@@ -2,7 +2,7 @@
 
 ![Rannaghor Banner](https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop)
 
-**Rannaghor** (Bengali for "Kitchen") is a modern, interactive restaurant website designed to showcase authentic Bangladeshi cuisine. It features a dynamic menu, a shopping cart system, and a real-time order tracking simulation.
+**Rannaghor** (Bengali for "Kitchen") is a modern, interactive restaurant website designed to showcase authentic Bangladeshi cuisine. It features a unique **QR code ordering system** where customers can scan a code at their table to start ordering instantly. Each table has a unique QR code, ensuring accurate service and a seamless dining experience.
 
 🔗 **Live Demo:** [https://tamimtxd.github.io/rannaghor-website/](https://tamimtxd.github.io/rannaghor-website/)
 
