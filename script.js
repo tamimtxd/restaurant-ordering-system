@@ -198,9 +198,6 @@ function renderMenu(category = 'all') {
                             <div class="text-5xl">${item.emoji}</div>
                             <div class="flex flex-col items-end gap-1">
                                 ${item.popular ? '<span class="bg-orange-500/20 text-orange-400 text-xs px-2 py-1 rounded-full">Popular</span>' : ''}
-                                <div class="flex items-center gap-1">
-                                    ${item.spicy > 0 ? '🌶️'.repeat(item.spicy) : '<span class="text-xs text-gray-500">Mild</span>'}
-                                </div>
                             </div>
                         </div>
                         <h3 class="text-xl font-display font-bold mb-1">${item.name}</h3>
