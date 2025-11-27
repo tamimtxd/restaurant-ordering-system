@@ -1,35 +1,59 @@
-# Rannaghor - Authentic Bangladeshi Cuisine
+# 🍛 Rannaghor - Authentic Bangladeshi Cuisine
 
-This is the source code for the Rannaghor restaurant website.
+![Rannaghor Banner](https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop)
 
-## Project Structure
+**Rannaghor** (Bengali for "Kitchen") is a modern, interactive restaurant website designed to showcase authentic Bangladeshi cuisine. It features a dynamic menu, a shopping cart system, and a real-time order tracking simulation.
 
-- `index.html`: The main HTML file.
-- `style.css`: Contains all the CSS styles.
-- `script.js`: Contains the JavaScript logic for the menu, cart, and order tracking.
+🔗 **Live Demo:** [https://tamimtxd.github.io/rannaghor-website/](https://tamimtxd.github.io/rannaghor-website/)
 
-## How to Deploy to GitHub Pages
+## ✨ Features
 
-1.  **Push to GitHub**:
-    - Create a new repository on GitHub.
-    - Run the following commands in your terminal (replace `<USERNAME>` and `<REPO>` with your details):
-      ```bash
-      git remote add origin https://github.com/<USERNAME>/<REPO>.git
-      git branch -M main
-      git push -u origin main
-      ```
+-   **Dynamic Menu**: Browse categories like Biriyani, Curry, Kebab, Snacks, and Desserts.
+-   **Interactive Cart**: Add items, adjust quantities, and view real-time totals (including VAT).
+-   **Order Tracking**: Visual status tracker simulating the kitchen process (Received → Preparing → Ready → Served).
+-   **Table Management**: Simulated QR code table selection flow.
+-   **Responsive Design**: Fully optimized for mobile, tablet, and desktop devices.
+-   **Modern UI/UX**: Glassmorphism effects, smooth animations, and a premium dark aesthetic.
 
-2.  **Enable GitHub Pages**:
-    - Go to your repository settings on GitHub.
-    - Navigate to "Pages" (usually under the "Code and automation" section).
-    - Under "Source", select "Deploy from a branch".
-    - Select the `main` branch and the `/ (root)` folder.
-    - Click "Save".
+## 🛠️ Technologies Used
 
-3.  **View Your Site**:
-    - GitHub will provide a URL (e.g., `https://<USERNAME>.github.io/<REPO>/`).
-    - It might take a minute or two for the site to go live.
+-   **HTML5**: Semantic structure.
+-   **CSS3**: Custom styles with animations and Tailwind CSS (via CDN) for utility classes.
+-   **JavaScript (ES6+)**: DOM manipulation, state management, and interaction logic.
+-   **LocalStorage**: Persists cart and order data locally in the browser.
 
-## Local Development
+## 📂 Project Structure
 
-To run the site locally, simply open `index.html` in your web browser.
+```
+rannaghor-website/
+├── index.html      # Main application structure
+├── style.css       # Custom CSS for animations and theming
+├── script.js       # Application logic (Menu, Cart, Orders)
+└── README.md       # Project documentation
+```
+
+## 🚀 Getting Started
+
+To run this project locally:
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/tamimtxd/rannaghor-website.git
+    ```
+2.  **Open `index.html`**:
+    Simply open the `index.html` file in your preferred web browser. No server setup is required for the frontend-only version.
+
+## 🔮 Future Roadmap
+
+-   [ ] **Backend Integration**: Connect to a Node.js/Express backend.
+-   [ ] **Database**: Implement MongoDB to store menu items and orders permanently.
+-   [ ] **Admin Dashboard**: Create an interface for kitchen staff to manage orders.
+-   [ ] **Payment Gateway**: Integrate online payment options.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+Made with ❤️ in Bangladesh
