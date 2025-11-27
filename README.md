@@ -1,8 +1,8 @@
-# 🍛 Rannaghor - Authentic Bangladeshi Cuisine
+# Modern Restaurant Ordering System
 
 ![Rannaghor Banner](Screenshot.png)
 
-**Rannaghor** is a modern, interactive restaurant website designed to showcase authentic Bangladeshi cuisine. It features a unique **QR code ordering system** where customers can scan a code at their table to start ordering instantly. Each table has a unique QR code, ensuring accurate service and a seamless dining experience.
+A next-generation dining experience featuring **QR Code Table Detection**, **Real-time Status Tracking**, and a stunning **Glassmorphism UI**. Designed to streamline the ordering process with style and efficiency.
 
 🔗 **Live Demo:** [https://tamimtxd.github.io/restaurant-ordering-system/](https://tamimtxd.github.io/restaurant-ordering-system/)
 
@@ -38,7 +38,7 @@ To run this project locally:
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/tamimtxd/rannaghor-website.git
+    git clone https://github.com/tamimtxd/restaurant-ordering-system.git
     ```
 2.  **Open `index.html`**:
     Simply open the `index.html` file in your preferred web browser. No server setup is required for the frontend-only version.
