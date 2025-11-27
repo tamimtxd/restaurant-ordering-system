@@ -134,39 +134,23 @@
 
             <!-- Table Badge (shown when table is detected) -->
             <div id="tableBadge" class="hidden items-center gap-2">
-                <div class="table-badge px-4 py-2 rounded-full flex items-center gap-2">
-                    <div class="live-dot"></div>
-                    <span class="font-semibold">Table <span id="tableNumberDisplay">-</span></span>
+
+                <div class="flex items-center gap-4">
+                    <button id="callWaiterBtn"
+                        class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/50 hover:bg-orange-500/20 transition-all">
+                        <span>🔔</span>
+                        <span>Call Waiter</span>
+                    </button>
+                    <button id="cartBtn" class="relative glow-btn p-3 rounded-full">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span id="cartCount"
+                            class="absolute -top-1 -right-1 w-5 h-5 bg-yellow-500 text-black text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
+                    </button>
                 </div>
             </div>
-
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#menu" class="text-gray-300 hover:text-orange-400 transition-colors">Menu</a>
-                <a href="#specials" class="text-gray-300 hover:text-orange-400 transition-colors">Specials</a>
-                <button id="viewOrdersBtn"
-                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center gap-1">
-                    My Orders
-                    <span id="activeOrdersBadge"
-                        class="hidden w-5 h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">0</span>
-                </button>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <button id="callWaiterBtn"
-                    class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/50 hover:bg-orange-500/20 transition-all">
-                    <span>🔔</span>
-                    <span>Call Waiter</span>
-                </button>
-                <button id="cartBtn" class="relative glow-btn p-3 rounded-full">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <span id="cartCount"
-                        class="absolute -top-1 -right-1 w-5 h-5 bg-yellow-500 text-black text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
-                </button>
-            </div>
-        </div>
     </nav>
 
     <!-- Cart Sidebar -->
@@ -488,6 +472,65 @@
                                 </div>
                                 <button class="add-to-cart-btn glow-btn px-6 py-2 rounded-full font-medium"
                                     data-id="special2">Add +</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="relative py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="scroll-reveal">
+                        <div class="relative">
+                            <div
+                                class="absolute -inset-4 bg-gradient-to-r from-orange-500 to-red-600 rounded-3xl opacity-20 blur-xl">
+                            </div>
+                            <div class="relative bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+                                <div class="text-6xl mb-4">👨‍🍳</div>
+                                <h3 class="text-2xl font-display font-bold mb-2">Master Chefs</h3>
+                                <p class="text-gray-400">Our chefs bring decades of experience from the heart of Dhaka,
+                                    ensuring every dish is authentic.</p>
+                            </div>
+                            <div
+                                class="absolute -bottom-6 -right-6 bg-[#1a0a00] border border-white/10 rounded-2xl p-6 shadow-xl">
+                                <div class="text-4xl font-bold gradient-text">15+</div>
+                                <div class="text-sm text-gray-400">Years of<br>Excellence</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scroll-reveal" style="transition-delay: 0.2s">
+                        <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">
+                            Our <span class="gradient-text">Story</span>
+                        </h2>
+                        <p class="text-gray-300 text-lg mb-6 leading-relaxed">
+                            Welcome to <span class="text-orange-400 font-semibold">Rannaghor</span>, where tradition
+                            meets modern dining. "Rannaghor" means Kitchen in Bengali, and that's exactly what we are—a
+                            kitchen that serves love on a plate.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            Founded in 2010, we started with a simple mission: to bring the authentic taste of
+                            Bangladeshi home cooking to your table. From the aromatic spices of our Biriyanis to the
+                            fiery kick of our Bhortas, every recipe has been passed down through generations.
+                        </p>
+                        <div class="flex gap-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-400">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">✓</span>
+                                Halal Certified
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-gray-400">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">✓</span>
+                                Fresh Ingredients
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-gray-400">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">✓</span>
+                                Authentic Taste
                             </div>
                         </div>
                     </div>
