@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rannaghor - Authentic Bangladeshi Cuisine</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#1a0a00] text-white overflow-x-hidden">
+    <!-- Welcome/Table Selection Screen (shown when no table is detected) -->
+    <div id="welcomeScreen" class="welcome-screen fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto">
+        <div class="w-full max-w-md mx-auto p-4">
+            <!-- Header -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center mb-4">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                        <span class="text-4xl">🍛</span>
+                    </div>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-display font-bold mb-2">
+                    Welcome to <span class="gradient-text">Rannaghor</span>
+                </h1>
+                <p class="text-sm text-gray-400 mb-1">রান্নাঘর - Authentic Bangladeshi Cuisine</p>
+                <p class="text-xs text-gray-500">Scan the QR code on your table to start ordering</p>
+            </div>
+
+            <!-- Demo Mode - Table Selection -->
+            <div class="bg-white/5 backdrop-blur-xl rounded-2xl p-4 border border-white/10">
+                <div class="text-center mb-4">
+                    <span class="inline-flex items-center gap-2 bg-yellow-500/20 text-yellow-400 px-3 py-1.5 rounded-full text-xs">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Demo Mode - Select a table
+                    </span>
+                </div>
+
+                <h3 class="text-sm font-semibold text-center mb-3">Choose Your Table</h3>
+                
+                <div class="grid grid-cols-5 gap-2 mb-4">
+                    <!-- Tables 1-10 -->
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="1">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T1</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="2">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T2</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="3">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T3</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="4">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T4</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="5">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T5</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="6">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T6</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="7">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T7</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="8">
+                        <div class="text-lg mb-1">🪑</div>
+                        <div class="font-bold text-[10px]">T8</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="9">
+                        <div class="text-lg mb-1">🛋️</div>
+                        <div class="font-bold text-[10px]">VIP1</div>
+                    </div>
+                    <div class="table-card bg-white/5 border-2 border-white/20 rounded-lg p-2 text-center" data-table="10">
+                        <div class="text-lg mb-1">🛋️</div>
+                        <div class="font-bold text-[10px]">VIP2</div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <div class="flex flex-wrap justify-center gap-3 text-xs text-gray-400">
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span>Available</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-orange-500"></div>
+                            <span>Your Session</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                    <span class="text-2xl">🍛</span>
+                </div>
+                <div>
+                    <span class="text-xl font-display font-bold">Rannaghor</span>
+                    <p class="text-xs text-orange-400">রান্নাঘর</p>
+                </div>
+            </div>
+
+            <!-- Table Badge (shown when table is detected) -->
+            <div id="tableBadge" class="hidden items-center gap-2">
+                <div class="table-badge px-4 py-2 rounded-full flex items-center gap-2">
+                    <div class="live-dot"></div>
+                    <span class="font-semibold">Table <span id="tableNumberDisplay">-</span></span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#menu" class="text-gray-300 hover:text-orange-400 transition-colors">Menu</a>
+                <a href="#specials" class="text-gray-300 hover:text-orange-400 transition-colors">Specials</a>
+                <button id="viewOrdersBtn" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center gap-1">
+                    My Orders
+                    <span id="activeOrdersBadge" class="hidden w-5 h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button id="callWaiterBtn" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/50 hover:bg-orange-500/20 transition-all">
+                    <span>🔔</span>
+                    <span>Call Waiter</span>
+                </button>
+                <button id="cartBtn" class="relative glow-btn p-3 rounded-full">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 bg-yellow-500 text-black text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar fixed top-0 right-0 w-full max-w-md h-full bg-[#1a0a00]/95 backdrop-blur-xl z-[60] border-l border-orange-500/20 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-display font-bold">Your Order</h2>
+                <button id="closeCart" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Table Info in Cart -->
+            <div id="cartTableInfo" class="bg-green-500/10 border border-green-500/30 rounded-xl p-4 mb-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center text-xl">🪑</div>
+                <div>
+                    <div class="text-sm text-green-400">Ordering for</div>
+                    <div class="font-bold">Table <span id="cartTableNumber">-</span></div>
+                </div>
+                <div class="ml-auto">
+                    <div class="live-dot"></div>
+                </div>
+            </div>
+            
+            <div id="cartItems" class="space-y-4 mb-6">
+                <!-- Cart items will be inserted here -->
+            </div>
+
+            <div id="emptyCart" class="text-center py-12">
+                <div class="text-6xl mb-4">🍽️</div>
+                <p class="text-gray-400">Your cart is empty</p>
+                <p class="text-sm text-gray-500">Add some delicious items!</p>
+            </div>
+
+            <div id="cartSummary" class="hidden border-t border-white/10 pt-6">
+                <div class="space-y-3 mb-6">
+                    <div class="flex justify-between text-gray-400">
+                        <span>Subtotal</span>
+                        <span id="subtotal">৳0</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400">
+                        <span>VAT (5%)</span>
+                        <span id="vat">৳0</span>
+                    </div>
+                    <div class="flex justify-between text-xl font-bold">
+                        <span>Total</span>
+                        <span id="total" class="gradient-text">৳0</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-400 mb-2">Special Instructions (Optional)</label>
+                    <textarea id="instructions" placeholder="Any allergies or special requests?" rows="2" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-orange-500 focus:outline-none transition-colors resize-none"></textarea>
+                </div>
+
+                <button id="placeOrder" class="w-full glow-btn py-4 rounded-xl text-lg font-semibold">
+                    Place Order 🍛
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
+
+    <!-- Orders Modal (Simple History) -->
+    <div id="ordersModal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-6">
+        <div class="bg-[#2a1a10] rounded-3xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-display font-bold">Order History</h3>
+                <button id="closeOrdersModal" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="ordersList" class="space-y-4">
+                <!-- Orders will be inserted here -->
+            </div>
+
+            <div id="noOrders" class="text-center py-8">
+                <div class="text-5xl mb-4">📋</div>
+                <p class="text-gray-400">No orders yet</p>
+                <p class="text-sm text-gray-500">Your order history will appear here</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Track Order Modal (With Visual Status) -->
+    <div id="trackOrderModal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-6">
+        <div class="bg-[#2a1a10] rounded-3xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-2xl font-display font-bold">Track Order</h3>
+                    <div class="flex items-center gap-2 bg-green-500/20 px-3 py-1 rounded-full">
+                        <div class="live-dot"></div>
+                        <span class="text-xs text-green-400">Live</span>
+                    </div>
+                </div>
+                <button id="closeTrackOrderModal" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="trackOrderList" class="space-y-6">
+                <!-- Active orders with status tracker will be inserted here -->
+            </div>
+
+            <div id="noActiveOrders" class="text-center py-8 hidden">
+                <div class="text-5xl mb-4">✅</div>
+                <p class="text-gray-400">No active orders</p>
+                <p class="text-sm text-gray-500">All your orders have been served!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-6">
+        <div class="bg-[#2a1a10] rounded-3xl p-8 max-w-md w-full text-center">
+            <!-- Animated Checkmark -->
+            <div class="success-checkmark mb-6">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            
+            <h3 class="text-3xl font-display font-bold mb-3 success-title">Order Placed!</h3>
+            <p class="text-gray-400 mb-2">Your order has been sent to the kitchen</p>
+            <p class="text-orange-400 font-semibold text-xl mb-6">Order #<span id="orderNumber">12345</span></p>
+            
+            <!-- Info Cards -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-white/5 rounded-xl p-4">
+                    <div class="text-3xl mb-2">⏱️</div>
+                    <p class="text-xs text-gray-500">Estimated Time</p>
+                    <p class="font-bold text-white">15-20 min</p>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4">
+                    <div class="text-3xl mb-2">🪑</div>
+                    <p class="text-xs text-gray-500">Delivering to</p>
+                    <p class="font-bold text-white">Table <span id="successTableNumber">-</span></p>
+                </div>
+            </div>
+
+            <!-- Tip Message -->
+            <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4 mb-6">
+                <p class="text-green-400 text-sm">
+                    💡 Tap <strong>"Track Order"</strong> button below to see real-time status updates
+                </p>
+            </div>
+
+            <button id="closeSuccessModal" class="w-full glow-btn py-4 rounded-xl text-lg font-semibold">
+                Continue Ordering
+            </button>
+        </div>
+    </div>
+
+    <!-- Call Waiter Modal -->
+    <div id="waiterModal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-6">
+        <div class="bg-[#2a1a10] rounded-3xl p-8 max-w-md w-full text-center">
+            <div class="text-7xl mb-4 animate-bounce">🔔</div>
+            <h3 class="text-2xl font-display font-bold mb-2">Calling Waiter...</h3>
+            <p class="text-gray-400 mb-6">A waiter will be with you shortly at Table <span id="waiterTableNumber">-</span></p>
+            
+            <div class="flex gap-3">
+                <button id="cancelWaiter" class="flex-1 py-3 rounded-xl border border-white/20 hover:bg-white/10 transition-colors">Cancel</button>
+                <button id="confirmWaiter" class="flex-1 glow-btn py-3 rounded-xl font-semibold">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Waiter Called Confirmation -->
+    <div id="waiterCalledModal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-6">
+        <div class="bg-[#2a1a10] rounded-3xl p-8 max-w-md w-full text-center">
+            <div class="text-7xl mb-4">✅</div>
+            <h3 class="text-2xl font-display font-bold mb-2">Waiter Notified!</h3>
+            <p class="text-gray-400 mb-6">Someone will assist you at Table <span id="waiterCalledTableNumber">-</span> shortly</p>
+            <button id="closeWaiterCalled" class="w-full glow-btn py-4 rounded-xl text-lg font-semibold">OK</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="opacity-0 transition-opacity duration-500">
+        <!-- Hero Section -->
+        <section class="relative min-h-[60vh] flex items-center justify-center pt-20 overflow-hidden">
+            <div class="mesh-gradient"></div>
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+            
+            <div class="relative z-10 max-w-7xl mx-auto px-6 py-12 text-center">
+                <div class="scroll-reveal">
+                    <div id="sessionInfo" class="inline-flex items-center gap-2 bg-green-500/20 backdrop-blur-sm px-6 py-3 rounded-full mb-8 border border-green-500/30">
+                        <div class="live-dot"></div>
+                        <span class="text-green-400 font-medium">Session Active • Table <span id="heroTableNumber">-</span></span>
+                    </div>
+                </div>
+                
+                <h1 class="scroll-reveal text-4xl md:text-6xl font-display font-bold mb-6 leading-tight" style="transition-delay: 0.1s">
+                    What would you like<br>
+                    <span class="gradient-text">to eat today?</span>
+                </h1>
+                
+                <p class="scroll-reveal text-xl text-gray-400 max-w-2xl mx-auto mb-10" style="transition-delay: 0.2s">
+                    Browse our menu, add items to your cart, and your order will be sent directly to our kitchen.
+                </p>
+                
+                <div class="scroll-reveal flex flex-col sm:flex-row gap-4 justify-center" style="transition-delay: 0.3s">
+                    <button onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})" class="glow-btn px-8 py-4 rounded-full text-lg font-semibold">
+                        Start Ordering 🍽️
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="relative py-20 pattern-bg">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="scroll-reveal text-4xl md:text-5xl font-display font-bold mb-6">
+                        Our <span class="gradient-text">Menu</span>
+                    </h2>
+                    <p class="scroll-reveal text-xl text-gray-400 max-w-2xl mx-auto" style="transition-delay: 0.1s">
+                        Authentic Bangladeshi dishes made with love
+                    </p>
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="scroll-reveal flex flex-wrap justify-center gap-3 mb-12" style="transition-delay: 0.2s">
+                    <button class="category-tab active px-6 py-3 rounded-full font-medium" data-category="all">All</button>
+                    <button class="category-tab px-6 py-3 rounded-full font-medium border border-white/20" data-category="biriyani">🍚 Biriyani</button>
+                    <button class="category-tab px-6 py-3 rounded-full font-medium border border-white/20" data-category="curry">🍛 Curry</button>
+                    <button class="category-tab px-6 py-3 rounded-full font-medium border border-white/20" data-category="kebab">🍢 Kebab</button>
+                    <button class="category-tab px-6 py-3 rounded-full font-medium border border-white/20" data-category="snacks">🥟 Snacks</button>
+                    <button class="category-tab px-6 py-3 rounded-full font-medium border border-white/20" data-category="dessert">🍮 Dessert</button>
+                    <button class="category-tab px-6 py-3 rounded-full font-medium border border-white/20" data-category="drinks">🥤 Drinks</button>
+                </div>
+
+                <!-- Menu Grid -->
+                <div id="menuGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Menu items will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Specials Section -->
+        <section id="specials" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 gradient-bg opacity-30"></div>
+            
+            <div class="relative z-10 max-w-7xl mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="scroll-reveal text-4xl md:text-5xl font-display font-bold mb-6">
+                        Today's <span class="gradient-text">Specials</span>
+                    </h2>
+                    <p class="scroll-reveal text-xl text-gray-400" style="transition-delay: 0.1s">
+                        Chef's recommended dishes
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="scroll-reveal food-card rounded-3xl p-8 flex gap-6" style="transition-delay: 0.1s">
+                        <div class="text-7xl">🍛</div>
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="text-2xl font-display font-bold">Kacchi Biriyani</h3>
+                                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">20% OFF</span>
+                            </div>
+                            <p class="text-gray-400 mb-4">Premium mutton slow-cooked with aromatic basmati rice, saffron & secret spices</p>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-2xl font-bold gradient-text">৳320</span>
+                                    <span class="text-gray-500 line-through ml-2">৳400</span>
+                                </div>
+                                <button class="add-to-cart-btn glow-btn px-6 py-2 rounded-full font-medium" data-id="special1">Add +</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scroll-reveal food-card rounded-3xl p-8 flex gap-6" style="transition-delay: 0.2s">
+                        <div class="text-7xl">🦐</div>
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="text-2xl font-display font-bold">Chingri Malai Curry</h3>
+                                <span class="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">CHEF'S PICK</span>
+                            </div>
+                            <p class="text-gray-400 mb-4">Jumbo prawns cooked in rich coconut milk with authentic Bengali spices</p>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-2xl font-bold gradient-text">৳450</span>
+                                </div>
+                                <button class="add-to-cart-btn glow-btn px-6 py-2 rounded-full font-medium" data-id="special2">Add +</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-12 border-t border-white/10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                                <span class="text-2xl">🍛</span>
+                            </div>
+                            <div>
+                                <span class="text-xl font-display font-bold">Rannaghor</span>
+                                <p class="text-xs text-orange-400">রান্নাঘর</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm">Authentic Bangladeshi cuisine since 2010. Every dish tells a story of tradition and love.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Contact</h4>
+                        <p class="text-gray-400 text-sm">📍 123 Gulshan Avenue, Dhaka 1212</p>
+                        <p class="text-gray-400 text-sm">📞 +880 1234-567890</p>
+                        <p class="text-gray-400 text-sm">✉️ info@rannaghor.com</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Hours</h4>
+                        <p class="text-gray-400 text-sm">Sunday - Thursday: 11AM - 11PM</p>
+                        <p class="text-gray-400 text-sm">Friday: 1PM - 11PM</p>
+                        <p class="text-gray-400 text-sm">Saturday: 11AM - 12AM</p>
+                    </div>
+                </div>
+                <div class="text-center text-gray-500 text-sm pt-8 border-t border-white/10">
+                    <p>© 2024 Rannaghor. All rights reserved. Made with ❤️ in Bangladesh</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Floating Cart Button (Mobile) -->
+    <div id="floatingCart" class="fab hidden">
+        <button id="floatingCartBtn" class="fab-btn glow-btn relative">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <span id="floatingCartCount" class="absolute -top-1 -right-1 w-5 h-5 bg-yellow-500 text-black text-xs font-bold rounded-full flex items-center justify-center">0</span>
+        </button>
+    </div>
+
+    <!-- Floating Track Order Button (appears after placing order) -->
+    <div id="floatingTrackOrder" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden">
+        <button id="floatingTrackBtn" class="flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
+            <div class="live-dot"></div>
+            <span class="font-semibold">Track Order</span>
+            <span id="floatingOrderCount" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-sm">1</span>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
