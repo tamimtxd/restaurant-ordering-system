@@ -1,17 +1,19 @@
 # Modern Restaurant Ordering System
 
-![Rannaghor Banner](Screenshot.png)
-
-A next-generation dining experience featuring **QR Code Table Detection**, **Real-time Status Tracking**, and a stunning **Glassmorphism UI**. Designed to streamline the ordering process with style and efficiency.
+A next-generation dining experience featuring QR Code Table Detection, Real-Time Order Status Tracking, and a stunning Glassmorphism UI. Customers simply scan their table’s unique QR code to open a personalized menu, place orders instantly, and track their status, all without calling a waiter.
 
 🔗 **Live Demo:** [https://tamimtxd.github.io/restaurant-ordering-system/](https://tamimtxd.github.io/restaurant-ordering-system/)
 
+![Rannaghor Banner](Screenshot.png)
+
 ## ✨ Features
 
+-   **Table-Based Ordering**: Customers choose or scan(QR code) their specific table number to start ordering, and orders go directly to the kitchen.
 -   **Dynamic Menu**: Browse categories like Biriyani, Curry, Kebab, Snacks, and Desserts.
 -   **Interactive Cart**: Add items, adjust quantities, and view real-time totals (including VAT).
 -   **Order Tracking**: Visual status tracker simulating the kitchen process (Received → Preparing → Ready → Served).
 -   **Table Management**: Simulated QR code table selection flow.
+-   **Call Waiter**: A dedicated “Call Waiter” button lets customers request assistance instantly without searching for staff.
 -   **Responsive Design**: Fully optimized for mobile, tablet, and desktop devices.
 -   **Modern UI/UX**: Glassmorphism effects, smooth animations, and a premium dark aesthetic.
 
