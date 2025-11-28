@@ -1,6 +1,6 @@
 # Modern Restaurant Ordering System
 
-A next-generation dining experience featuring QR Code Table Detection, Real-Time Order Status Tracking, and a stunning Glassmorphism UI. Customers simply scan their table’s unique QR code to open a personalized menu, place orders instantly, and track their status, all without calling a waiter.
+The system allows customers to place orders directly from their table using a unique QR code that links to a digital menu. Orders are sent automatically to the kitchen, and customers can track their order status in real time—all without calling a waiter.
 
 🔗 **Live Demo:** [https://tamimtxd.github.io/restaurant-ordering-system/](https://tamimtxd.github.io/restaurant-ordering-system/)
 
