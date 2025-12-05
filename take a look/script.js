@@ -118,7 +118,7 @@ const state = {
 const DOM = {
     // Welcome Screen
     welcomeScreen: document.getElementById('welcomeScreen'),
-    tableCards: document.querySelectorAll('.table-btn'),
+    tableCards: document.querySelectorAll('.table-card'),
 
     // Navigation
     navbar: document.getElementById('navbar'),
@@ -231,7 +231,7 @@ function init() {
 
     setupEventListeners();
     initScrollObserver();
-
+    
     // Initialize special items listeners ONCE
     initSpecialItems();
 }
@@ -396,7 +396,7 @@ function attachMenuItemListeners() {
 // Initialize special items separately (called only once)
 function initSpecialItems() {
     if (state.specialItemsInitialized) return;
-
+    
     document.querySelectorAll('.btn-special').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -404,7 +404,7 @@ function initSpecialItems() {
             addToCart(btn.dataset.id);
         });
     });
-
+    
     state.specialItemsInitialized = true;
 }
 
@@ -654,7 +654,7 @@ function updateOrderStatus(orderNumber, newStatus) {
     if (!DOM.trackOrderModal.classList.contains('hidden')) {
         const activeOrders = state.orders.filter(o => o.status !== 'served');
         const orderIndex = activeOrders.findIndex(o => o.id === orderNumber);
-
+        
         if (orderIndex !== -1) {
             animateSingleStep(orderIndex, newStatusIndex);
         }
@@ -851,7 +851,7 @@ function animateTrackOrderStatus(orderIndex, targetStep) {
 
     // Animate from step 0 UP TO targetStep
     for (let step = 0; step <= targetStep; step++) {
-        (function (currentStep) {
+        (function(currentStep) {
             const delay = currentStep * stepDelay;
 
             setTimeout(() => {

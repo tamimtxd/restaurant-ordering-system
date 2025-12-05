@@ -4,22 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description"
-        content="Rannaghor - Authentic Bangladeshi Cuisine. Order delicious food directly from your table.">
+    <meta name="description" content="Rannaghor - Authentic Bangladeshi Cuisine. Order delicious food directly from your table.">
     <meta name="theme-color" content="#1a0a00">
     <title>Rannaghor - Authentic Bangladeshi Cuisine</title>
-
+    
     <!-- Preconnect for faster font loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍛</text></svg>">
-
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍛</text></svg>">
+    
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -58,51 +54,61 @@
                 <h2 class="table-selection-title">Choose Your Table</h2>
 
                 <!-- Table Grid -->
-                <div class="table-grid-optimized" role="radiogroup" aria-label="Select a table">
-                    <!-- Regular Tables (1-8) -->
-                    <button class="table-btn" data-table="1" role="radio" aria-checked="false" aria-label="Table 1">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T1</div>
+                <div class="table-grid" role="radiogroup" aria-label="Select a table">
+                    <!-- Regular Tables -->
+                    <button class="table-card" data-table="1" role="radio" aria-checked="false" aria-label="Table 1">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T1</span>
                     </button>
-                    <button class="table-btn" data-table="2" role="radio" aria-checked="false" aria-label="Table 2">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T2</div>
+                    <button class="table-card" data-table="2" role="radio" aria-checked="false" aria-label="Table 2">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T2</span>
                     </button>
-                    <button class="table-btn" data-table="3" role="radio" aria-checked="false" aria-label="Table 3">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T3</div>
+                    <button class="table-card" data-table="3" role="radio" aria-checked="false" aria-label="Table 3">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T3</span>
                     </button>
-                    <button class="table-btn" data-table="4" role="radio" aria-checked="false" aria-label="Table 4">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T4</div>
+                    <button class="table-card" data-table="4" role="radio" aria-checked="false" aria-label="Table 4">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T4</span>
                     </button>
-                    <button class="table-btn" data-table="5" role="radio" aria-checked="false" aria-label="Table 5">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T5</div>
+                    <button class="table-card" data-table="5" role="radio" aria-checked="false" aria-label="Table 5">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T5</span>
                     </button>
-                    <button class="table-btn" data-table="6" role="radio" aria-checked="false" aria-label="Table 6">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T6</div>
+                    <button class="table-card" data-table="6" role="radio" aria-checked="false" aria-label="Table 6">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T6</span>
                     </button>
-                    <button class="table-btn" data-table="7" role="radio" aria-checked="false" aria-label="Table 7">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T7</div>
+                    <button class="table-card" data-table="7" role="radio" aria-checked="false" aria-label="Table 7">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T7</span>
                     </button>
-                    <button class="table-btn" data-table="8" role="radio" aria-checked="false" aria-label="Table 8">
-                        <div class="table-icon-circle">🪑</div>
-                        <div class="table-label">T8</div>
+                    <button class="table-card" data-table="8" role="radio" aria-checked="false" aria-label="Table 8">
+                        <span class="table-icon">🪑</span>
+                        <span class="table-number">T8</span>
                     </button>
-                    <!-- VIP Tables (9-10) -->
-                    <button class="table-btn vip-table" data-table="9" role="radio" aria-checked="false"
-                        aria-label="VIP Table 1">
-                        <div class="table-icon-circle">🛋️</div>
-                        <div class="table-label">VIP1</div>
+                    <!-- VIP Tables -->
+                    <button class="table-card vip" data-table="9" role="radio" aria-checked="false" aria-label="VIP Table 1">
+                        <span class="table-icon">🛋️</span>
+                        <span class="table-number">VIP1</span>
                     </button>
-                    <button class="table-btn vip-table" data-table="10" role="radio" aria-checked="false"
-                        aria-label="VIP Table 2">
-                        <div class="table-icon-circle">🛋️</div>
-                        <div class="table-label">VIP2</div>
+                    <button class="table-card vip" data-table="10" role="radio" aria-checked="false" aria-label="VIP Table 2">
+                        <span class="table-icon">🛋️</span>
+                        <span class="table-number">VIP2</span>
                     </button>
+                </div>
+
+                <!-- Legend -->
+                <div class="table-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot available"></span>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot selected"></span>
+                        <span>Your Session</span>
+                    </div>
                 </div>
             </div>
 
@@ -129,6 +135,11 @@
                 </div>
             </a>
 
+            <!-- Table Badge (shown when table is selected) -->
+            <div id="tableBadge" class="table-badge hidden">
+                <div class="live-dot"></div>
+                <span>Table <span id="tableNumberDisplay">-</span></span>
+            </div>
 
             <!-- Desktop Navigation -->
             <div class="navbar-menu">
@@ -151,8 +162,7 @@
                 <!-- Cart Button -->
                 <button id="cartBtn" class="btn btn-cart" aria-label="View cart">
                     <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                     <span id="cartCount" class="cart-count hidden">0</span>
                 </button>
@@ -192,7 +202,7 @@
     <!-- CART SIDEBAR -->
     <!-- ==================== -->
     <div id="cartOverlay" class="overlay hidden" aria-hidden="true"></div>
-
+    
     <aside id="cartSidebar" class="cart-sidebar" role="dialog" aria-labelledby="cartTitle" aria-modal="true">
         <div class="cart-container">
             <!-- Cart Header -->
@@ -200,7 +210,7 @@
                 <h2 id="cartTitle" class="cart-title">Your Order</h2>
                 <button id="closeCart" class="btn-close" aria-label="Close cart">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 18L18 6M6 6l12 12" />
+                        <path d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </header>
@@ -247,8 +257,12 @@
                 <!-- Special Instructions -->
                 <div class="cart-instructions">
                     <label for="instructions" class="instructions-label">Special Instructions (Optional)</label>
-                    <textarea id="instructions" class="instructions-input"
-                        placeholder="Any allergies or special requests?" rows="2"></textarea>
+                    <textarea 
+                        id="instructions" 
+                        class="instructions-input" 
+                        placeholder="Any allergies or special requests?"
+                        rows="2"
+                    ></textarea>
                 </div>
 
                 <!-- Place Order Button -->
@@ -264,7 +278,7 @@
     <!-- MAIN CONTENT -->
     <!-- ==================== -->
     <main id="mainContent" class="main-content">
-
+        
         <!-- ==================== -->
         <!-- HERO SECTION -->
         <!-- ==================== -->
@@ -281,7 +295,7 @@
                 <!-- Session Info Badge -->
                 <div id="sessionInfo" class="session-badge scroll-reveal">
                     <div class="live-dot"></div>
-                    <span class="session-text">Active • Table <span id="heroTableNumber">-</span></span>
+                    <span>Session Active • Table <span id="heroTableNumber">-</span></span>
                 </div>
 
                 <!-- Hero Content -->
@@ -330,7 +344,7 @@
                 <span>Scroll to explore</span>
                 <div class="scroll-arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
                     </svg>
                 </div>
             </div>
@@ -355,14 +369,19 @@
                 <div class="search-container scroll-reveal">
                     <div class="search-box">
                         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="M21 21l-4.35-4.35" />
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
                         </svg>
-                        <input type="search" id="menuSearch" class="search-input" placeholder="Search dishes..."
-                            aria-label="Search menu">
+                        <input 
+                            type="search" 
+                            id="menuSearch" 
+                            class="search-input" 
+                            placeholder="Search dishes..."
+                            aria-label="Search menu"
+                        >
                         <button id="clearSearch" class="search-clear hidden" aria-label="Clear search">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M6 18L18 6M6 6l12 12" />
+                                <path d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
                     </div>
@@ -428,208 +447,204 @@
                     </p>
                 </header>
 
-                <!-- ==================== -->
-                <!-- SPECIALS SECTION -->
-                <!-- ==================== -->
-                <section id="specials" class="specials-section" aria-labelledby="specialsTitle">
-                    <div class="section-container">
-                        <!-- Section Header -->
-                        <header class="section-header">
-                            <h2 id="specialsTitle" class="section-title scroll-reveal">
-                                Today's <span class="gradient-text">Specials</span>
-                            </h2>
-                            <p class="section-subtitle scroll-reveal">
-                                Chef's recommended dishes - Limited time offers!
-                            </p>
-                        </header>
+<!-- ==================== -->
+<!-- SPECIALS SECTION -->
+<!-- ==================== -->
+<section id="specials" class="specials-section" aria-labelledby="specialsTitle">
+    <div class="section-container">
+        <!-- Section Header -->
+        <header class="section-header">
+            <h2 id="specialsTitle" class="section-title scroll-reveal">
+                Today's <span class="gradient-text">Specials</span>
+            </h2>
+            <p class="section-subtitle scroll-reveal">
+                Chef's recommended dishes - Limited time offers!
+            </p>
+        </header>
 
-                        <!-- Specials Grid -->
-                        <div class="specials-grid">
-                            <!-- Special Item 1 -->
-                            <article class="special-card scroll-reveal" role="listitem">
-                                <div class="special-badge discount">20% OFF</div>
-                                <div class="special-content">
-                                    <div class="special-icon">🍛</div>
-                                    <div class="special-details">
-                                        <h3 class="special-title">Kacchi Biriyani</h3>
-                                        <p class="special-description">
-                                            Premium mutton slow-cooked with aromatic basmati rice, saffron & secret
-                                            spices
-                                        </p>
-                                        <div class="special-footer">
-                                            <div class="special-price">
-                                                <span class="price-current">৳320</span>
-                                                <span class="price-original">৳400</span>
-                                            </div>
-                                            <button class="btn btn-primary btn-add btn-special" data-id="special1">
-                                                Add +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <!-- Special Item 2 -->
-                            <article class="special-card scroll-reveal" role="listitem">
-                                <div class="special-badge chef">CHEF'S PICK</div>
-                                <div class="special-content">
-                                    <div class="special-icon">🦐</div>
-                                    <div class="special-details">
-                                        <h3 class="special-title">Chingri Malai Curry</h3>
-                                        <p class="special-description">
-                                            Jumbo prawns cooked in rich coconut milk with authentic Bengali spices
-                                        </p>
-                                        <div class="special-footer">
-                                            <div class="special-price">
-                                                <span class="price-current">৳450</span>
-                                            </div>
-                                            <button class="btn btn-primary btn-add btn-special" data-id="special2">
-                                                Add +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
+        <!-- Specials Grid -->
+        <div class="specials-grid">
+            <!-- Special Item 1 -->
+            <article class="special-card scroll-reveal" role="listitem">
+                <div class="special-badge discount">20% OFF</div>
+                <div class="special-content">
+                    <div class="special-icon">🍛</div>
+                    <div class="special-details">
+                        <h3 class="special-title">Kacchi Biriyani</h3>
+                        <p class="special-description">
+                            Premium mutton slow-cooked with aromatic basmati rice, saffron & secret spices
+                        </p>
+                        <div class="special-footer">
+                            <div class="special-price">
+                                <span class="price-current">৳320</span>
+                                <span class="price-original">৳400</span>
+                            </div>
+                            <button class="btn btn-primary btn-add btn-special" data-id="special1">
+                                Add +
+                            </button>
                         </div>
                     </div>
-                </section>
+                </div>
+            </article>
 
-                <!-- ==================== -->
-                <!-- FEATURES SECTION -->
-                <!-- ==================== -->
-                <section class="features-section" aria-labelledby="featuresTitle">
-                    <div class="section-container">
-                        <header class="section-header">
-                            <h2 id="featuresTitle" class="section-title scroll-reveal">
-                                Why <span class="gradient-text">Choose Us</span>
-                            </h2>
-                        </header>
-
-                        <div class="features-grid">
-                            <div class="feature-card scroll-reveal">
-                                <div class="feature-icon">👨‍🍳</div>
-                                <h3 class="feature-title">Expert Chefs</h3>
-                                <p class="feature-description">Our chefs bring decades of experience in authentic
-                                    Bangladeshi cuisine</p>
+            <!-- Special Item 2 -->
+            <article class="special-card scroll-reveal" role="listitem">
+                <div class="special-badge chef">CHEF'S PICK</div>
+                <div class="special-content">
+                    <div class="special-icon">🦐</div>
+                    <div class="special-details">
+                        <h3 class="special-title">Chingri Malai Curry</h3>
+                        <p class="special-description">
+                            Jumbo prawns cooked in rich coconut milk with authentic Bengali spices
+                        </p>
+                        <div class="special-footer">
+                            <div class="special-price">
+                                <span class="price-current">৳450</span>
                             </div>
-                            <div class="feature-card scroll-reveal">
-                                <div class="feature-icon">🌿</div>
-                                <h3 class="feature-title">Fresh Ingredients</h3>
-                                <p class="feature-description">We source the freshest local ingredients daily</p>
-                            </div>
-                            <div class="feature-card scroll-reveal">
-                                <div class="feature-icon">⚡</div>
-                                <h3 class="feature-title">Quick Service</h3>
-                                <p class="feature-description">Hot food served to your table in 15-20 minutes</p>
-                            </div>
-                            <div class="feature-card scroll-reveal">
-                                <div class="feature-icon">💯</div>
-                                <h3 class="feature-title">Quality Promise</h3>
-                                <p class="feature-description">100% satisfaction guaranteed or we'll make it right</p>
-                            </div>
+                            <button class="btn btn-primary btn-add btn-special" data-id="special2">
+                                Add +
+                            </button>
                         </div>
                     </div>
-                </section>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
 
-                <!-- ==================== -->
-                <!-- FOOTER -->
-                <!-- ==================== -->
-                <footer class="footer" role="contentinfo">
-                    <div class="footer-container">
-                        <div class="footer-grid">
-                            <!-- Brand Column -->
-                            <div class="footer-brand">
-                                <div class="footer-logo">
-                                    <div class="brand-logo">
-                                        <span>🍛</span>
-                                    </div>
-                                    <div class="brand-text">
-                                        <span class="brand-name">Rannaghor</span>
-                                        <span class="brand-tagline">রান্নাঘর</span>
-                                    </div>
-                                </div>
-                                <p class="footer-description">
-                                    Authentic Bangladeshi cuisine since 2010. Every dish tells a story of tradition and
-                                    love.
-                                </p>
-                                <div class="social-links">
-                                    <a href="#" class="social-link" aria-label="Facebook">
-                                        <svg viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                                        </svg>
-                                    </a>
-                                    <a href="#" class="social-link" aria-label="Instagram">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="2" y="2" width="20" height="20" rx="5" />
-                                            <circle cx="12" cy="12" r="4" />
-                                            <circle cx="18" cy="6" r="1" />
-                                        </svg>
-                                    </a>
-                                    <a href="#" class="social-link" aria-label="Twitter">
-                                        <svg viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
-                                        </svg>
-                                    </a>
-                                </div>
+        <!-- ==================== -->
+        <!-- FEATURES SECTION -->
+        <!-- ==================== -->
+        <section class="features-section" aria-labelledby="featuresTitle">
+            <div class="section-container">
+                <header class="section-header">
+                    <h2 id="featuresTitle" class="section-title scroll-reveal">
+                        Why <span class="gradient-text">Choose Us</span>
+                    </h2>
+                </header>
+
+                <div class="features-grid">
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">👨‍🍳</div>
+                        <h3 class="feature-title">Expert Chefs</h3>
+                        <p class="feature-description">Our chefs bring decades of experience in authentic Bangladeshi cuisine</p>
+                    </div>
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">🌿</div>
+                        <h3 class="feature-title">Fresh Ingredients</h3>
+                        <p class="feature-description">We source the freshest local ingredients daily</p>
+                    </div>
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Quick Service</h3>
+                        <p class="feature-description">Hot food served to your table in 15-20 minutes</p>
+                    </div>
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">💯</div>
+                        <h3 class="feature-title">Quality Promise</h3>
+                        <p class="feature-description">100% satisfaction guaranteed or we'll make it right</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== -->
+        <!-- FOOTER -->
+        <!-- ==================== -->
+        <footer class="footer" role="contentinfo">
+            <div class="footer-container">
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <div class="brand-logo">
+                                <span>🍛</span>
                             </div>
-
-                            <!-- Contact Column -->
-                            <div class="footer-column">
-                                <h4 class="footer-heading">Contact</h4>
-                                <ul class="footer-links">
-                                    <li>
-                                        <span class="footer-icon">📍</span>
-                                        <span>123 Gulshan Avenue, Dhaka 1212</span>
-                                    </li>
-                                    <li>
-                                        <span class="footer-icon">📞</span>
-                                        <a href="tel:+8801234567890">+880 1234-567890</a>
-                                    </li>
-                                    <li>
-                                        <span class="footer-icon">✉️</span>
-                                        <a href="mailto:info@rannaghor.com">info@rannaghor.com</a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Hours Column -->
-                            <div class="footer-column">
-                                <h4 class="footer-heading">Hours</h4>
-                                <ul class="footer-links">
-                                    <li>
-                                        <span class="day">Sunday - Thursday</span>
-                                        <span class="time">11AM - 11PM</span>
-                                    </li>
-                                    <li>
-                                        <span class="day">Friday</span>
-                                        <span class="time">1PM - 11PM</span>
-                                    </li>
-                                    <li>
-                                        <span class="day">Saturday</span>
-                                        <span class="time">11AM - 12AM</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Quick Links Column -->
-                            <div class="footer-column">
-                                <h4 class="footer-heading">Quick Links</h4>
-                                <ul class="footer-links">
-                                    <li><a href="#menu">Menu</a></li>
-                                    <li><a href="#specials">Today's Specials</a></li>
-                                    <li><a href="#">About Us</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                </ul>
+                            <div class="brand-text">
+                                <span class="brand-name">Rannaghor</span>
+                                <span class="brand-tagline">রান্নাঘর</span>
                             </div>
                         </div>
-
-                        <!-- Footer Bottom -->
-                        <div class="footer-bottom">
-                            <p>© 2024 Rannaghor. All rights reserved. Made with ❤️ in Bangladesh</p>
+                        <p class="footer-description">
+                            Authentic Bangladeshi cuisine since 2010. Every dish tells a story of tradition and love.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link" aria-label="Facebook">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Instagram">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                    <circle cx="12" cy="12" r="4"/>
+                                    <circle cx="18" cy="6" r="1"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Twitter">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                                </svg>
+                            </a>
                         </div>
                     </div>
-                </footer>
+
+                    <!-- Contact Column -->
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Contact</h4>
+                        <ul class="footer-links">
+                            <li>
+                                <span class="footer-icon">📍</span>
+                                <span>123 Gulshan Avenue, Dhaka 1212</span>
+                            </li>
+                            <li>
+                                <span class="footer-icon">📞</span>
+                                <a href="tel:+8801234567890">+880 1234-567890</a>
+                            </li>
+                            <li>
+                                <span class="footer-icon">✉️</span>
+                                <a href="mailto:info@rannaghor.com">info@rannaghor.com</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Hours Column -->
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Hours</h4>
+                        <ul class="footer-links">
+                            <li>
+                                <span class="day">Sunday - Thursday</span>
+                                <span class="time">11AM - 11PM</span>
+                            </li>
+                            <li>
+                                <span class="day">Friday</span>
+                                <span class="time">1PM - 11PM</span>
+                            </li>
+                            <li>
+                                <span class="day">Saturday</span>
+                                <span class="time">11AM - 12AM</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Quick Links Column -->
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="#menu">Menu</a></li>
+                            <li><a href="#specials">Today's Specials</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <p>© 2024 Rannaghor. All rights reserved. Made with ❤️ in Bangladesh</p>
+                </div>
+            </div>
+        </footer>
     </main>
 
     <!-- ==================== -->
@@ -645,7 +660,7 @@
                     <h3 id="ordersModalTitle" class="modal-title">Order History</h3>
                     <button id="closeOrdersModal" class="btn-close" aria-label="Close">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 18L18 6M6 6l12 12" />
+                            <path d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
                 </header>
@@ -664,8 +679,7 @@
     </div>
 
     <!-- Track Order Modal -->
-    <div id="trackOrderModal" class="modal hidden" role="dialog" aria-labelledby="trackOrderModalTitle"
-        aria-modal="true">
+    <div id="trackOrderModal" class="modal hidden" role="dialog" aria-labelledby="trackOrderModalTitle" aria-modal="true">
         <div class="modal-backdrop"></div>
         <div class="modal-container">
             <div class="modal-content modal-md">
@@ -679,7 +693,7 @@
                     </div>
                     <button id="closeTrackOrderModal" class="btn-close" aria-label="Close">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 18L18 6M6 6l12 12" />
+                            <path d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
                 </header>
@@ -706,7 +720,7 @@
                     <!-- Animated Checkmark -->
                     <div class="success-checkmark">
                         <svg viewBox="0 0 24 24">
-                            <path d="M5 13l4 4L19 7" />
+                            <path d="M5 13l4 4L19 7"/>
                         </svg>
                     </div>
 
@@ -749,9 +763,8 @@
                 <div class="waiter-content">
                     <div class="waiter-icon">🔔</div>
                     <h3 id="waiterModalTitle" class="modal-title">Calling Waiter...</h3>
-                    <p class="waiter-subtitle">A waiter will be with you shortly at Table <span
-                            id="waiterTableNumber">-</span></p>
-
+                    <p class="waiter-subtitle">A waiter will be with you shortly at Table <span id="waiterTableNumber">-</span></p>
+                    
                     <div class="waiter-actions">
                         <button id="cancelWaiter" class="btn btn-outline">Cancel</button>
                         <button id="confirmWaiter" class="btn btn-primary">Confirm</button>
@@ -762,17 +775,15 @@
     </div>
 
     <!-- Waiter Called Confirmation Modal -->
-    <div id="waiterCalledModal" class="modal hidden" role="dialog" aria-labelledby="waiterCalledTitle"
-        aria-modal="true">
+    <div id="waiterCalledModal" class="modal hidden" role="dialog" aria-labelledby="waiterCalledTitle" aria-modal="true">
         <div class="modal-backdrop"></div>
         <div class="modal-container">
             <div class="modal-content modal-sm">
                 <div class="waiter-content">
                     <div class="waiter-icon success">✅</div>
                     <h3 id="waiterCalledTitle" class="modal-title">Waiter Notified!</h3>
-                    <p class="waiter-subtitle">Someone will assist you at Table <span
-                            id="waiterCalledTableNumber">-</span> shortly</p>
-
+                    <p class="waiter-subtitle">Someone will assist you at Table <span id="waiterCalledTableNumber">-</span> shortly</p>
+                    
                     <button id="closeWaiterCalled" class="btn btn-primary btn-block">OK</button>
                 </div>
             </div>
@@ -786,17 +797,17 @@
             <div class="modal-content modal-md">
                 <button id="closeItemModal" class="btn-close modal-close-top" aria-label="Close">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 18L18 6M6 6l12 12" />
+                        <path d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
-
+                
                 <div class="item-modal-content">
                     <div class="item-modal-icon" id="itemModalIcon">🍛</div>
                     <div class="item-modal-details">
                         <h3 id="itemModalTitle" class="item-modal-title">Item Name</h3>
                         <p id="itemModalTitleBn" class="item-modal-subtitle">বাংলা নাম</p>
                         <p id="itemModalDesc" class="item-modal-description">Description</p>
-
+                        
                         <div class="item-modal-meta">
                             <div id="itemModalSpicy" class="spicy-level"></div>
                             <div class="item-modal-category" id="itemModalCategory">Category</div>
@@ -830,8 +841,7 @@
     <div id="floatingCart" class="floating-cart hidden">
         <button id="floatingCartBtn" class="fab fab-cart" aria-label="View cart">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
             <span id="floatingCartCount" class="fab-badge">0</span>
         </button>
@@ -854,7 +864,7 @@
     <!-- Back to Top Button -->
     <button id="backToTop" class="back-to-top hidden" aria-label="Back to top">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 15l-6-6-6 6" />
+            <path d="M18 15l-6-6-6 6"/>
         </svg>
     </button>
 
