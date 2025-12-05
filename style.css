@@ -3942,3 +3942,8 @@ textarea::placeholder {
     .demo-tag .demo-icon { width: 14px; height: 14px; }
     .welcome-footer-new { font-size: 0.65rem; margin-top: 1rem; }
 }
+
+/* Center section headers (restore previous style) */
+.section-header {
+    text-align: center !important;
+}
