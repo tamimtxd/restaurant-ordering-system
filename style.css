@@ -4124,3 +4124,7 @@ textarea::placeholder {
 .section-header {
     text-align: center !important;
 }
+/* Center category tabs */
+.category-tabs {
+    justify-content: center !important;
+}
