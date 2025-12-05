@@ -3534,3 +3534,105 @@ textarea::placeholder {
     .table-selection-title { font-size: 1.1rem; margin-bottom: 1rem; }
     .welcome-card { padding: 1rem; }
 }
+
+/* WELCOME SCREEN COMPACT FIX */
+.welcome-screen {
+    padding: 0.5rem !important;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+.welcome-content {
+    padding: 0.5rem 0 !important;
+}
+
+.welcome-header {
+    margin-bottom: 0.75rem !important;
+}
+
+.welcome-logo {
+    width: 40px !important;
+    height: 40px !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.welcome-title {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.welcome-subtitle {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.125rem !important;
+}
+
+.welcome-instruction {
+    font-size: 0.65rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.demo-badge {
+    margin-bottom: 0.75rem !important;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.7rem !important;
+}
+
+.demo-icon {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.table-selection-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.welcome-card {
+    padding: 0.75rem !important;
+}
+
+.table-section {
+    margin-bottom: 1rem !important;
+}
+
+.section-header {
+    padding: 0.5rem 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.section-icon {
+    font-size: 1.125rem !important;
+}
+
+.section-label {
+    font-size: 0.875rem !important;
+}
+
+.modern-card {
+    padding: 1rem 0.5rem !important;
+}
+
+.table-number {
+    font-size: 1.75rem !important;
+}
+
+.table-status {
+    font-size: 0.625rem !important;
+}
+
+.vip-badge {
+    font-size: 0.5rem !important;
+    padding: 0.2rem 0.5rem !important;
+}
+
+.welcome-footer {
+    margin-top: 0.75rem !important;
+    font-size: 0.65rem !important;
+}
+
+@media (max-width: 640px) {
+    .welcome-title { font-size: 1.1rem !important; }
+    .table-selection-title { font-size: 0.9rem !important; }
+    .table-number { font-size: 1.5rem !important; }
+    .modern-card { padding: 0.875rem 0.375rem !important; }
+}
