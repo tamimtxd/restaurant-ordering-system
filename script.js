@@ -118,7 +118,7 @@ const state = {
 const DOM = {
     // Welcome Screen
     welcomeScreen: document.getElementById('welcomeScreen'),
-    tableCards: document.querySelectorAll('.table-btn'),
+    tableCards: document.querySelectorAll('.table-btn-compact'),
 
     // Navigation
     navbar: document.getElementById('navbar'),

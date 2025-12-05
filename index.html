@@ -28,112 +28,33 @@
     <!-- ==================== -->
     <!-- WELCOME SCREEN -->
     <!-- ==================== -->
-    <div id="welcomeScreen" class="welcome-screen" role="dialog" aria-labelledby="welcomeTitle" aria-modal="true">
-        <div class="welcome-container">
-            <!-- Logo & Header -->
-            <header class="welcome-header">
-                <div class="welcome-logo">
-                    <div class="logo-icon">
-                        <span>🍛</span>
-                    </div>
-                </div>
-                <h1 id="welcomeTitle" class="welcome-title">
-                    Welcome to <span class="gradient-text">Rannaghor</span>
-                </h1>
-                <p class="welcome-subtitle">রান্নাঘর - Authentic Bangladeshi Cuisine</p>
-                <p class="welcome-instruction">Scan the QR code on your table to start ordering</p>
-            </header>
-
-            <!-- Demo Mode Card -->
-            <div class="welcome-card">
-                <div class="demo-badge">
-                    <svg class="demo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    <span>Demo Mode - Select a table</span>
-                </div>
-
-                <h2 class="table-selection-title">Select Your Table</h2>
-
-                <!-- Regular Tables Section -->
-                <div class="table-section">
-                    <div class="section-header">
-                        <span class="section-icon">🪑</span>
-                        <span class="section-label">Regular Tables</span>
-                    </div>
-                    <div class="table-cards-grid">
-                        <button class="table-btn modern-card" data-table="1" aria-label="Table 1">
-                            <div class="card-shine"></div>
-                            <div class="table-number">01</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                        <button class="table-btn modern-card" data-table="2" aria-label="Table 2">
-                            <div class="card-shine"></div>
-                            <div class="table-number">02</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                        <button class="table-btn modern-card" data-table="3" aria-label="Table 3">
-                            <div class="card-shine"></div>
-                            <div class="table-number">03</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                        <button class="table-btn modern-card" data-table="4" aria-label="Table 4">
-                            <div class="card-shine"></div>
-                            <div class="table-number">04</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                        <button class="table-btn modern-card" data-table="5" aria-label="Table 5">
-                            <div class="card-shine"></div>
-                            <div class="table-number">05</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                        <button class="table-btn modern-card" data-table="6" aria-label="Table 6">
-                            <div class="card-shine"></div>
-                            <div class="table-number">06</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                        <button class="table-btn modern-card" data-table="7" aria-label="Table 7">
-                            <div class="card-shine"></div>
-                            <div class="table-number">07</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                        <button class="table-btn modern-card" data-table="8" aria-label="Table 8">
-                            <div class="card-shine"></div>
-                            <div class="table-number">08</div>
-                            <div class="table-status">Available</div>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- VIP Tables Section -->
-                <div class="table-section vip-section">
-                    <div class="section-header vip-header">
-                        <span class="section-icon">👑</span>
-                        <span class="section-label">VIP Lounge</span>
-                    </div>
-                    <div class="table-cards-grid vip-grid">
-                        <button class="table-btn modern-card vip-card" data-table="9" aria-label="VIP Table 1">
-                            <div class="card-shine gold-shine"></div>
-                            <div class="vip-badge">VIP</div>
-                            <div class="table-number">01</div>
-                            <div class="table-status">Premium</div>
-                        </button>
-                        <button class="table-btn modern-card vip-card" data-table="10" aria-label="VIP Table 2">
-                            <div class="card-shine gold-shine"></div>
-                            <div class="vip-badge">VIP</div>
-                            <div class="table-number">02</div>
-                            <div class="table-status">Premium</div>
-                        </button>
-                    </div>
-                </div>
+    <div id="welcomeScreen" class="welcome-screen-new">
+        <div class="welcome-wrapper">
+            <!-- Compact Header -->
+            <div class="welcome-brand">
+                <div class="brand-icon-lg">🍛</div>
+                <h1 class="brand-title">Rannaghor</h1>
+                <p class="brand-subtitle">রান্নাঘর</p>
             </div>
 
-            <!-- Footer -->
-            <footer class="welcome-footer">
-                <p>© 2024 Rannaghor. Made with ❤️ in Bangladesh</p>
-            </footer>
+            <!-- Table Selection -->
+            <div class="table-selector">
+                <h2 class="selector-title">Choose Table</h2>
+                <div class="table-grid-compact">
+                    <!-- Tables 1-8 -->
+                    <button class="table-btn-compact" data-table="1">1</button>
+                    <button class="table-btn-compact" data-table="2">2</button>
+                    <button class="table-btn-compact" data-table="3">3</button>
+                    <button class="table-btn-compact" data-table="4">4</button>
+                    <button class="table-btn-compact" data-table="5">5</button>
+                    <button class="table-btn-compact" data-table="6">6</button>
+                    <button class="table-btn-compact" data-table="7">7</button>
+                    <button class="table-btn-compact" data-table="8">8</button>
+                    <!-- VIP Tables -->
+                    <button class="table-btn-compact vip" data-table="9"><span class="vip-tag">VIP</span>9</button>
+                    <button class="table-btn-compact vip" data-table="10"><span class="vip-tag">VIP</span>10</button>
+                </div>
+            </div>
         </div>
     </div>
 
