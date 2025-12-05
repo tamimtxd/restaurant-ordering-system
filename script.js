@@ -1,96 +1,246 @@
-// =====================
-// CONFIGURATION
-// =====================
+/* ============================================
+   RANNAGHOR - RESTAURANT ORDERING SYSTEM
+   Complete JavaScript Application (FIXED)
+   ============================================ */
 
-// Simulated URL structure: ?table=X (in real usage, QR code would link to this)
-// Example: https://rannaghor.com/order?table=5
+// ==========================================
+// 1. CONFIGURATION & DATA
+// ==========================================
 
-// =====================
-// DATA
-// =====================
+const CONFIG = {
+    vatRate: 0.05,
+    currency: '৳',
+    estimatedTime: '15-20 min',
+    orderStatusDelay: {
+        preparing: 5000,
+        ready: 15000,
+        served: 25000
+    },
+    toastDuration: 3000,
+    animationDelay: 100
+};
 
+// Menu Items Data
 const menuItems = [
     // Biriyani
     { id: 1, name: "Kacchi Biriyani", namebn: "কাচ্চি বিরিয়ানি", category: "biriyani", price: 350, emoji: "🍛", desc: "Aromatic mutton biriyani with potatoes", spicy: 2, popular: true },
     { id: 2, name: "Chicken Biriyani", namebn: "চিকেন বিরিয়ানি", category: "biriyani", price: 280, emoji: "🍗", desc: "Fragrant rice with tender chicken pieces", spicy: 2 },
     { id: 3, name: "Beef Tehari", namebn: "গরুর তেহারি", category: "biriyani", price: 300, emoji: "🥩", desc: "Spiced beef with aromatic rice", spicy: 3 },
+    { id: 4, name: "Morog Polao", namebn: "মোরগ পোলাও", category: "biriyani", price: 320, emoji: "🍚", desc: "Chicken with fragrant pulao rice", spicy: 1 },
 
     // Curry
-    { id: 4, name: "Chicken Rezala", namebn: "চিকেন রেজালা", category: "curry", price: 320, emoji: "🍛", desc: "Creamy white curry with tender chicken", spicy: 1 },
-    { id: 5, name: "Mutton Bhuna", namebn: "মাটন ভুনা", category: "curry", price: 380, emoji: "🍖", desc: "Slow-cooked mutton in rich spices", spicy: 3, popular: true },
-    { id: 6, name: "Chingri Malai", namebn: "চিংড়ি মালাই", category: "curry", price: 450, emoji: "🦐", desc: "Prawns in coconut milk curry", spicy: 1 },
-    { id: 7, name: "Ilish Bhapa", namebn: "ইলিশ ভাপা", category: "curry", price: 500, emoji: "🐟", desc: "Steamed hilsa in mustard paste", spicy: 2 },
-    { id: 8, name: "Beef Kala Bhuna", namebn: "গরুর কালা ভুনা", category: "curry", price: 360, emoji: "🥘", desc: "Chittagong style dark beef curry", spicy: 3 },
+    { id: 5, name: "Chicken Rezala", namebn: "চিকেন রেজালা", category: "curry", price: 320, emoji: "🍛", desc: "Creamy white curry with tender chicken", spicy: 1 },
+    { id: 6, name: "Mutton Bhuna", namebn: "মাটন ভুনা", category: "curry", price: 380, emoji: "🍖", desc: "Slow-cooked mutton in rich spices", spicy: 3, popular: true },
+    { id: 7, name: "Chingri Malai", namebn: "চিংড়ি মালাই", category: "curry", price: 450, emoji: "🦐", desc: "Prawns in coconut milk curry", spicy: 1 },
+    { id: 8, name: "Ilish Bhapa", namebn: "ইলিশ ভাপা", category: "curry", price: 500, emoji: "🐟", desc: "Steamed hilsa in mustard paste", spicy: 2 },
+    { id: 9, name: "Beef Kala Bhuna", namebn: "গরুর কালা ভুনা", category: "curry", price: 360, emoji: "🥘", desc: "Chittagong style dark beef curry", spicy: 3 },
+    { id: 10, name: "Chicken Kosha", namebn: "চিকেন কষা", category: "curry", price: 280, emoji: "🍗", desc: "Bengali style slow-cooked chicken", spicy: 2 },
 
     // Kebab
-    { id: 9, name: "Chicken Tikka", namebn: "চিকেন টিক্কা", category: "kebab", price: 280, emoji: "🍢", desc: "Grilled marinated chicken pieces", spicy: 2 },
-    { id: 10, name: "Beef Seekh Kebab", namebn: "বিফ সিক কাবাব", category: "kebab", price: 320, emoji: "🥙", desc: "Spiced minced beef on skewers", spicy: 2 },
-    { id: 11, name: "Mutton Boti Kebab", namebn: "মাটন বটি কাবাব", category: "kebab", price: 350, emoji: "🍖", desc: "Tender mutton cubes grilled", spicy: 2 },
-    { id: 12, name: "Tangri Kebab", namebn: "টাংরি কাবাব", category: "kebab", price: 300, emoji: "🍗", desc: "Marinated chicken drumsticks", spicy: 2, popular: true },
+    { id: 11, name: "Chicken Tikka", namebn: "চিকেন টিক্কা", category: "kebab", price: 280, emoji: "🍢", desc: "Grilled marinated chicken pieces", spicy: 2 },
+    { id: 12, name: "Beef Seekh Kebab", namebn: "বিফ সিক কাবাব", category: "kebab", price: 320, emoji: "🥙", desc: "Spiced minced beef on skewers", spicy: 2 },
+    { id: 13, name: "Mutton Boti Kebab", namebn: "মাটন বটি কাবাব", category: "kebab", price: 350, emoji: "🍖", desc: "Tender mutton cubes grilled", spicy: 2 },
+    { id: 14, name: "Tangri Kebab", namebn: "টাংরি কাবাব", category: "kebab", price: 300, emoji: "🍗", desc: "Marinated chicken drumsticks", spicy: 2, popular: true },
+    { id: 15, name: "Reshmi Kebab", namebn: "রেশমি কাবাব", category: "kebab", price: 290, emoji: "🥓", desc: "Soft and silky chicken kebab", spicy: 1 },
 
     // Snacks
-    { id: 13, name: "Samosa", namebn: "সমুচা", category: "snacks", price: 40, emoji: "🥟", desc: "Crispy pastry with spiced filling (2 pcs)", spicy: 1 },
-    { id: 14, name: "Singara", namebn: "সিঙ্গারা", category: "snacks", price: 30, emoji: "🔺", desc: "Bengali style potato samosa (2 pcs)", spicy: 1 },
-    { id: 15, name: "Fuchka", namebn: "ফুচকা", category: "snacks", price: 60, emoji: "🫓", desc: "Crispy shells with tangy water (6 pcs)", spicy: 2, popular: true },
-    { id: 16, name: "Chotpoti", namebn: "চটপটি", category: "snacks", price: 80, emoji: "🥣", desc: "Spicy chickpea street food", spicy: 2 },
-    { id: 17, name: "Jhalmuri", namebn: "ঝালমুড়ি", category: "snacks", price: 50, emoji: "🍿", desc: "Spiced puffed rice mix", spicy: 2 },
+    { id: 16, name: "Samosa", namebn: "সমুচা", category: "snacks", price: 40, emoji: "🥟", desc: "Crispy pastry with spiced filling (2 pcs)", spicy: 1 },
+    { id: 17, name: "Singara", namebn: "সিঙ্গারা", category: "snacks", price: 30, emoji: "🔺", desc: "Bengali style potato samosa (2 pcs)", spicy: 1 },
+    { id: 18, name: "Fuchka", namebn: "ফুচকা", category: "snacks", price: 60, emoji: "🫓", desc: "Crispy shells with tangy water (6 pcs)", spicy: 2, popular: true },
+    { id: 19, name: "Chotpoti", namebn: "চটপটি", category: "snacks", price: 80, emoji: "🥣", desc: "Spicy chickpea street food", spicy: 2 },
+    { id: 20, name: "Jhalmuri", namebn: "ঝালমুড়ি", category: "snacks", price: 50, emoji: "🍿", desc: "Spiced puffed rice mix", spicy: 2 },
+    { id: 21, name: "Peyaju", namebn: "পেঁয়াজু", category: "snacks", price: 35, emoji: "🧅", desc: "Crispy onion fritters (4 pcs)", spicy: 1 },
+    { id: 22, name: "Beguni", namebn: "বেগুনি", category: "snacks", price: 35, emoji: "🍆", desc: "Fried eggplant fritters (4 pcs)", spicy: 1 },
 
     // Dessert
-    { id: 18, name: "Roshogolla", namebn: "রসগোল্লা", category: "dessert", price: 40, emoji: "⚪", desc: "Soft cheese balls in syrup (2 pcs)", spicy: 0 },
-    { id: 19, name: "Mishti Doi", namebn: "মিষ্টি দই", category: "dessert", price: 60, emoji: "🍮", desc: "Sweet fermented yogurt", spicy: 0, popular: true },
-    { id: 20, name: "Chomchom", namebn: "চমচম", category: "dessert", price: 50, emoji: "🟤", desc: "Oval shaped sweet (2 pcs)", spicy: 0 },
-    { id: 21, name: "Firni", namebn: "ফিরনি", category: "dessert", price: 70, emoji: "🥛", desc: "Rice pudding with nuts", spicy: 0 },
-    { id: 22, name: "Jilapi", namebn: "জিলাপি", category: "dessert", price: 80, emoji: "🌀", desc: "Crispy sweet spirals", spicy: 0 },
+    { id: 23, name: "Roshogolla", namebn: "রসগোল্লা", category: "dessert", price: 40, emoji: "⚪", desc: "Soft cheese balls in syrup (2 pcs)", spicy: 0 },
+    { id: 24, name: "Mishti Doi", namebn: "মিষ্টি দই", category: "dessert", price: 60, emoji: "🍮", desc: "Sweet fermented yogurt", spicy: 0, popular: true },
+    { id: 25, name: "Chomchom", namebn: "চমচম", category: "dessert", price: 50, emoji: "🟤", desc: "Oval shaped sweet (2 pcs)", spicy: 0 },
+    { id: 26, name: "Firni", namebn: "ফিরনি", category: "dessert", price: 70, emoji: "🥛", desc: "Rice pudding with nuts", spicy: 0 },
+    { id: 27, name: "Jilapi", namebn: "জিলাপি", category: "dessert", price: 80, emoji: "🌀", desc: "Crispy sweet spirals", spicy: 0 },
+    { id: 28, name: "Rasmalai", namebn: "রসমালাই", category: "dessert", price: 90, emoji: "🥮", desc: "Cheese patties in sweet milk (2 pcs)", spicy: 0 },
 
     // Drinks
-    { id: 23, name: "Borhani", namebn: "বোরহানি", category: "drinks", price: 60, emoji: "🥛", desc: "Spiced yogurt drink", spicy: 1, popular: true },
-    { id: 24, name: "Lassi", namebn: "লাচ্ছি", category: "drinks", price: 80, emoji: "🥤", desc: "Sweet yogurt smoothie", spicy: 0 },
-    { id: 25, name: "Mango Lassi", namebn: "আমের লাচ্ছি", category: "drinks", price: 100, emoji: "🥭", desc: "Mango flavored lassi", spicy: 0 },
-    { id: 26, name: "Cha", namebn: "চা", category: "drinks", price: 30, emoji: "🍵", desc: "Traditional milk tea", spicy: 0 },
-    { id: 27, name: "Doodh Cha", namebn: "দুধ চা", category: "drinks", price: 50, emoji: "☕", desc: "Creamy milk tea", spicy: 0 },
+    { id: 29, name: "Borhani", namebn: "বোরহানি", category: "drinks", price: 60, emoji: "🥛", desc: "Spiced yogurt drink", spicy: 1, popular: true },
+    { id: 30, name: "Lassi", namebn: "লাচ্ছি", category: "drinks", price: 80, emoji: "🥤", desc: "Sweet yogurt smoothie", spicy: 0 },
+    { id: 31, name: "Mango Lassi", namebn: "আমের লাচ্ছি", category: "drinks", price: 100, emoji: "🥭", desc: "Mango flavored lassi", spicy: 0 },
+    { id: 32, name: "Cha", namebn: "চা", category: "drinks", price: 30, emoji: "🍵", desc: "Traditional milk tea", spicy: 0 },
+    { id: 33, name: "Doodh Cha", namebn: "দুধ চা", category: "drinks", price: 50, emoji: "☕", desc: "Creamy milk tea", spicy: 0 },
+    { id: 34, name: "Lemon Soda", namebn: "লেবু সোডা", category: "drinks", price: 40, emoji: "🍋", desc: "Fresh lemon with soda", spicy: 0 },
 ];
 
+// Special Items Data
 const specialItems = [
-    { id: 'special1', name: "Kacchi Biriyani (Special)", price: 320, originalPrice: 400, emoji: "🍛", desc: "Premium mutton biriyani" },
-    { id: 'special2', name: "Chingri Malai Curry", price: 450, emoji: "🦐", desc: "Jumbo prawns in coconut" },
+    {
+        id: 'special1',
+        name: "Kacchi Biriyani (Special)",
+        namebn: "কাচ্চি বিরিয়ানি (স্পেশাল)",
+        price: 320,
+        originalPrice: 400,
+        emoji: "🍛",
+        desc: "Premium mutton slow-cooked with aromatic basmati rice, saffron & secret spices",
+        spicy: 2,
+        category: "biriyani"
+    },
+    {
+        id: 'special2',
+        name: "Chingri Malai Curry",
+        namebn: "চিংড়ি মালাই কারি",
+        price: 450,
+        emoji: "🦐",
+        desc: "Jumbo prawns cooked in rich coconut milk with authentic Bengali spices",
+        spicy: 1,
+        category: "curry"
+    }
 ];
 
-// =====================
-// STATE
-// =====================
+// ==========================================
+// 2. STATE MANAGEMENT
+// ==========================================
 
-let currentTable = null;
-let cart = [];
-let orders = [];
+const state = {
+    currentTable: null,
+    cart: [],
+    orders: [],
+    selectedCategory: 'all',
+    searchQuery: '',
+    selectedItem: null,
+    selectedItemQty: 1,
+    isCartOpen: false,
+    isMobileMenuOpen: false,
+    specialItemsInitialized: false // Flag to prevent multiple listeners
+};
 
-// =====================
-// DOM ELEMENTS
-// =====================
+// ==========================================
+// 3. DOM ELEMENTS
+// ==========================================
 
-const welcomeScreen = document.getElementById('welcomeScreen');
-const mainContent = document.getElementById('mainContent');
-const menuGrid = document.getElementById('menuGrid');
-const cartBtn = document.getElementById('cartBtn');
-const cartSidebar = document.getElementById('cartSidebar');
-const cartOverlay = document.getElementById('cartOverlay');
-const closeCart = document.getElementById('closeCart');
-const cartItems = document.getElementById('cartItems');
-const emptyCart = document.getElementById('emptyCart');
-const cartSummary = document.getElementById('cartSummary');
-const cartCount = document.getElementById('cartCount');
-const floatingCartCount = document.getElementById('floatingCartCount');
-const subtotalEl = document.getElementById('subtotal');
-const vatEl = document.getElementById('vat');
-const totalEl = document.getElementById('total');
-const placeOrderBtn = document.getElementById('placeOrder');
-const successModal = document.getElementById('successModal');
-const ordersModal = document.getElementById('ordersModal');
-const waiterModal = document.getElementById('waiterModal');
-const waiterCalledModal = document.getElementById('waiterCalledModal');
+const DOM = {
+    // Welcome Screen
+    welcomeScreen: document.getElementById('welcomeScreen'),
+    tableCards: document.querySelectorAll('.table-card'),
 
-// =====================
-// TABLE DETECTION
-// =====================
+    // Navigation
+    navbar: document.getElementById('navbar'),
+    tableBadge: document.getElementById('tableBadge'),
+    tableNumberDisplay: document.getElementById('tableNumberDisplay'),
+    mobileMenuBtn: document.getElementById('mobileMenuBtn'),
+    mobileMenu: document.getElementById('mobileMenu'),
+
+    // Main Content
+    mainContent: document.getElementById('mainContent'),
+    heroTableNumber: document.getElementById('heroTableNumber'),
+    sessionInfo: document.getElementById('sessionInfo'),
+
+    // Menu
+    menuGrid: document.getElementById('menuGrid'),
+    categoryTabs: document.querySelectorAll('.category-tab'),
+    menuSearch: document.getElementById('menuSearch'),
+    clearSearch: document.getElementById('clearSearch'),
+    noResults: document.getElementById('noResults'),
+
+    // Cart
+    cartBtn: document.getElementById('cartBtn'),
+    cartSidebar: document.getElementById('cartSidebar'),
+    cartOverlay: document.getElementById('cartOverlay'),
+    closeCart: document.getElementById('closeCart'),
+    cartItems: document.getElementById('cartItems'),
+    emptyCart: document.getElementById('emptyCart'),
+    cartSummary: document.getElementById('cartSummary'),
+    cartCount: document.getElementById('cartCount'),
+    cartTableNumber: document.getElementById('cartTableNumber'),
+    subtotal: document.getElementById('subtotal'),
+    vat: document.getElementById('vat'),
+    total: document.getElementById('total'),
+    instructions: document.getElementById('instructions'),
+    placeOrderBtn: document.getElementById('placeOrder'),
+
+    // Floating Elements
+    floatingCart: document.getElementById('floatingCart'),
+    floatingCartBtn: document.getElementById('floatingCartBtn'),
+    floatingCartCount: document.getElementById('floatingCartCount'),
+    floatingTrackOrder: document.getElementById('floatingTrackOrder'),
+    floatingTrackBtn: document.getElementById('floatingTrackBtn'),
+    floatingOrderCount: document.getElementById('floatingOrderCount'),
+    backToTop: document.getElementById('backToTop'),
+
+    // Modals
+    successModal: document.getElementById('successModal'),
+    orderNumber: document.getElementById('orderNumber'),
+    successTableNumber: document.getElementById('successTableNumber'),
+    closeSuccessModal: document.getElementById('closeSuccessModal'),
+
+    ordersModal: document.getElementById('ordersModal'),
+    ordersList: document.getElementById('ordersList'),
+    noOrders: document.getElementById('noOrders'),
+    closeOrdersModal: document.getElementById('closeOrdersModal'),
+    viewOrdersBtn: document.getElementById('viewOrdersBtn'),
+    mobileOrdersBtn: document.getElementById('mobileOrdersBtn'),
+
+    trackOrderModal: document.getElementById('trackOrderModal'),
+    trackOrderList: document.getElementById('trackOrderList'),
+    noActiveOrders: document.getElementById('noActiveOrders'),
+    closeTrackOrderModal: document.getElementById('closeTrackOrderModal'),
+
+    waiterModal: document.getElementById('waiterModal'),
+    waiterTableNumber: document.getElementById('waiterTableNumber'),
+    cancelWaiter: document.getElementById('cancelWaiter'),
+    confirmWaiter: document.getElementById('confirmWaiter'),
+    callWaiterBtn: document.getElementById('callWaiterBtn'),
+    mobileWaiterBtn: document.getElementById('mobileWaiterBtn'),
+
+    waiterCalledModal: document.getElementById('waiterCalledModal'),
+    waiterCalledTableNumber: document.getElementById('waiterCalledTableNumber'),
+    closeWaiterCalled: document.getElementById('closeWaiterCalled'),
+
+    itemModal: document.getElementById('itemModal'),
+    closeItemModal: document.getElementById('closeItemModal'),
+    itemModalIcon: document.getElementById('itemModalIcon'),
+    itemModalTitle: document.getElementById('itemModalTitle'),
+    itemModalTitleBn: document.getElementById('itemModalTitleBn'),
+    itemModalDesc: document.getElementById('itemModalDesc'),
+    itemModalSpicy: document.getElementById('itemModalSpicy'),
+    itemModalCategory: document.getElementById('itemModalCategory'),
+    itemModalPrice: document.getElementById('itemModalPrice'),
+    itemQtyMinus: document.getElementById('itemQtyMinus'),
+    itemQtyValue: document.getElementById('itemQtyValue'),
+    itemQtyPlus: document.getElementById('itemQtyPlus'),
+    itemTotalPrice: document.getElementById('itemTotalPrice'),
+    addItemToCart: document.getElementById('addItemToCart'),
+
+    // Order Badges
+    activeOrdersBadge: document.getElementById('activeOrdersBadge'),
+    mobileOrdersBadge: document.getElementById('mobileOrdersBadge'),
+
+    // Toast Container
+    toastContainer: document.getElementById('toastContainer')
+};
+
+// ==========================================
+// 4. INITIALIZATION
+// ==========================================
+
+function init() {
+    const tableFromURL = getTableFromURL();
+
+    if (tableFromURL) {
+        setTable(tableFromURL);
+    } else {
+        showWelcomeScreen();
+    }
+
+    setupEventListeners();
+    initScrollObserver();
+    
+    // Initialize special items listeners ONCE
+    initSpecialItems();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+// ==========================================
+// 5. TABLE DETECTION & SELECTION
+// ==========================================
 
 function getTableFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -98,317 +248,660 @@ function getTableFromURL() {
 }
 
 function setTable(tableNumber) {
-    currentTable = tableNumber;
+    state.currentTable = tableNumber;
 
-    // Update URL without reload
     const url = new URL(window.location);
     url.searchParams.set('table', tableNumber);
     window.history.pushState({}, '', url);
 
-    // Update all table displays
-    document.getElementById('tableNumberDisplay').textContent = tableNumber;
-    document.getElementById('heroTableNumber').textContent = tableNumber;
-    document.getElementById('cartTableNumber').textContent = tableNumber;
-    document.getElementById('waiterTableNumber').textContent = tableNumber;
-    document.getElementById('waiterCalledTableNumber').textContent = tableNumber;
-
-    // Show table badge
-    document.getElementById('tableBadge').classList.remove('hidden');
-    document.getElementById('tableBadge').classList.add('flex');
-
-    // Hide welcome screen, show main content
-    welcomeScreen.style.display = 'none';
-    mainContent.classList.remove('opacity-0');
-
-    // Show floating cart on mobile
-    document.getElementById('floatingCart').classList.remove('hidden');
-
-    // Load any saved cart for this table
-    loadCartFromStorage();
-
-    // Initialize menu
+    updateTableDisplays(tableNumber);
+    hideWelcomeScreen();
+    showMainContent();
+    loadFromStorage();
     renderMenu();
-    initScrollReveal();
-}
+    updateOrderBadges();
 
-function loadCartFromStorage() {
-    const savedCart = localStorage.getItem(`cart_table_${currentTable}`);
-    if (savedCart) {
-        cart = JSON.parse(savedCart);
-        updateCart();
-    }
-
-    const savedOrders = localStorage.getItem(`orders_table_${currentTable}`);
-    if (savedOrders) {
-        orders = JSON.parse(savedOrders);
-        updateOrdersBadge();
+    if (window.innerWidth < 768) {
+        DOM.floatingCart.classList.remove('hidden');
     }
 }
 
-function saveCartToStorage() {
-    localStorage.setItem(`cart_table_${currentTable}`, JSON.stringify(cart));
+function updateTableDisplays(tableNumber) {
+    const displays = [
+        DOM.tableNumberDisplay,
+        DOM.heroTableNumber,
+        DOM.cartTableNumber,
+        DOM.waiterTableNumber,
+        DOM.waiterCalledTableNumber,
+        DOM.successTableNumber
+    ];
+
+    displays.forEach(el => {
+        if (el) el.textContent = tableNumber;
+    });
+
+    if (DOM.tableBadge) {
+        DOM.tableBadge.classList.remove('hidden');
+    }
 }
 
-function saveOrdersToStorage() {
-    localStorage.setItem(`orders_table_${currentTable}`, JSON.stringify(orders));
+function showWelcomeScreen() {
+    if (DOM.welcomeScreen) {
+        DOM.welcomeScreen.style.display = 'flex';
+    }
 }
 
-// =====================
-// INITIALIZATION
-// =====================
+function hideWelcomeScreen() {
+    if (DOM.welcomeScreen) {
+        DOM.welcomeScreen.style.display = 'none';
+    }
+}
 
-function init() {
-    const tableFromURL = getTableFromURL();
+function showMainContent() {
+    if (DOM.mainContent) {
+        DOM.mainContent.classList.add('visible');
+    }
+}
 
-    if (tableFromURL) {
-        // Table detected from URL (simulating QR scan)
-        setTable(tableFromURL);
+// ==========================================
+// 6. MENU FUNCTIONS
+// ==========================================
+
+function renderMenu(category = 'all', searchQuery = '') {
+    if (!DOM.menuGrid) return;
+
+    let filtered = [...menuItems];
+
+    if (category !== 'all') {
+        filtered = filtered.filter(item => item.category === category);
+    }
+
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(item =>
+            item.name.toLowerCase().includes(query) ||
+            item.namebn.includes(query) ||
+            item.desc.toLowerCase().includes(query) ||
+            item.category.toLowerCase().includes(query)
+        );
+    }
+
+    if (filtered.length === 0) {
+        DOM.noResults.classList.remove('hidden');
+        DOM.menuGrid.innerHTML = '';
+        return;
     } else {
-        // No table in URL - show welcome/selection screen
-        welcomeScreen.style.display = 'flex';
+        DOM.noResults.classList.add('hidden');
     }
 
-    // Setup table selection cards
-    document.querySelectorAll('.table-card').forEach(card => {
-        card.addEventListener('click', () => {
-            document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
+    DOM.menuGrid.innerHTML = filtered.map((item, index) => createMenuItemHTML(item, index)).join('');
 
-            setTimeout(() => {
-                setTable(card.dataset.table);
-            }, 300);
+    observeScrollElements();
+    attachMenuItemListeners();
+}
+
+function createMenuItemHTML(item, index) {
+    const spicyIndicator = getSpicyIndicator(item.spicy);
+    const delay = Math.min(index * 0.05, 0.5);
+
+    return `
+        <article class="food-card scroll-reveal" data-id="${item.id}" role="listitem" style="transition-delay: ${delay}s">
+            <div class="food-card-content">
+                <div class="food-card-header">
+                    <div class="food-card-icon">${item.emoji}</div>
+                    <div class="food-card-badges">
+                        ${item.popular ? '<span class="food-badge popular">Popular</span>' : ''}
+                        ${item.spicy >= 3 ? '<span class="food-badge spicy">Spicy</span>' : ''}
+                    </div>
+                </div>
+                <h3 class="food-card-title">${item.name}</h3>
+                <p class="food-card-title-bn">${item.namebn}</p>
+                <p class="food-card-description">${item.desc}</p>
+                <div class="food-card-footer">
+                    <span class="food-card-price gradient-text">${CONFIG.currency}${item.price}</span>
+                    <button class="btn btn-primary btn-add btn-menu-item" data-id="${item.id}" aria-label="Add ${item.name} to cart">
+                        Add +
+                    </button>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+function getSpicyIndicator(level) {
+    if (!level) return '';
+    return '🌶️'.repeat(level);
+}
+
+// Attach listeners ONLY to menu grid items (not special items)
+function attachMenuItemListeners() {
+    // Add to cart buttons - only menu items
+    document.querySelectorAll('.btn-menu-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(btn.dataset.id);
         });
     });
 
-    // Setup event listeners
-    setupEventListeners();
-}
-
-// =====================
-// MENU RENDERING
-// =====================
-
-function renderMenu(category = 'all') {
-    const filtered = category === 'all' ? menuItems : menuItems.filter(item => item.category === category);
-
-    menuGrid.innerHTML = filtered.map((item, index) => `
-                <div class="scroll-reveal food-card rounded-2xl overflow-hidden" style="transition-delay: ${0.1 + index * 0.03}s" data-category="${item.category}">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="text-5xl">${item.emoji}</div>
-                            <div class="flex flex-col items-end gap-1">
-                                ${item.popular ? '<span class="bg-orange-500/20 text-orange-400 text-xs px-2 py-1 rounded-full">Popular</span>' : ''}
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-display font-bold mb-1">${item.name}</h3>
-                        <p class="text-orange-400 text-sm mb-2">${item.namebn}</p>
-                        <p class="text-gray-400 text-sm mb-4">${item.desc}</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold gradient-text">৳${item.price}</span>
-                            <button class="add-to-cart-btn glow-btn px-5 py-2 rounded-full font-medium text-sm" data-id="${item.id}">
-                                Add +
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-    // Re-observe for scroll reveal
-    document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(el => observer.observe(el));
-
-    // Add event listeners for add to cart buttons
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        btn.addEventListener('click', () => addToCart(btn.dataset.id));
+    // Card click for details
+    document.querySelectorAll('.food-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.btn-add')) {
+                openItemModal(card.dataset.id);
+            }
+        });
     });
 }
 
-// =====================
-// CART FUNCTIONS
-// =====================
+// Initialize special items separately (called only once)
+function initSpecialItems() {
+    if (state.specialItemsInitialized) return;
+    
+    document.querySelectorAll('.btn-special').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            addToCart(btn.dataset.id);
+        });
+    });
+    
+    state.specialItemsInitialized = true;
+}
+
+function setCategory(category) {
+    state.selectedCategory = category;
+
+    DOM.categoryTabs.forEach(tab => {
+        const isActive = tab.dataset.category === category;
+        tab.classList.toggle('active', isActive);
+        tab.setAttribute('aria-selected', isActive);
+    });
+
+    renderMenu(category, state.searchQuery);
+}
+
+// ==========================================
+// 7. SEARCH FUNCTIONALITY
+// ==========================================
+
+function handleSearch(query) {
+    state.searchQuery = query;
+
+    if (DOM.clearSearch) {
+        DOM.clearSearch.classList.toggle('hidden', !query);
+    }
+
+    renderMenu(state.selectedCategory, query);
+}
+
+function clearSearch() {
+    state.searchQuery = '';
+    if (DOM.menuSearch) {
+        DOM.menuSearch.value = '';
+    }
+    if (DOM.clearSearch) {
+        DOM.clearSearch.classList.add('hidden');
+    }
+    renderMenu(state.selectedCategory, '');
+}
+
+// ==========================================
+// 8. CART FUNCTIONS
+// ==========================================
 
 function addToCart(id) {
     let item = menuItems.find(i => i.id == id) || specialItems.find(i => i.id == id);
     if (!item) return;
 
-    const existingItem = cart.find(i => i.id == id);
+    const existingItem = state.cart.find(i => i.id == id);
+
     if (existingItem) {
         existingItem.qty++;
     } else {
-        cart.push({ ...item, qty: 1 });
+        state.cart.push({ ...item, qty: 1 });
     }
 
     updateCart();
-    saveCartToStorage();
+    saveToStorage();
+    showToast(`${item.name} added to cart! 🛒`);
+    animateCartIcon();
+}
 
-    // Bounce animation
-    cartCount.classList.add('cart-bounce');
-    setTimeout(() => cartCount.classList.remove('cart-bounce'), 500);
+function addToCartWithQty(id, qty) {
+    let item = menuItems.find(i => i.id == id) || specialItems.find(i => i.id == id);
+    if (!item || qty < 1) return;
 
-    // Show quick feedback
-    showToast(`${item.name} added to cart!`);
+    const existingItem = state.cart.find(i => i.id == id);
+
+    if (existingItem) {
+        existingItem.qty += qty;
+    } else {
+        state.cart.push({ ...item, qty: qty });
+    }
+
+    updateCart();
+    saveToStorage();
+    showToast(`${qty}x ${item.name} added to cart! 🛒`);
+    animateCartIcon();
+}
+
+function updateCartItemQty(id, change) {
+    const item = state.cart.find(i => i.id == id);
+    if (!item) return;
+
+    item.qty += change;
+
+    if (item.qty <= 0) {
+        removeFromCart(id);
+    } else {
+        updateCart();
+        saveToStorage();
+    }
+}
+
+function removeFromCart(id) {
+    state.cart = state.cart.filter(i => i.id != id);
+    updateCart();
+    saveToStorage();
 }
 
 function updateCart() {
-    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const vat = Math.round(subtotal * 0.05);
-    const total = subtotal + vat;
+    const totalItems = state.cart.reduce((sum, item) => sum + item.qty, 0);
+    const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const vatAmount = Math.round(subtotal * CONFIG.vatRate);
+    const totalAmount = subtotal + vatAmount;
 
-    // Update count badges
-    if (totalItems > 0) {
-        cartCount.textContent = totalItems;
-        cartCount.classList.remove('hidden');
-        floatingCartCount.textContent = totalItems;
-        emptyCart.classList.add('hidden');
-        cartSummary.classList.remove('hidden');
-    } else {
-        cartCount.classList.add('hidden');
-        floatingCartCount.textContent = '0';
-        emptyCart.classList.remove('hidden');
-        cartSummary.classList.add('hidden');
-    }
+    updateCartBadges(totalItems);
 
-    // Update totals
-    subtotalEl.textContent = `৳${subtotal}`;
-    vatEl.textContent = `৳${vat}`;
-    totalEl.textContent = `৳${total}`;
+    if (DOM.subtotal) DOM.subtotal.textContent = `${CONFIG.currency}${subtotal}`;
+    if (DOM.vat) DOM.vat.textContent = `${CONFIG.currency}${vatAmount}`;
+    if (DOM.total) DOM.total.textContent = `${CONFIG.currency}${totalAmount}`;
 
-    // Render cart items
-    cartItems.innerHTML = cart.map(item => `
-                <div class="flex items-center gap-4 bg-white/5 rounded-xl p-4">
-                    <div class="text-3xl">${item.emoji}</div>
-                    <div class="flex-1 min-w-0">
-                        <h4 class="font-semibold truncate">${item.name}</h4>
-                        <p class="text-orange-400 text-sm">৳${item.price} each</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="qty-btn w-8 h-8 rounded-full border border-white/20 flex items-center justify-center" onclick="updateQty('${item.id}', -1)">-</button>
-                        <span class="w-8 text-center">${item.qty}</span>
-                        <button class="qty-btn w-8 h-8 rounded-full border border-white/20 flex items-center justify-center" onclick="updateQty('${item.id}', 1)">+</button>
-                    </div>
-                </div>
-            `).join('');
+    const isEmpty = state.cart.length === 0;
+    if (DOM.emptyCart) DOM.emptyCart.classList.toggle('hidden', !isEmpty);
+    if (DOM.cartSummary) DOM.cartSummary.classList.toggle('hidden', isEmpty);
+
+    renderCartItems();
 }
 
-function updateQty(id, change) {
-    const item = cart.find(i => i.id == id);
-    if (item) {
-        item.qty += change;
-        if (item.qty <= 0) {
-            cart = cart.filter(i => i.id != id);
+function updateCartBadges(count) {
+    const badges = [DOM.cartCount, DOM.floatingCartCount];
+
+    badges.forEach(badge => {
+        if (badge) {
+            badge.textContent = count;
+            badge.classList.toggle('hidden', count === 0);
         }
-        updateCart();
-        saveCartToStorage();
+    });
+}
+
+function renderCartItems() {
+    if (!DOM.cartItems) return;
+
+    DOM.cartItems.innerHTML = state.cart.map(item => `
+        <div class="cart-item" data-id="${item.id}">
+            <div class="cart-item-icon">${item.emoji}</div>
+            <div class="cart-item-details">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">${CONFIG.currency}${item.price} each</div>
+            </div>
+            <div class="cart-item-quantity">
+                <button class="qty-btn" onclick="updateCartItemQty('${item.id}', -1)" aria-label="Decrease quantity">−</button>
+                <span class="qty-value">${item.qty}</span>
+                <button class="qty-btn" onclick="updateCartItemQty('${item.id}', 1)" aria-label="Increase quantity">+</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function animateCartIcon() {
+    if (DOM.cartCount) {
+        DOM.cartCount.classList.add('cart-bounce');
+        setTimeout(() => DOM.cartCount.classList.remove('cart-bounce'), 400);
     }
 }
 
-// =====================
-// ORDER FUNCTIONS
-// =====================
+function openCart() {
+    state.isCartOpen = true;
+    if (DOM.cartSidebar) DOM.cartSidebar.classList.add('open');
+    if (DOM.cartOverlay) DOM.cartOverlay.classList.remove('hidden');
+    setTimeout(() => {
+        if (DOM.cartOverlay) DOM.cartOverlay.classList.add('visible');
+    }, 10);
+    document.body.classList.add('cart-open');
+}
+
+function closeCart() {
+    state.isCartOpen = false;
+    if (DOM.cartSidebar) DOM.cartSidebar.classList.remove('open');
+    if (DOM.cartOverlay) DOM.cartOverlay.classList.remove('visible');
+    setTimeout(() => {
+        if (DOM.cartOverlay) DOM.cartOverlay.classList.add('hidden');
+    }, 300);
+    document.body.classList.remove('cart-open');
+}
+
+// ==========================================
+// 9. ORDER FUNCTIONS
+// ==========================================
 
 function placeOrder() {
-    if (cart.length === 0) return;
+    if (state.cart.length === 0) {
+        showToast('Your cart is empty!', 'warning');
+        return;
+    }
 
-    const orderNumber = Math.floor(10000 + Math.random() * 90000);
+    const orderNumber = generateOrderNumber();
+
     const order = {
         id: orderNumber,
-        table: currentTable,
-        items: [...cart],
-        total: cart.reduce((sum, item) => sum + (item.price * item.qty), 0),
-        instructions: document.getElementById('instructions').value,
+        table: state.currentTable,
+        items: [...state.cart],
+        subtotal: state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0),
+        vat: Math.round(state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0) * CONFIG.vatRate),
+        total: 0,
+        instructions: DOM.instructions?.value || '',
         status: 'received',
         timestamp: new Date().toISOString()
     };
+    order.total = order.subtotal + order.vat;
 
-    orders.unshift(order);
-    saveOrdersToStorage();
-    updateOrdersBadge();
+    state.orders.unshift(order);
+    saveToStorage();
 
-    // Show order number and table
-    document.getElementById('orderNumber').textContent = orderNumber;
-    document.getElementById('successTableNumber').textContent = currentTable;
-
-    // Clear cart
-    cart = [];
+    state.cart = [];
     updateCart();
-    saveCartToStorage();
-    document.getElementById('instructions').value = '';
+    if (DOM.instructions) DOM.instructions.value = '';
 
-    // Close cart, show success
-    cartSidebar.classList.remove('open');
-    cartOverlay.classList.add('hidden');
-    successModal.classList.remove('hidden');
-
-    // Simulate order status progression (for demo)
+    updateOrderBadges();
+    closeCart();
+    showSuccessModal(orderNumber);
     simulateOrderProgress(orderNumber);
 }
 
-function simulateOrderProgress(orderNumber) {
-    // After 5 seconds, move to "preparing"
-    setTimeout(() => {
-        const order = orders.find(o => o.id === orderNumber);
-        if (order && order.status === 'received') {
-            // Trigger animation FIRST (before status change)
-            triggerStatusAnimation(orderNumber, 1);
-            // Then change status
-            order.status = 'preparing';
-            saveOrdersToStorage();
-            showToast('👨‍🍳 Your order is being prepared!');
-        }
-    }, 5000);
-
-    // After 15 seconds, move to "ready"
-    setTimeout(() => {
-        const order = orders.find(o => o.id === orderNumber);
-        if (order && order.status === 'preparing') {
-            // Trigger animation FIRST (before status change)
-            triggerStatusAnimation(orderNumber, 2);
-            // Then change status
-            order.status = 'ready';
-            saveOrdersToStorage();
-            showToast('🍽️ Your order is ready!');
-        }
-    }, 15000);
-
-    // After 25 seconds, move to "served"
-    setTimeout(() => {
-        const order = orders.find(o => o.id === orderNumber);
-        if (order && order.status === 'ready') {
-            // Trigger animation FIRST (while order is still "ready" status)
-            triggerStatusAnimation(orderNumber, 3);
-            // Then change status after a short delay for animation to complete
-            setTimeout(() => {
-                order.status = 'served';
-                saveOrdersToStorage();
-                updateOrdersBadge();
-            }, 500);
-            showToast('✅ Order served. Enjoy your meal!');
-        }
-    }, 25000);
+function generateOrderNumber() {
+    return Math.floor(10000 + Math.random() * 90000);
 }
 
-// Trigger animation when status changes (toast appears)
-function triggerStatusAnimation(orderNumber, newStatusIndex) {
-    const trackOrderModal = document.getElementById('trackOrderModal');
+function simulateOrderProgress(orderNumber) {
+    const { preparing, ready, served } = CONFIG.orderStatusDelay;
 
-    // Check if Track Order modal is open
-    if (!trackOrderModal.classList.contains('hidden')) {
-        // Find the order index in active orders
-        const activeOrders = orders.filter(o => o.status !== 'served');
+    setTimeout(() => {
+        updateOrderStatus(orderNumber, 'preparing');
+        showToast('👨‍🍳 Your order is being prepared!');
+    }, preparing);
+
+    setTimeout(() => {
+        updateOrderStatus(orderNumber, 'ready');
+        showToast('🍽️ Your order is ready!');
+    }, ready);
+
+    setTimeout(() => {
+        updateOrderStatus(orderNumber, 'served');
+        showToast('✅ Order served. Enjoy your meal!');
+        updateOrderBadges();
+    }, served);
+}
+
+function updateOrderStatus(orderNumber, newStatus) {
+    const order = state.orders.find(o => o.id === orderNumber);
+    if (!order) return;
+
+    const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
+    const newStatusIndex = statusIndex[newStatus];
+
+    // Trigger animation BEFORE changing status (if modal is open)
+    if (!DOM.trackOrderModal.classList.contains('hidden')) {
+        const activeOrders = state.orders.filter(o => o.status !== 'served');
         const orderIndex = activeOrders.findIndex(o => o.id === orderNumber);
-
+        
         if (orderIndex !== -1) {
-            // Animate just the status change (single step transition)
             animateSingleStep(orderIndex, newStatusIndex);
         }
+    }
+
+    order.status = newStatus;
+    saveToStorage();
+}
+
+function updateOrderBadges() {
+    const activeCount = state.orders.filter(o => o.status !== 'served').length;
+
+    const badges = [DOM.activeOrdersBadge, DOM.mobileOrdersBadge];
+    badges.forEach(badge => {
+        if (badge) {
+            badge.textContent = activeCount;
+            badge.classList.toggle('hidden', activeCount === 0);
+        }
+    });
+
+    if (DOM.floatingTrackOrder) {
+        DOM.floatingTrackOrder.classList.toggle('hidden', activeCount === 0);
+    }
+    if (DOM.floatingOrderCount) {
+        DOM.floatingOrderCount.textContent = activeCount;
+    }
+}
+
+function renderOrders() {
+    if (!DOM.ordersList) return;
+
+    if (state.orders.length === 0) {
+        DOM.ordersList.innerHTML = '';
+        if (DOM.noOrders) DOM.noOrders.classList.remove('hidden');
+        return;
+    }
+
+    if (DOM.noOrders) DOM.noOrders.classList.add('hidden');
+
+    DOM.ordersList.innerHTML = state.orders.map(order => {
+        const statusConfig = {
+            'received': { label: '📝 Received', class: 'active' },
+            'preparing': { label: '👨‍🍳 Preparing', class: 'active' },
+            'ready': { label: '🍽️ Ready', class: 'active' },
+            'served': { label: '✅ Served', class: 'completed' }
+        };
+
+        const status = statusConfig[order.status];
+
+        return `
+            <div class="order-item">
+                <div class="order-header">
+                    <div>
+                        <div class="order-id">Order #${order.id}</div>
+                        <div class="order-time">${formatDate(order.timestamp)}</div>
+                    </div>
+                    <span class="order-status ${status.class}">${status.label}</span>
+                </div>
+                <div class="order-items-list">
+                    ${order.items.map(item => `
+                        <div class="order-item-row">
+                            <span>${item.emoji} ${item.name} <span class="item-qty">×${item.qty}</span></span>
+                            <span>${CONFIG.currency}${item.price * item.qty}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="order-total">
+                    <span>Total (incl. VAT)</span>
+                    <span class="total-value gradient-text">${CONFIG.currency}${order.total}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderTrackOrders() {
+    if (!DOM.trackOrderList) return;
+
+    const activeOrders = state.orders.filter(o => o.status !== 'served');
+
+    if (activeOrders.length === 0) {
+        DOM.trackOrderList.innerHTML = '';
+        if (DOM.noActiveOrders) DOM.noActiveOrders.classList.remove('hidden');
+        return;
+    }
+
+    if (DOM.noActiveOrders) DOM.noActiveOrders.classList.add('hidden');
+
+    DOM.trackOrderList.innerHTML = activeOrders.map((order, orderIndex) => {
+        return `
+            <div class="track-order-card" data-order-id="${order.id}">
+                <div class="track-order-header">
+                    <div>
+                        <div class="track-order-id">Order #${order.id}</div>
+                        <div class="track-order-time">${formatTime(order.timestamp)}</div>
+                    </div>
+                    <span class="track-status-badge">
+                        <span class="live-dot"></span>
+                        In Progress
+                    </span>
+                </div>
+
+                <!-- Status Tracker -->
+                <div class="status-tracker">
+                    <div class="status-steps">
+                        <div class="status-progress-line">
+                            <div class="track-progress-${orderIndex} status-progress-fill" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="track-step-${orderIndex}-0 status-step">
+                            <div class="step-icon">📝</div>
+                            <span class="step-label">Received</span>
+                        </div>
+                        
+                        <div class="track-step-${orderIndex}-1 status-step">
+                            <div class="step-icon">👨‍🍳</div>
+                            <span class="step-label">Preparing</span>
+                        </div>
+                        
+                        <div class="track-step-${orderIndex}-2 status-step">
+                            <div class="step-icon">🍽️</div>
+                            <span class="step-label">Ready</span>
+                        </div>
+                        
+                        <div class="track-step-${orderIndex}-3 status-step">
+                            <div class="step-icon">✅</div>
+                            <span class="step-label">Served</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="track-order-items">
+                    ${order.items.map(item => `
+                        <div class="order-item-row">
+                            <span>${item.emoji} ${item.name} <span class="item-qty">×${item.qty}</span></span>
+                            <span>${CONFIG.currency}${item.price * item.qty}</span>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- Footer -->
+                <div class="track-order-footer">
+                    <div class="track-total">
+                        <span class="track-total-label">Total</span>
+                        <span class="track-total-value gradient-text">${CONFIG.currency}${order.total}</span>
+                    </div>
+                    <div class="track-eta">
+                        <span class="track-eta-label">Estimated</span>
+                        <span class="track-eta-value">${CONFIG.estimatedTime}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Animate status trackers after render
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            activeOrders.forEach((order, orderIndex) => {
+                const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
+                const currentStep = statusIndex[order.status];
+                animateTrackOrderStatus(orderIndex, currentStep);
+            });
+        });
+    });
+}
+
+// Animate the track order status - animates UP TO the actual order status
+function animateTrackOrderStatus(orderIndex, targetStep) {
+    const progressBar = document.querySelector(`.track-progress-${orderIndex}`);
+    if (!progressBar) return;
+
+    // First, reset ALL steps to initial gray state
+    for (let i = 0; i <= 3; i++) {
+        const stepEl = document.querySelector(`.track-step-${orderIndex}-${i}`);
+        if (stepEl) {
+            const icon = stepEl.querySelector('.step-icon');
+            const text = stepEl.querySelector('.step-label');
+            if (icon) {
+                icon.style.background = 'rgba(255, 255, 255, 0.1)';
+                icon.style.boxShadow = 'none';
+                icon.classList.remove('active', 'completed');
+            }
+            if (text) {
+                text.style.color = '';
+                text.classList.remove('active', 'completed');
+            }
+        }
+    }
+    progressBar.style.width = '0%';
+
+    const stepDelay = 600;
+
+    // Animate from step 0 UP TO targetStep
+    for (let step = 0; step <= targetStep; step++) {
+        (function(currentStep) {
+            const delay = currentStep * stepDelay;
+
+            setTimeout(() => {
+                // Turn PREVIOUS step green (completed)
+                if (currentStep > 0) {
+                    const prevStepEl = document.querySelector(`.track-step-${orderIndex}-${currentStep - 1}`);
+                    if (prevStepEl) {
+                        const prevIcon = prevStepEl.querySelector('.step-icon');
+                        const prevText = prevStepEl.querySelector('.step-label');
+                        if (prevIcon) {
+                            prevIcon.style.background = '#10b981';
+                            prevIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
+                            prevIcon.classList.remove('active');
+                            prevIcon.classList.add('completed');
+                        }
+                        if (prevText) {
+                            prevText.style.color = '#10b981';
+                            prevText.classList.remove('active');
+                            prevText.classList.add('completed');
+                        }
+                    }
+                }
+
+                // Make CURRENT step orange (active)
+                const stepEl = document.querySelector(`.track-step-${orderIndex}-${currentStep}`);
+                if (stepEl) {
+                    const icon = stepEl.querySelector('.step-icon');
+                    const text = stepEl.querySelector('.step-label');
+                    if (icon) {
+                        icon.style.background = 'linear-gradient(135deg, #FF8C00 0%, #DC143C 100%)';
+                        icon.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.6)';
+                        icon.classList.add('active');
+                    }
+                    if (text) {
+                        text.style.color = '#FF8C00';
+                        text.classList.add('active');
+                    }
+                }
+
+                // Update progress bar
+                const progressWidth = (currentStep / 3) * 100;
+                progressBar.style.width = `${progressWidth}%`;
+            }, delay);
+        })(step);
     }
 }
 
 // Animate a single step transition (when status changes in real-time)
 function animateSingleStep(orderIndex, newStatusIndex) {
     const prevStepIndex = newStatusIndex - 1;
-
-    // Get the progress bar
     const progressBar = document.querySelector(`.track-progress-${orderIndex}`);
 
     // Turn previous step green (completed)
@@ -416,23 +909,35 @@ function animateSingleStep(orderIndex, newStatusIndex) {
         const prevStepEl = document.querySelector(`.track-step-${orderIndex}-${prevStepIndex}`);
         if (prevStepEl) {
             const prevIcon = prevStepEl.querySelector('.step-icon');
-            const prevText = prevStepEl.querySelector('span:last-child');
-            prevIcon.style.background = '#10b981';
-            prevIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
-            prevIcon.classList.remove('step-active-glow');
-            prevText.className = 'text-xs text-green-400';
+            const prevText = prevStepEl.querySelector('.step-label');
+            if (prevIcon) {
+                prevIcon.style.background = '#10b981';
+                prevIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
+                prevIcon.classList.remove('active');
+                prevIcon.classList.add('completed');
+            }
+            if (prevText) {
+                prevText.style.color = '#10b981';
+                prevText.classList.remove('active');
+                prevText.classList.add('completed');
+            }
         }
     }
 
-    // Turn current step orange (active) with pulsing glow
+    // Turn current step orange (active)
     const currentStepEl = document.querySelector(`.track-step-${orderIndex}-${newStatusIndex}`);
     if (currentStepEl) {
         const icon = currentStepEl.querySelector('.step-icon');
-        const text = currentStepEl.querySelector('span:last-child');
-        icon.style.background = 'linear-gradient(135deg, #FF8C00 0%, #DC143C 100%)';
-        icon.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.6)';
-        icon.classList.add('step-active-glow');
-        text.className = 'text-xs text-orange-400';
+        const text = currentStepEl.querySelector('.step-label');
+        if (icon) {
+            icon.style.background = 'linear-gradient(135deg, #FF8C00 0%, #DC143C 100%)';
+            icon.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.6)';
+            icon.classList.add('active');
+        }
+        if (text) {
+            text.style.color = '#FF8C00';
+            text.classList.add('active');
+        }
     }
 
     // Update progress bar
@@ -441,410 +946,427 @@ function animateSingleStep(orderIndex, newStatusIndex) {
         progressBar.style.width = `${progressWidth}%`;
     }
 
-    // If served, update the badge after animation
+    // If served, re-render after animation to remove from list
     if (newStatusIndex === 3) {
         setTimeout(() => {
-            // Re-render to remove served orders from active list
-            renderTrackOrder();
+            renderTrackOrders();
         }, 2000);
     }
 }
 
-function updateOrdersBadge() {
-    const activeOrders = orders.filter(o => o.status !== 'served').length;
-    const badge = document.getElementById('activeOrdersBadge');
-    const floatingTrackOrder = document.getElementById('floatingTrackOrder');
-    const floatingOrderCount = document.getElementById('floatingOrderCount');
+// ==========================================
+// 10. MODAL FUNCTIONS
+// ==========================================
 
-    if (activeOrders > 0) {
-        badge.textContent = activeOrders;
-        badge.classList.remove('hidden');
-        badge.classList.add('flex');
+function showModal(modal) {
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    setTimeout(() => modal.classList.add('visible'), 10);
+    document.body.classList.add('modal-open');
+}
 
-        // Show floating track order button
-        floatingTrackOrder.classList.remove('hidden');
-        floatingOrderCount.textContent = activeOrders;
-    } else {
-        badge.classList.add('hidden');
-        floatingTrackOrder.classList.add('hidden');
+function hideModal(modal) {
+    if (!modal) return;
+    modal.classList.remove('visible');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+    document.body.classList.remove('modal-open');
+}
+
+function showSuccessModal(orderNumber) {
+    if (DOM.orderNumber) DOM.orderNumber.textContent = orderNumber;
+    if (DOM.successTableNumber) DOM.successTableNumber.textContent = state.currentTable;
+    showModal(DOM.successModal);
+}
+
+function showOrdersModal() {
+    renderOrders();
+    showModal(DOM.ordersModal);
+}
+
+function showTrackOrderModal() {
+    renderTrackOrders();
+    showModal(DOM.trackOrderModal);
+}
+
+function openItemModal(id) {
+    const item = menuItems.find(i => i.id == id) || specialItems.find(i => i.id == id);
+    if (!item) return;
+
+    state.selectedItem = item;
+    state.selectedItemQty = 1;
+
+    if (DOM.itemModalIcon) DOM.itemModalIcon.textContent = item.emoji;
+    if (DOM.itemModalTitle) DOM.itemModalTitle.textContent = item.name;
+    if (DOM.itemModalTitleBn) DOM.itemModalTitleBn.textContent = item.namebn || '';
+    if (DOM.itemModalDesc) DOM.itemModalDesc.textContent = item.desc;
+    if (DOM.itemModalSpicy) DOM.itemModalSpicy.textContent = getSpicyIndicator(item.spicy);
+    if (DOM.itemModalCategory) DOM.itemModalCategory.textContent = item.category;
+    if (DOM.itemModalPrice) DOM.itemModalPrice.textContent = `${CONFIG.currency}${item.price}`;
+    if (DOM.itemQtyValue) DOM.itemQtyValue.textContent = '1';
+    if (DOM.itemTotalPrice) DOM.itemTotalPrice.textContent = `${CONFIG.currency}${item.price}`;
+
+    showModal(DOM.itemModal);
+}
+
+function updateItemModalQty(change) {
+    state.selectedItemQty = Math.max(1, state.selectedItemQty + change);
+    if (DOM.itemQtyValue) DOM.itemQtyValue.textContent = state.selectedItemQty;
+
+    if (state.selectedItem && DOM.itemTotalPrice) {
+        const total = state.selectedItem.price * state.selectedItemQty;
+        DOM.itemTotalPrice.textContent = `${CONFIG.currency}${total}`;
     }
 }
 
-// Simple order history (My Orders)
-function renderOrders() {
-    const ordersList = document.getElementById('ordersList');
-    const noOrders = document.getElementById('noOrders');
-
-    if (orders.length === 0) {
-        ordersList.innerHTML = '';
-        noOrders.classList.remove('hidden');
-        return;
-    }
-
-    noOrders.classList.add('hidden');
-    ordersList.innerHTML = orders.map(order => {
-        const statusLabels = {
-            'received': '📝 Received',
-            'preparing': '👨‍🍳 Preparing',
-            'ready': '🍽️ Ready',
-            'served': '✅ Served'
-        };
-
-        return `
-                    <div class="order-history-item bg-white/5 rounded-2xl p-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <div>
-                                <span class="font-bold">Order #${order.id}</span>
-                                <div class="text-gray-500 text-xs">${new Date(order.timestamp).toLocaleString()}</div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs px-2 py-1 rounded-full ${order.status === 'served' ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'}">${statusLabels[order.status]}</span>
-                            </div>
-                        </div>
-
-                        <!-- Order Items -->
-                        <div class="space-y-1 mb-3">
-                            ${order.items.map(item => `
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">${item.emoji} ${item.name} <span class="text-orange-400">x${item.qty}</span></span>
-                                    <span>৳${item.price * item.qty}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <!-- Total -->
-                        <div class="flex justify-between pt-2 border-t border-white/10">
-                            <span class="text-sm">Total (incl. VAT)</span>
-                            <span class="font-bold gradient-text">৳${Math.round(order.total * 1.05)}</span>
-                        </div>
-                    </div>
-                `;
-    }).join('');
+function addSelectedItemToCart() {
+    if (!state.selectedItem) return;
+    addToCartWithQty(state.selectedItem.id, state.selectedItemQty);
+    hideModal(DOM.itemModal);
+    state.selectedItem = null;
+    state.selectedItemQty = 1;
 }
 
-// Track Order with visual status (Track Order button)
-function renderTrackOrder() {
-    const trackOrderList = document.getElementById('trackOrderList');
-    const noActiveOrders = document.getElementById('noActiveOrders');
-    const trackOrderModal = document.getElementById('trackOrderModal');
+// ==========================================
+// 11. WAITER FUNCTIONS
+// ==========================================
 
-    const activeOrders = orders.filter(o => o.status !== 'served');
-
-    if (activeOrders.length === 0) {
-        trackOrderList.innerHTML = '';
-        noActiveOrders.classList.remove('hidden');
-        return;
-    }
-
-    noActiveOrders.classList.add('hidden');
-    trackOrderList.innerHTML = activeOrders.map((order, orderIndex) => {
-        const statusIndex = {
-            'received': 0,
-            'preparing': 1,
-            'ready': 2,
-            'served': 3
-        };
-        const currentStatusIndex = statusIndex[order.status];
-
-        return `
-                    <div class="bg-white/5 rounded-2xl p-5 border border-orange-500/20">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <span class="font-bold text-xl">Order #${order.id}</span>
-                                <div class="text-gray-500 text-xs">${new Date(order.timestamp).toLocaleTimeString()}</div>
-                            </div>
-                            <div class="flex items-center gap-2 bg-orange-500/20 px-3 py-1 rounded-full">
-                                <div class="live-dot"></div>
-                                <span class="text-xs text-orange-400">In Progress</span>
-                            </div>
-                        </div>
-
-                        <!-- Visual Status Tracker with Animation -->
-                        <div class="bg-black/30 rounded-2xl p-6 mb-4">
-                            <div class="flex items-center justify-between relative">
-                                <!-- Progress Line -->
-                                <div class="absolute top-5 left-8 right-8 h-1 bg-white/10">
-                                    <div class="track-progress-${orderIndex} h-full bg-gradient-to-r from-green-500 to-orange-500 transition-all duration-1000" style="width: 0%"></div>
-                                </div>
-                                
-                                <!-- Step 1: Received -->
-                                <div class="track-step-${orderIndex}-0 flex flex-col items-center relative z-10">
-                                    <div class="step-icon w-10 h-10 rounded-full flex items-center justify-center mb-2 text-lg bg-white/10">📝</div>
-                                    <span class="text-xs text-gray-500">Received</span>
-                                </div>
-                                
-                                <!-- Step 2: Preparing -->
-                                <div class="track-step-${orderIndex}-1 flex flex-col items-center relative z-10">
-                                    <div class="step-icon w-10 h-10 rounded-full flex items-center justify-center mb-2 text-lg bg-white/10">👨‍🍳</div>
-                                    <span class="text-xs text-gray-500">Preparing</span>
-                                </div>
-                                
-                                <!-- Step 3: Ready -->
-                                <div class="track-step-${orderIndex}-2 flex flex-col items-center relative z-10">
-                                    <div class="step-icon w-10 h-10 rounded-full flex items-center justify-center mb-2 text-lg bg-white/10">🍽️</div>
-                                    <span class="text-xs text-gray-500">Ready</span>
-                                </div>
-                                
-                                <!-- Step 4: Served -->
-                                <div class="track-step-${orderIndex}-3 flex flex-col items-center relative z-10">
-                                    <div class="step-icon w-10 h-10 rounded-full flex items-center justify-center mb-2 text-lg bg-white/10">✅</div>
-                                    <span class="text-xs text-gray-500">Served</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Order Items -->
-                        <div class="space-y-2 mb-4">
-                            ${order.items.map(item => `
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">${item.emoji} ${item.name} <span class="text-orange-400">x${item.qty}</span></span>
-                                    <span>৳${item.price * item.qty}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <!-- Total & Estimated Time -->
-                        <div class="flex justify-between items-center pt-3 border-t border-white/10">
-                            <div>
-                                <span class="text-sm text-gray-400">Total</span>
-                                <span class="font-bold gradient-text ml-2">৳${Math.round(order.total * 1.05)}</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs text-gray-500">Estimated</span>
-                                <span class="text-sm text-white font-medium ml-1">15-20 mins</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-    }).join('');
-
-    // Animate each order's status tracker
-    activeOrders.forEach((order, orderIndex) => {
-        const statusIndex = {
-            'received': 0,
-            'preparing': 1,
-            'ready': 2,
-            'served': 3
-        };
-        const currentStatusIndex = statusIndex[order.status];
-
-        animateTrackOrderStatus(orderIndex, currentStatusIndex);
-    });
+function showWaiterModal() {
+    if (DOM.waiterTableNumber) DOM.waiterTableNumber.textContent = state.currentTable;
+    showModal(DOM.waiterModal);
 }
 
-// Animate the track order status - animates UP TO the actual order status
-function animateTrackOrderStatus(orderIndex, targetStep) {
-    // Use requestAnimationFrame to ensure DOM is fully ready
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            const progressBar = document.querySelector(`.track-progress-${orderIndex}`);
-            if (!progressBar) return;
+function confirmCallWaiter() {
+    hideModal(DOM.waiterModal);
+    if (DOM.waiterCalledTableNumber) DOM.waiterCalledTableNumber.textContent = state.currentTable;
+    showModal(DOM.waiterCalledModal);
+    showToast('🔔 Waiter has been notified!');
+}
 
-            // First, reset ALL steps to initial gray state
-            for (let i = 0; i <= 3; i++) {
-                const stepEl = document.querySelector(`.track-step-${orderIndex}-${i}`);
-                if (stepEl) {
-                    const icon = stepEl.querySelector('.step-icon');
-                    const text = stepEl.querySelector('span:last-child');
-                    icon.style.background = 'rgba(255, 255, 255, 0.1)';
-                    icon.style.boxShadow = 'none';
-                    icon.classList.remove('step-active-glow');
-                    text.className = 'text-xs text-gray-500';
-                }
-            }
-            progressBar.style.width = '0%';
+// ==========================================
+// 12. UI HELPERS
+// ==========================================
 
-            const stepDelay = 600; // 600ms between each step
+function toggleMobileMenu() {
+    state.isMobileMenuOpen = !state.isMobileMenuOpen;
 
-            // Animate from step 0 UP TO targetStep (actual order status)
-            for (let step = 0; step <= targetStep; step++) {
-                (function (currentStep) {
-                    const delay = currentStep * stepDelay;
+    if (DOM.mobileMenuBtn) {
+        DOM.mobileMenuBtn.classList.toggle('active', state.isMobileMenuOpen);
+        DOM.mobileMenuBtn.setAttribute('aria-expanded', state.isMobileMenuOpen);
+    }
 
-                    setTimeout(() => {
-                        // Turn PREVIOUS step green (completed)
-                        if (currentStep > 0) {
-                            const prevStepEl = document.querySelector(`.track-step-${orderIndex}-${currentStep - 1}`);
-                            if (prevStepEl) {
-                                const prevIcon = prevStepEl.querySelector('.step-icon');
-                                const prevText = prevStepEl.querySelector('span:last-child');
-                                prevIcon.style.background = '#10b981';
-                                prevIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
-                                prevIcon.classList.remove('step-active-glow');
-                                prevText.className = 'text-xs text-green-400';
-                            }
-                        }
+    if (DOM.mobileMenu) {
+        DOM.mobileMenu.classList.toggle('hidden', !state.isMobileMenuOpen);
+    }
+}
 
-                        // Make CURRENT step orange (active)
-                        const stepEl = document.querySelector(`.track-step-${orderIndex}-${currentStep}`);
-                        if (stepEl) {
-                            const icon = stepEl.querySelector('.step-icon');
-                            const text = stepEl.querySelector('span:last-child');
-                            icon.style.background = 'linear-gradient(135deg, #FF8C00 0%, #DC143C 100%)';
-                            icon.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.6)';
-                            text.className = 'text-xs text-orange-400';
+function closeMobileMenu() {
+    state.isMobileMenuOpen = false;
+    if (DOM.mobileMenuBtn) {
+        DOM.mobileMenuBtn.classList.remove('active');
+        DOM.mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+    if (DOM.mobileMenu) {
+        DOM.mobileMenu.classList.add('hidden');
+    }
+}
 
-                            // Add pulsing glow ONLY on the final step (targetStep)
-                            if (currentStep === targetStep) {
-                                icon.classList.add('step-active-glow');
-                            }
-                        }
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-                        // Update progress bar
-                        const progressWidth = (currentStep / 3) * 100;
-                        progressBar.style.width = `${progressWidth}%`;
-                    }, delay);
-                })(step);
+function handleScroll() {
+    const scrollY = window.scrollY;
+
+    if (DOM.navbar) {
+        DOM.navbar.classList.toggle('scrolled', scrollY > 50);
+    }
+
+    if (DOM.backToTop) {
+        DOM.backToTop.classList.toggle('visible', scrollY > 500);
+    }
+
+    if (window.innerWidth < 768 && DOM.floatingCart && state.currentTable) {
+        DOM.floatingCart.classList.toggle('hidden', scrollY < 200);
+    }
+}
+
+// ==========================================
+// 13. TOAST NOTIFICATIONS
+// ==========================================
+
+function showToast(message, type = 'success') {
+    if (!DOM.toastContainer) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    toast.setAttribute('role', 'alert');
+
+    DOM.toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('toast-out');
+        setTimeout(() => toast.remove(), 300);
+    }, CONFIG.toastDuration);
+}
+
+// ==========================================
+// 14. SCROLL & ANIMATION
+// ==========================================
+
+const scrollObserver = new IntersectionObserver(
+    (entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
             }
         });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+);
+
+function initScrollObserver() {
+    observeScrollElements();
+}
+
+function observeScrollElements() {
+    document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(el => {
+        scrollObserver.observe(el);
     });
 }
 
-// =====================
-// TOAST NOTIFICATION
-// =====================
+function handleMouseMove(e) {
+    const orbs = document.querySelectorAll('.orb');
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
-function showToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg z-[80] transition-all duration-300 transform translate-y-4 opacity-0';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.classList.remove('translate-y-4', 'opacity-0');
-    }, 100);
-
-    setTimeout(() => {
-        toast.classList.add('translate-y-4', 'opacity-0');
-        setTimeout(() => toast.remove(), 300);
-    }, 2000);
+    orbs.forEach((orb, index) => {
+        const speed = (index + 1) * 15;
+        orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+    });
 }
 
-// =====================
-// EVENT LISTENERS
-// =====================
+// ==========================================
+// 15. EVENT LISTENERS
+// ==========================================
 
 function setupEventListeners() {
-    // Category tabs
-    document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.category-tab').forEach(t => {
-                t.classList.remove('active');
-                if (!t.classList.contains('active')) {
-                    t.classList.add('border', 'border-white/20');
-                }
-            });
-            tab.classList.add('active');
-            tab.classList.remove('border', 'border-white/20');
-            renderMenu(tab.dataset.category);
+    // Table selection
+    DOM.tableCards.forEach(card => {
+        card.addEventListener('click', () => {
+            DOM.tableCards.forEach(c => c.setAttribute('aria-checked', 'false'));
+            card.setAttribute('aria-checked', 'true');
+            card.classList.add('selected');
+            setTimeout(() => setTable(card.dataset.table), 200);
         });
     });
 
-    // Cart sidebar
-    cartBtn.addEventListener('click', openCart);
-    document.getElementById('floatingCartBtn').addEventListener('click', openCart);
-    closeCart.addEventListener('click', closeCartSidebar);
-    cartOverlay.addEventListener('click', closeCartSidebar);
+    // Category tabs
+    DOM.categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => setCategory(tab.dataset.category));
+    });
 
-    // Place order
-    placeOrderBtn.addEventListener('click', placeOrder);
+    // Search
+    if (DOM.menuSearch) {
+        DOM.menuSearch.addEventListener('input', (e) => handleSearch(e.target.value));
+        DOM.menuSearch.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') clearSearch();
+        });
+    }
 
-    // Success modal
-    document.getElementById('closeSuccessModal').addEventListener('click', () => {
-        successModal.classList.add('hidden');
+    if (DOM.clearSearch) {
+        DOM.clearSearch.addEventListener('click', clearSearch);
+    }
+
+    // Cart
+    if (DOM.cartBtn) DOM.cartBtn.addEventListener('click', openCart);
+    if (DOM.floatingCartBtn) DOM.floatingCartBtn.addEventListener('click', openCart);
+    if (DOM.closeCart) DOM.closeCart.addEventListener('click', closeCart);
+    if (DOM.cartOverlay) DOM.cartOverlay.addEventListener('click', closeCart);
+    if (DOM.placeOrderBtn) DOM.placeOrderBtn.addEventListener('click', placeOrder);
+
+    // Mobile menu
+    if (DOM.mobileMenuBtn) DOM.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+    DOM.mobileMenu?.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
     });
 
     // Orders modal
-    document.getElementById('viewOrdersBtn').addEventListener('click', () => {
-        renderOrders();
-        ordersModal.classList.remove('hidden');
-    });
-    document.getElementById('closeOrdersModal').addEventListener('click', () => {
-        ordersModal.classList.add('hidden');
-    });
+    if (DOM.viewOrdersBtn) DOM.viewOrdersBtn.addEventListener('click', showOrdersModal);
+    if (DOM.mobileOrdersBtn) {
+        DOM.mobileOrdersBtn.addEventListener('click', () => {
+            closeMobileMenu();
+            showOrdersModal();
+        });
+    }
+    if (DOM.closeOrdersModal) DOM.closeOrdersModal.addEventListener('click', () => hideModal(DOM.ordersModal));
 
-    // Floating track order button - opens Track Order modal with visual status
-    document.getElementById('floatingTrackBtn').addEventListener('click', () => {
-        renderTrackOrder();
-        document.getElementById('trackOrderModal').classList.remove('hidden');
-    });
+    // Track order
+    if (DOM.floatingTrackBtn) DOM.floatingTrackBtn.addEventListener('click', showTrackOrderModal);
+    if (DOM.closeTrackOrderModal) DOM.closeTrackOrderModal.addEventListener('click', () => hideModal(DOM.trackOrderModal));
 
-    // Close Track Order modal
-    document.getElementById('closeTrackOrderModal').addEventListener('click', () => {
-        document.getElementById('trackOrderModal').classList.add('hidden');
-    });
+    // Success modal
+    if (DOM.closeSuccessModal) DOM.closeSuccessModal.addEventListener('click', () => hideModal(DOM.successModal));
 
-    // Call waiter
-    document.getElementById('callWaiterBtn').addEventListener('click', () => {
-        waiterModal.classList.remove('hidden');
-    });
-    document.getElementById('cancelWaiter').addEventListener('click', () => {
-        waiterModal.classList.add('hidden');
-    });
-    document.getElementById('confirmWaiter').addEventListener('click', () => {
-        waiterModal.classList.add('hidden');
-        waiterCalledModal.classList.remove('hidden');
-    });
-    document.getElementById('closeWaiterCalled').addEventListener('click', () => {
-        waiterCalledModal.classList.add('hidden');
-    });
+    // Waiter modals
+    if (DOM.callWaiterBtn) DOM.callWaiterBtn.addEventListener('click', showWaiterModal);
+    if (DOM.mobileWaiterBtn) {
+        DOM.mobileWaiterBtn.addEventListener('click', () => {
+            closeMobileMenu();
+            showWaiterModal();
+        });
+    }
+    if (DOM.cancelWaiter) DOM.cancelWaiter.addEventListener('click', () => hideModal(DOM.waiterModal));
+    if (DOM.confirmWaiter) DOM.confirmWaiter.addEventListener('click', confirmCallWaiter);
+    if (DOM.closeWaiterCalled) DOM.closeWaiterCalled.addEventListener('click', () => hideModal(DOM.waiterCalledModal));
 
-    // Navbar background on scroll
-    window.addEventListener('scroll', () => {
-        const nav = document.querySelector('nav');
-        if (window.scrollY > 50) {
-            nav.style.background = 'rgba(26, 10, 0, 0.98)';
-        } else {
-            nav.style.background = 'rgba(26, 10, 0, 0.9)';
-        }
-    });
+    // Item modal
+    if (DOM.closeItemModal) DOM.closeItemModal.addEventListener('click', () => hideModal(DOM.itemModal));
+    if (DOM.itemQtyMinus) DOM.itemQtyMinus.addEventListener('click', () => updateItemModalQty(-1));
+    if (DOM.itemQtyPlus) DOM.itemQtyPlus.addEventListener('click', () => updateItemModalQty(1));
+    if (DOM.addItemToCart) DOM.addItemToCart.addEventListener('click', addSelectedItemToCart);
 
-    // Parallax effect for orbs
-    document.addEventListener('mousemove', (e) => {
-        const orbs = document.querySelectorAll('.orb');
-        const x = e.clientX / window.innerWidth;
-        const y = e.clientY / window.innerHeight;
+    // Back to top
+    if (DOM.backToTop) DOM.backToTop.addEventListener('click', scrollToTop);
 
-        orbs.forEach((orb, index) => {
-            const speed = (index + 1) * 10;
-            orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+    // Scroll events
+    window.addEventListener('scroll', debounce(handleScroll, 10));
+
+    // Mouse move for parallax
+    document.addEventListener('mousemove', throttle(handleMouseMove, 50));
+
+    // Keyboard navigation
+    document.addEventListener('keydown', handleKeyboard);
+
+    // Window resize
+    window.addEventListener('resize', debounce(handleResize, 100));
+
+    // Modal backdrop clicks
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', (e) => {
+            const modal = e.target.closest('.modal');
+            if (modal) hideModal(modal);
         });
     });
-}
 
-function openCart() {
-    cartSidebar.classList.add('open');
-    cartOverlay.classList.remove('hidden');
-}
-
-function closeCartSidebar() {
-    cartSidebar.classList.remove('open');
-    cartOverlay.classList.add('hidden');
-}
-
-// =====================
-// SCROLL REVEAL
-// =====================
-
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
+    // Prevent body scroll when modal is open
+    document.addEventListener('touchmove', (e) => {
+        if (document.body.classList.contains('modal-open') || document.body.classList.contains('cart-open')) {
+            const target = e.target;
+            if (!target.closest('.modal-body') && !target.closest('.cart-content')) {
+                e.preventDefault();
+            }
         }
-    });
-}, observerOptions);
-
-function initScrollReveal() {
-    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    }, { passive: false });
 }
 
-// =====================
-// INITIALIZE
-// =====================
+function handleKeyboard(e) {
+    if (e.key === 'Escape') {
+        if (state.isCartOpen) {
+            closeCart();
+        } else if (state.isMobileMenuOpen) {
+            closeMobileMenu();
+        } else {
+            const openModal = document.querySelector('.modal.visible');
+            if (openModal) hideModal(openModal);
+        }
+    }
+}
 
-init();
+function handleResize() {
+    if (window.innerWidth >= 768 && state.isMobileMenuOpen) {
+        closeMobileMenu();
+    }
+
+    if (DOM.floatingCart && state.currentTable) {
+        DOM.floatingCart.classList.toggle('hidden', window.innerWidth >= 768);
+    }
+}
+
+// ==========================================
+// 16. UTILITY FUNCTIONS
+// ==========================================
+
+function saveToStorage() {
+    if (!state.currentTable) return;
+
+    const data = {
+        cart: state.cart,
+        orders: state.orders
+    };
+
+    try {
+        localStorage.setItem(`rannaghor_table_${state.currentTable}`, JSON.stringify(data));
+    } catch (e) {
+        console.warn('Could not save to localStorage:', e);
+    }
+}
+
+function loadFromStorage() {
+    if (!state.currentTable) return;
+
+    try {
+        const data = localStorage.getItem(`rannaghor_table_${state.currentTable}`);
+        if (data) {
+            const parsed = JSON.parse(data);
+            state.cart = parsed.cart || [];
+            state.orders = parsed.orders || [];
+            updateCart();
+        }
+    } catch (e) {
+        console.warn('Could not load from localStorage:', e);
+    }
+}
+
+function formatDate(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
+}
+
+function formatTime(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function throttle(func, limit) {
+    let inThrottle;
+    return function executedFunction(...args) {
+        if (!inThrottle) {
+            func(...args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+// ==========================================
+// EXPOSE FUNCTIONS TO GLOBAL SCOPE
+// ==========================================
+
+window.updateCartItemQty = updateCartItemQty;
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.openItemModal = openItemModal;
