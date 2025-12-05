@@ -3480,3 +3480,57 @@ textarea::placeholder {
     .table-cards-grid { grid-template-columns: repeat(4, 1fr); }
     .vip-grid { grid-template-columns: repeat(2, 1fr); max-width: 400px; }
 }
+
+/* Welcome Screen Layout Fix */
+.welcome-screen {
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.welcome-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+
+.welcome-header {
+    margin-bottom: 1.5rem;
+}
+
+.welcome-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.welcome-instruction {
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.demo-badge {
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.table-selection-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+.welcome-card {
+    padding: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    .welcome-title { font-size: 1.5rem; }
+    .welcome-subtitle { font-size: 0.8rem; }
+    .welcome-instruction { font-size: 0.7rem; }
+    .table-selection-title { font-size: 1.1rem; margin-bottom: 1rem; }
+    .welcome-card { padding: 1rem; }
+}
