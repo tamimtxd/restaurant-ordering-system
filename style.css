@@ -4221,3 +4221,28 @@ textarea::placeholder {
         display: none !important;
     }
 }
+/* ==========================================
+   FIX: ENSURE WELCOME SCREEN INTERACTIVITY
+   ========================================== */
+.welcome-content-wrapper,
+.welcome-card {
+    position: relative;
+    z-index: 1000; /* High z-index to be above particles */
+}
+
+.particles-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none; /* Ensure background doesn't steal clicks */
+}
+
+.table-btn-compact,
+.table-btn-compact.vip {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1001;
+}
