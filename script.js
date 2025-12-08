@@ -1041,37 +1041,7 @@ function confirmCallWaiter() {
     showModal(DOM.waiterCalledModal);
     showToast('🔔 Waiter has been notified!');
 }
-
-// ==========================================
-// 12. UI HELPERS
-// ==========================================
-
-function toggleMobileMenu() {
-    state.isMobileMenuOpen = !state.isMobileMenuOpen;
-
-    if (DOM.mobileMenuBtn) {
-        DOM.mobileMenuBtn.classList.toggle('active', state.isMobileMenuOpen);
-        DOM.mobileMenuBtn.setAttribute('aria-expanded', state.isMobileMenuOpen);
-    }
-
-    if (DOM.mobileMenu) {
-        DOM.mobileMenu.classList.toggle('hidden', !state.isMobileMenuOpen);
-    }
-}
-
-function closeMobileMenu() {
-    state.isMobileMenuOpen = false;
-    if (DOM.mobileMenuBtn) {
-        DOM.mobileMenuBtn.classList.remove('active');
-        DOM.mobileMenuBtn.setAttribute('aria-expanded', 'false');
-    }
-    if (DOM.mobileMenu) {
-        DOM.mobileMenu.classList.add('hidden');
-    }
-}
-
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function handleScroll() {
@@ -1259,19 +1229,6 @@ function setupEventListeners() {
             }
         }
     }, { passive: false });
-}
-
-function handleKeyboard(e) {
-    if (e.key === 'Escape') {
-        if (state.isCartOpen) {
-            closeCart();
-        } else if (state.isMobileMenuOpen) {
-            closeMobileMenu();
-        } else {
-            const openModal = document.querySelector('.modal.visible');
-            if (openModal) hideModal(openModal);
-        }
-    }
 }
 
 function handleResize() {

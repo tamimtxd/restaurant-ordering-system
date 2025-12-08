@@ -116,8 +116,9 @@
                     <span id="cartCount" class="cart-count hidden">0</span>
                 </button>
 
-                <!-- Mobile Menu Toggle -->
-                <button id="mobileMenuBtn" class="btn btn-mobile-menu" aria-label="Toggle menu" aria-expanded="false">
+                <!-- Mobile Menu Toggle (Hidden) -->
+                <button id="mobileMenuBtn" class="btn btn-mobile-menu hidden" aria-label="Toggle menu"
+                    aria-expanded="false" style="display: none !important;">
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
@@ -125,26 +126,36 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
+        <!-- Mobile Menu Dropdown (Hidden/Removed in favor of bottom nav) -->
         <div id="mobileMenu" class="mobile-menu hidden">
-            <a href="#menu" class="mobile-nav-link">
-                <span class="mobile-nav-icon">📖</span>
-                Menu
-            </a>
-            <a href="#specials" class="mobile-nav-link">
-                <span class="mobile-nav-icon">⭐</span>
-                Specials
-            </a>
-            <button id="mobileOrdersBtn" class="mobile-nav-link">
-                <span class="mobile-nav-icon">📋</span>
-                My Orders
-                <span id="mobileOrdersBadge" class="order-badge hidden">0</span>
-            </button>
-            <button id="mobileWaiterBtn" class="mobile-nav-link">
-                <span class="mobile-nav-icon">🔔</span>
-                Call Waiter
-            </button>
+            <!-- Legacy menu items kept just in case, but hidden -->
         </div>
+    </nav>
+
+    <!-- ==================== -->
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <!-- ==================== -->
+    <nav class="mobile-bottom-nav">
+        <a href="#menu" class="nav-item">
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">Menu</span>
+        </a>
+        <a href="#specials" class="nav-item">
+            <span class="nav-icon">⭐</span>
+            <span class="nav-label">Specials</span>
+        </a>
+        <button id="bottomNavOrdersBtn" class="nav-item">
+            <div class="icon-container">
+                <span class="nav-icon">📋</span>
+                <span id="bottomNavOrdersBadge" class="nav-badge hidden">0</span>
+            </div>
+            <span class="nav-label">Orders</span>
+        </button>
+        <button id="bottomNavWaiterBtn" class="nav-item">
+            <span class="nav-icon">🔔</span>
+            <span class="nav-label">Waiter</span>
+        </button>
+    </nav>
     </nav>
 
     <!-- ==================== -->
