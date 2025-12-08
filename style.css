@@ -1602,99 +1602,6 @@ h6 {
 
 .overlay.visible {
     opacity: 1;
-    visibility: visible;
-}
-
-.cart-sidebar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    max-width: 420px;
-    height: 100%;
-    background: rgba(26, 10, 0, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-left: 1px solid var(--color-border);
-    z-index: var(--z-modal);
-    transform: translateX(100%);
-    transition: transform var(--transition-base);
-    display: flex;
-    flex-direction: column;
-}
-
-.cart-sidebar.open {
-    transform: translateX(0);
-}
-
-.cart-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* Cart Header */
-.cart-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-lg);
-    border-bottom: 1px solid var(--color-border);
-    flex-shrink: 0;
-}
-
-.cart-title {
-    font-size: var(--text-xl);
-}
-
-/* Cart Table Info */
-.cart-table-info {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md) var(--space-lg);
-    margin: var(--space-md) var(--space-lg);
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    border-radius: var(--radius-xl);
-}
-
-.table-info-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(16, 185, 129, 0.2);
-    border-radius: var(--radius-full);
-    font-size: var(--text-xl);
-}
-
-.table-info-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.table-info-label {
-    font-size: var(--text-xs);
-    color: var(--color-success);
-}
-
-.table-info-number {
-    font-weight: var(--font-bold);
-}
-
-/* Cart Content */
-.cart-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 var(--space-lg);
-}
-
-.cart-items {
-    display: flex;
-    flex-direction: column;
     gap: var(--space-md);
     padding: var(--space-md) 0;
 }
@@ -4130,12 +4037,15 @@ textarea::placeholder {
     .category-tabs {
         justify-content: center !important;
     }
-}/* ==========================================
+}
+
+/* ==========================================
    5. MOBILE BOTTOM NAVIGATION
    ========================================== */
 
 .mobile-bottom-nav {
-    display: none; /* Hidden by default */
+    display: none;
+    /* Hidden by default */
     position: fixed;
     bottom: 0;
     left: 0;
@@ -4221,13 +4131,15 @@ textarea::placeholder {
         display: none !important;
     }
 }
+
 /* ==========================================
    FIX: ENSURE WELCOME SCREEN INTERACTIVITY
    ========================================== */
 .welcome-content-wrapper,
 .welcome-card {
     position: relative;
-    z-index: 1000; /* High z-index to be above particles */
+    z-index: 1000;
+    /* High z-index to be above particles */
 }
 
 .particles-bg {
@@ -4237,7 +4149,8 @@ textarea::placeholder {
     width: 100%;
     height: 100%;
     z-index: 1;
-    pointer-events: none; /* Ensure background doesn't steal clicks */
+    pointer-events: none;
+    /* Ensure background doesn't steal clicks */
 }
 
 .table-btn-compact,

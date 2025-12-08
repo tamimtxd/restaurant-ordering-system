@@ -175,7 +175,7 @@ const DOM = {
     noOrders: document.getElementById('noOrders'),
     closeOrdersModal: document.getElementById('closeOrdersModal'),
     viewOrdersBtn: document.getElementById('viewOrdersBtn'),
-    mobileOrdersBtn: document.getElementById('mobileOrdersBtn'),
+    mobileOrdersBtn: document.getElementById('bottomNavOrdersBtn'), // Updated to new ID
 
     trackOrderModal: document.getElementById('trackOrderModal'),
     trackOrderList: document.getElementById('trackOrderList'),
@@ -187,7 +187,7 @@ const DOM = {
     cancelWaiter: document.getElementById('cancelWaiter'),
     confirmWaiter: document.getElementById('confirmWaiter'),
     callWaiterBtn: document.getElementById('callWaiterBtn'),
-    mobileWaiterBtn: document.getElementById('mobileWaiterBtn'),
+    mobileWaiterBtn: document.getElementById('bottomNavWaiterBtn'), // Updated to new ID
 
     waiterCalledModal: document.getElementById('waiterCalledModal'),
     waiterCalledTableNumber: document.getElementById('waiterCalledTableNumber'),
@@ -1204,35 +1204,6 @@ function setupEventListeners() {
     if (DOM.closeCart) DOM.closeCart.addEventListener('click', closeCart);
     if (DOM.cartOverlay) DOM.cartOverlay.addEventListener('click', closeCart);
     if (DOM.placeOrderBtn) DOM.placeOrderBtn.addEventListener('click', placeOrder);
-
-    // Orders modal
-    if (DOM.viewOrdersBtn) DOM.viewOrdersBtn.addEventListener('click', showOrdersModal);
-    if (DOM.mobileOrdersBtn) {
-        DOM.mobileOrdersBtn.addEventListener('click', () => {
-            // Legacy closeMobileMenu removed
-            showOrdersModal();
-        });
-    }
-    if (DOM.closeOrdersModal) DOM.closeOrdersModal.addEventListener('click', () => hideModal(DOM.ordersModal));
-
-    // Track order
-    if (DOM.floatingTrackBtn) DOM.floatingTrackBtn.addEventListener('click', showTrackOrderModal);
-    if (DOM.closeTrackOrderModal) DOM.closeTrackOrderModal.addEventListener('click', () => hideModal(DOM.trackOrderModal));
-
-    // Success modal
-    if (DOM.closeSuccessModal) DOM.closeSuccessModal.addEventListener('click', () => hideModal(DOM.successModal));
-
-    // Waiter modals
-    if (DOM.callWaiterBtn) DOM.callWaiterBtn.addEventListener('click', showWaiterModal);
-    if (DOM.mobileWaiterBtn) {
-        DOM.mobileWaiterBtn.addEventListener('click', () => {
-            // Legacy closeMobileMenu removed
-            showWaiterModal();
-        });
-    }
-    if (DOM.cancelWaiter) DOM.cancelWaiter.addEventListener('click', () => hideModal(DOM.waiterModal));
-    if (DOM.confirmWaiter) DOM.confirmWaiter.addEventListener('click', confirmCallWaiter);
-    if (DOM.closeWaiterCalled) DOM.closeWaiterCalled.addEventListener('click', () => hideModal(DOM.waiterCalledModal));
 
     // Item modal
     if (DOM.closeItemModal) DOM.closeItemModal.addEventListener('click', () => hideModal(DOM.itemModal));
