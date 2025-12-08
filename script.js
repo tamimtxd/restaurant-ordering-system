@@ -1249,8 +1249,7 @@ function setupEventListeners() {
     // Mouse move for parallax
     document.addEventListener('mousemove', throttle(handleMouseMove, 50));
 
-    // Keyboard navigation
-    document.addEventListener('keydown', handleKeyboard);
+    // Keyboard navigation removed (function undefined)
 
     // Window resize
     window.addEventListener('resize', debounce(handleResize, 100));
