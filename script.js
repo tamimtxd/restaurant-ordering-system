@@ -248,6 +248,9 @@ function getTableFromURL() {
 }
 
 function setTable(tableNumber) {
+    console.log('setTable called with:', tableNumber);
+    if (!tableNumber) return;
+
     state.currentTable = tableNumber;
 
     const url = new URL(window.location);
@@ -261,7 +264,7 @@ function setTable(tableNumber) {
     renderMenu();
     updateOrderBadges();
 
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 768 && DOM.floatingCart) {
         DOM.floatingCart.classList.remove('hidden');
     }
 }
@@ -1121,15 +1124,50 @@ function handleMouseMove(e) {
 // ==========================================
 
 function setupEventListeners() {
-    // Table selection
-    DOM.tableCards.forEach(card => {
-        card.addEventListener('click', () => {
-            DOM.tableCards.forEach(c => c.setAttribute('aria-checked', 'false'));
-            card.setAttribute('aria-checked', 'true');
-            card.classList.add('selected');
-            setTimeout(() => setTable(card.dataset.table), 200);
+    // Table selection (Robust Implementation)
+    console.log('SetupEventListeners: initializing table selection');
+
+    // Method 1: Direct attachment (backup)
+    if (DOM.tableCards && DOM.tableCards.length > 0) {
+        DOM.tableCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                console.log('Table clicked (Direct):', card.dataset.table);
+                handleTableSelect(card);
+            });
         });
+    } else {
+        console.error('CRITICAL: DOM.tableCards not found or empty!');
+        // Re-query in case DOM was not ready
+        const cards = document.querySelectorAll('.table-btn-compact');
+        console.log('Re-query found cards:', cards.length);
+        cards.forEach(card => {
+            card.addEventListener('click', () => handleTableSelect(card));
+        });
+    }
+
+    // Method 2: Global Delegation (Safety Net)
+    document.addEventListener('click', (e) => {
+        const tableBtn = e.target.closest('.table-btn-compact');
+        if (tableBtn) {
+            console.log('Table clicked (Delegation):', tableBtn.dataset.table);
+            // Only trigger if not already handled (optional check, but harmless to call setTable twice rarely)
+            handleTableSelect(tableBtn);
+        }
     });
+
+    function handleTableSelect(card) {
+        if (!card) return;
+
+        // Visual feedback
+        document.querySelectorAll('.table-btn-compact').forEach(c => c.setAttribute('aria-checked', 'false'));
+        document.querySelectorAll('.table-btn-compact').forEach(c => c.classList.remove('selected')); // Remove class from ALL
+
+        card.setAttribute('aria-checked', 'true');
+        card.classList.add('selected');
+
+        console.log('Setting table to:', card.dataset.table);
+        setTimeout(() => setTable(card.dataset.table), 100);
+    }
 
     // Category tabs
     DOM.categoryTabs.forEach(tab => {
