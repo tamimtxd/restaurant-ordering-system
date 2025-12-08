@@ -1194,18 +1194,11 @@ function setupEventListeners() {
     if (DOM.cartOverlay) DOM.cartOverlay.addEventListener('click', closeCart);
     if (DOM.placeOrderBtn) DOM.placeOrderBtn.addEventListener('click', placeOrder);
 
-    // Mobile menu
-    if (DOM.mobileMenuBtn) DOM.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-
-    DOM.mobileMenu?.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', closeMobileMenu);
-    });
-
     // Orders modal
     if (DOM.viewOrdersBtn) DOM.viewOrdersBtn.addEventListener('click', showOrdersModal);
     if (DOM.mobileOrdersBtn) {
         DOM.mobileOrdersBtn.addEventListener('click', () => {
-            closeMobileMenu();
+            // Legacy closeMobileMenu removed
             showOrdersModal();
         });
     }
@@ -1222,7 +1215,7 @@ function setupEventListeners() {
     if (DOM.callWaiterBtn) DOM.callWaiterBtn.addEventListener('click', showWaiterModal);
     if (DOM.mobileWaiterBtn) {
         DOM.mobileWaiterBtn.addEventListener('click', () => {
-            closeMobileMenu();
+            // Legacy closeMobileMenu removed
             showWaiterModal();
         });
     }
@@ -1272,7 +1265,7 @@ function setupEventListeners() {
 
 function handleResize() {
     if (window.innerWidth >= 768 && state.isMobileMenuOpen) {
-        closeMobileMenu();
+        // Legacy closeMobileMenu removed
     }
 
     if (DOM.floatingCart && state.currentTable) {
