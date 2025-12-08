@@ -453,21 +453,32 @@ function clearSearch() {
 // ==========================================
 
 function addToCart(id) {
-    let item = menuItems.find(i => i.id == id) || specialItems.find(i => i.id == id);
-    if (!item) return;
+    console.log('addToCart called for ID:', id);
+    try {
+        let item = menuItems.find(i => i.id == id) || specialItems.find(i => i.id == id);
+        if (!item) {
+            console.error('Item not found for ID:', id);
+            return;
+        }
 
-    const existingItem = state.cart.find(i => i.id == id);
+        const existingItem = state.cart.find(i => i.id == id);
 
-    if (existingItem) {
-        existingItem.qty++;
-    } else {
-        state.cart.push({ ...item, qty: 1 });
+        if (existingItem) {
+            existingItem.qty++;
+            console.log('Incremented quantity for:', item.name);
+        } else {
+            state.cart.push({ ...item, qty: 1 });
+            console.log('Added new item:', item.name);
+        }
+
+        updateCart();
+        saveToStorage();
+        showToast(`${item.name} added to cart! 🛒`);
+        animateCartIcon();
+    } catch (error) {
+        console.error('Error in addToCart:', error);
+        showToast('Error adding to cart', 'error');
     }
-
-    updateCart();
-    saveToStorage();
-    showToast(`${item.name} added to cart! 🛒`);
-    animateCartIcon();
 }
 
 function addToCartWithQty(id, qty) {
