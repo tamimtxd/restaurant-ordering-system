@@ -1044,7 +1044,8 @@ function confirmCallWaiter() {
     showModal(DOM.waiterCalledModal);
     showToast('🔔 Waiter has been notified!');
 }
-window.scrollTo({ top: 0, behavior: 'smooth' });
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function handleScroll() {
