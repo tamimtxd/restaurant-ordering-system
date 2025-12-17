@@ -1205,6 +1205,25 @@ function setupEventListeners() {
     if (DOM.cartOverlay) DOM.cartOverlay.addEventListener('click', closeCart);
     if (DOM.placeOrderBtn) DOM.placeOrderBtn.addEventListener('click', placeOrder);
 
+    // Orders modal
+    if (DOM.viewOrdersBtn) DOM.viewOrdersBtn.addEventListener('click', showOrdersModal);
+    if (DOM.mobileOrdersBtn) DOM.mobileOrdersBtn.addEventListener('click', showOrdersModal);
+    if (DOM.closeOrdersModal) DOM.closeOrdersModal.addEventListener('click', () => hideModal(DOM.ordersModal));
+
+    // Track order
+    if (DOM.floatingTrackBtn) DOM.floatingTrackBtn.addEventListener('click', showTrackOrderModal);
+    if (DOM.closeTrackOrderModal) DOM.closeTrackOrderModal.addEventListener('click', () => hideModal(DOM.trackOrderModal));
+
+    // Success modal
+    if (DOM.closeSuccessModal) DOM.closeSuccessModal.addEventListener('click', () => hideModal(DOM.successModal));
+
+    // Waiter modals
+    if (DOM.callWaiterBtn) DOM.callWaiterBtn.addEventListener('click', showWaiterModal);
+    if (DOM.mobileWaiterBtn) DOM.mobileWaiterBtn.addEventListener('click', showWaiterModal);
+    if (DOM.cancelWaiter) DOM.cancelWaiter.addEventListener('click', () => hideModal(DOM.waiterModal));
+    if (DOM.confirmWaiter) DOM.confirmWaiter.addEventListener('click', confirmCallWaiter);
+    if (DOM.closeWaiterCalled) DOM.closeWaiterCalled.addEventListener('click', () => hideModal(DOM.waiterCalledModal));
+
     // Item modal
     if (DOM.closeItemModal) DOM.closeItemModal.addEventListener('click', () => hideModal(DOM.itemModal));
     if (DOM.itemQtyMinus) DOM.itemQtyMinus.addEventListener('click', () => updateItemModalQty(-1));
