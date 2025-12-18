@@ -294,6 +294,14 @@ h6 {
     background-clip: text;
 }
 
+.currency {
+    font-size: 1.1em !important;
+    font-weight: bolder;
+    margin-right: 0.05em;
+    font-family: inherit !important;
+    vertical-align: baseline;
+}
+
 /* ==========================================
    4. UTILITY CLASSES
    ========================================== */
@@ -1416,14 +1424,6 @@ h6 {
     background-clip: text;
 }
 
-/* Fix Issue 5: Match currency size globally */
-.currency {
-    font-size: 1.1em !important;
-    font-weight: 600 !important;
-    margin-right: 0.05em;
-    font-family: inherit !important;
-    vertical-align: baseline;
-}
 
 .price-original {
     font-size: var(--text-sm);
