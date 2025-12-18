@@ -9,7 +9,7 @@
 
 const CONFIG = {
     vatRate: 0.05,
-    currency: '৳',
+    currency: '<span class="currency">৳</span>',
     estimatedTime: '15-20 min',
     orderStatusDelay: {
         preparing: 5000,
@@ -527,9 +527,9 @@ function updateCart() {
 
     updateCartBadges(totalItems);
 
-    if (DOM.subtotal) DOM.subtotal.textContent = `${CONFIG.currency}${subtotal}`;
-    if (DOM.vat) DOM.vat.textContent = `${CONFIG.currency}${vatAmount}`;
-    if (DOM.total) DOM.total.textContent = `${CONFIG.currency}${totalAmount}`;
+    if (DOM.subtotal) DOM.subtotal.innerHTML = `${CONFIG.currency}${subtotal}`;
+    if (DOM.vat) DOM.vat.innerHTML = `${CONFIG.currency}${vatAmount}`;
+    if (DOM.total) DOM.total.innerHTML = `${CONFIG.currency}${totalAmount}`;
 
     const isEmpty = state.cart.length === 0;
     if (DOM.emptyCart) DOM.emptyCart.classList.toggle('hidden', !isEmpty);
@@ -1015,9 +1015,9 @@ function openItemModal(id) {
     if (DOM.itemModalDesc) DOM.itemModalDesc.textContent = item.desc;
     if (DOM.itemModalSpicy) DOM.itemModalSpicy.textContent = getSpicyIndicator(item.spicy);
     if (DOM.itemModalCategory) DOM.itemModalCategory.textContent = item.category;
-    if (DOM.itemModalPrice) DOM.itemModalPrice.textContent = `${CONFIG.currency}${item.price}`;
+    if (DOM.itemModalPrice) DOM.itemModalPrice.innerHTML = `${CONFIG.currency}${item.price}`;
     if (DOM.itemQtyValue) DOM.itemQtyValue.textContent = '1';
-    if (DOM.itemTotalPrice) DOM.itemTotalPrice.textContent = `${CONFIG.currency}${item.price}`;
+    if (DOM.itemTotalPrice) DOM.itemTotalPrice.innerHTML = `${CONFIG.currency}${item.price}`;
 
     showModal(DOM.itemModal);
 }
@@ -1028,7 +1028,7 @@ function updateItemModalQty(change) {
 
     if (state.selectedItem && DOM.itemTotalPrice) {
         const total = state.selectedItem.price * state.selectedItemQty;
-        DOM.itemTotalPrice.textContent = `${CONFIG.currency}${total}`;
+        DOM.itemTotalPrice.innerHTML = `${CONFIG.currency}${total}`;
     }
 }
 

@@ -128,11 +128,11 @@
     --z-dropdown: 10;
     --z-sticky: 20;
     --z-fixed: 30;
-    --z-modal-backdrop: 40;
-    --z-modal: 50;
+    --z-modal-backdrop: 2000;
+    --z-modal: 3000;
     --z-popover: 60;
     --z-tooltip: 70;
-    --z-toast: 80;
+    --z-toast: 5000;
     --z-max: 100;
 
     /* Container */
@@ -1044,14 +1044,14 @@ h6 {
     display: inline-flex;
     align-items: center;
     gap: var(--space-sm);
-    background: rgba(16, 185, 129, 0.2);
+    background: rgba(22, 101, 52, 0.4);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    border: 1px solid rgba(0, 239, 139, 0.2);
     padding: var(--space-sm) var(--space-lg);
     border-radius: var(--radius-full);
     font-size: var(--text-sm);
-    color: var(--color-success);
+    color: #00ef8b;
     margin-bottom: var(--space-xl);
 }
 
@@ -1059,9 +1059,10 @@ h6 {
 .live-dot {
     width: 8px;
     height: 8px;
-    background: var(--color-success);
+    background: #00ef8b;
     border-radius: var(--radius-full);
     animation: live-pulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(0, 239, 139, 0.5);
 }
 
 /* Hero Title */
@@ -1413,6 +1414,15 @@ h6 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* Fix Issue 5: Match currency size globally */
+.currency {
+    font-size: 1.1em !important;
+    font-weight: 600 !important;
+    margin-right: 0.05em;
+    font-family: inherit !important;
+    vertical-align: baseline;
 }
 
 .price-original {
@@ -2530,10 +2540,18 @@ textarea::placeholder {
 /* Floating Track Order */
 .floating-track {
     position: fixed;
-    bottom: var(--space-lg);
+    bottom: var(--space-xl);
     left: 50%;
     transform: translateX(-50%);
-    z-index: var(--z-fixed);
+    z-index: 1500;
+    /* Above nav (1000) but below toast/modals */
+    animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (max-width: 768px) {
+    .floating-track {
+        bottom: calc(85px + var(--space-md));
+    }
 }
 
 /* FAB (Floating Action Button) */
@@ -2588,9 +2606,19 @@ textarea::placeholder {
 
 .fab-track {
     gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg);
-    background: var(--gradient-success);
+    padding: var(--space-md) var(--space-xl);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: var(--color-text-primary);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.fab-track:hover {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    box-shadow: 0 12px 40px rgba(16, 185, 129, 0.3);
 }
 
 .fab-track .fab-badge {
@@ -2644,7 +2672,7 @@ textarea::placeholder {
 /* Toast Container */
 .toast-container {
     position: fixed;
-    bottom: calc(80px + var(--space-lg));
+    top: var(--space-lg);
     left: 50%;
     transform: translateX(-50%);
     z-index: var(--z-toast);
@@ -2774,11 +2802,25 @@ textarea::placeholder {
     100% {
         opacity: 1;
         transform: scale(1);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
     }
 
     50% {
-        opacity: 0.5;
-        transform: scale(1.2);
+        opacity: 0.7;
+        transform: scale(1.3);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
     }
 }
 
@@ -2855,7 +2897,7 @@ textarea::placeholder {
 @keyframes toastIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(-20px);
     }
 
     to {
@@ -3237,12 +3279,10 @@ textarea::placeholder {
    SESSION BADGE OPTIMIZATION
    ========================================== */
 .session-text {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #00ef8b;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
 }
 
 /* ==========================================
@@ -4157,6 +4197,33 @@ textarea::placeholder {
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
 }
 
+@media (max-width: 768px) {
+
+    /* Bug Fix: Ensure modals don't get covered by bottom nav */
+    .modal {
+        align-items: flex-start !important;
+        padding-top: 5vh !important;
+        padding-bottom: 120px !important;
+        /* Large padding to clear nav */
+        overflow-y: auto !important;
+    }
+
+    .modal-container {
+        max-height: none !important;
+        align-items: flex-start !important;
+    }
+
+    .modal-content {
+        max-height: none !important;
+        margin-bottom: 120px !important;
+    }
+
+    .modal-body {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+}
+
 .mobile-bottom-nav .nav-item {
     display: flex;
     flex-direction: column;
@@ -4225,6 +4292,13 @@ textarea::placeholder {
     .navbar-menu {
         display: none !important;
     }
+
+    /* Modal visibility fix: Handled by z-index: 3000 */
+
+    /* Fix Issue 3: No need for floating cart on mobile */
+    .floating-cart {
+        display: none !important;
+    }
 }
 
 /* ==========================================
@@ -4233,7 +4307,8 @@ textarea::placeholder {
 .welcome-content-wrapper,
 .welcome-card {
     position: relative;
-    z-index: 1000;
+    z-index: 5000;
+    /* Above EVERYTHING */
     /* High z-index to be above particles */
 }
 
