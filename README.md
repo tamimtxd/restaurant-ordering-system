@@ -1,6 +1,6 @@
 # Modern Restaurant Ordering System
 
-![Rannaghor Banner](Screenshot.png)
+![Rannaghor Banner](images/Screenshot.png)
 
 A next-generation dining experience featuring **QR Code Table Detection**, **Real-time Status Tracking**, and a stunning **Glassmorphism UI**. Designed to streamline the ordering process with style and efficiency.
 
