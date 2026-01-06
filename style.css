@@ -64,22 +64,38 @@
     --gradient-text: linear-gradient(135deg, #FF8C00 0%, #FFD700 50%, #FF6347 100%);
     --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
 
-    /* Spacing */
+    /* Spacing Scale (Issue #10: Documented for clarity)
+       Based on a consistent 4px/0.25rem base unit
+       xs=4px, sm=8px, md=16px, lg=24px, xl=32px, 2xl=48px, 3xl=64px */
     --space-xs: 0.25rem;
+    /* 4px - Minimal spacing */
     --space-sm: 0.5rem;
+    /* 8px - Small spacing */
     --space-md: 1rem;
+    /* 16px - Default spacing */
     --space-lg: 1.5rem;
+    /* 24px - Large spacing */
     --space-xl: 2rem;
+    /* 32px - Extra large spacing */
     --space-2xl: 3rem;
+    /* 48px - 2x extra large */
     --space-3xl: 4rem;
+    /* 64px - 3x extra large */
 
-    /* Border Radius */
+    /* Border Radius Scale
+       Consistent sizing from small corners to full circles */
     --radius-sm: 0.375rem;
+    /* 6px - Small radius */
     --radius-md: 0.5rem;
+    /* 8px - Medium radius */
     --radius-lg: 0.75rem;
+    /* 12px - Large radius */
     --radius-xl: 1rem;
+    /* 16px - Extra large radius */
     --radius-2xl: 1.5rem;
+    /* 24px - 2x extra large */
     --radius-full: 9999px;
+    /* Fully rounded (pills/circles) */
 
     /* Font Family */
     --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -447,6 +463,39 @@ h6 {
 .btn-outline:hover {
     background: rgba(255, 140, 0, 0.1);
     border-color: var(--color-primary);
+}
+
+/* Hero Stats Optimization */
+.hero-stats {
+    display: flex;
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    /* Increased weight */
+    color: #FF8C00;
+    /* Use primary brand orange for better visibility */
+    line-height: 1;
+    margin-bottom: var(--space-xxs);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    /* Add shadow for contrast */
+}
+
+.stat-label {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.9);
+    /* Brighter white */
+    font-weight: 500;
 }
 
 /* Button Sizes */
@@ -1872,7 +1921,7 @@ h6 {
 }
 
 .modal-backdrop {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: var(--color-bg-overlay);
 }
@@ -2677,30 +2726,47 @@ textarea::placeholder {
 
 /* Toast Container */
 .toast-container {
+    /* Glassmorphic Pill Design for Mobile & Desktop */
     position: fixed;
-    top: var(--space-lg);
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: var(--z-toast);
+    z-index: 5000;
+    width: auto;
+    max-width: 90%;
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    align-items: center;
+    gap: 10px;
     pointer-events: none;
-    width: max-content;
-    max-width: calc(100vw - var(--space-xl));
 }
 
 .toast {
-    padding: var(--space-md) var(--space-lg);
-    background: var(--color-success);
+    padding: 12px 24px;
+    background: rgba(16, 185, 129, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     color: white;
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-    box-shadow: var(--shadow-lg);
-    animation: toastIn var(--transition-base);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: toastSlideDown 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     pointer-events: auto;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes toastSlideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .toast.toast-warning {
@@ -3625,9 +3691,33 @@ textarea::placeholder {
 }
 
 /* Welcome Screen Layout Fix */
+/* Welcome Screen Scroll Fix */
 .welcome-screen {
     padding: 1rem;
-    overflow-y: auto;
+    overflow-y: hidden;
+    /* Fix Issue 1: Hide scroll bar */
+    height: 100vh;
+    /* Force full height */
+}
+
+.welcome-screen-new {
+    overflow: hidden !important;
+    height: 100vh;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.welcome-screen-new::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+}
+
+/* Hide scrollbar on body when welcome screen is active */
+body.welcome-active {
+    overflow: hidden !important;
+    height: 100vh;
 }
 
 .welcome-content {
@@ -4119,6 +4209,32 @@ textarea::placeholder {
         font-size: 0.625rem !important;
         max-width: 60px;
     }
+
+    /* Track Order Button Optimization */
+    .fab-track {
+        padding: var(--space-sm) var(--space-lg) !important;
+        gap: var(--space-xs) !important;
+    }
+
+    .fab-track .fab-text {
+        font-size: 0.8rem !important;
+    }
+
+    .floating-track {
+        bottom: calc(80px + var(--space-sm)) !important;
+    }
+
+    /* Toast Optimization */
+    .toast-container {
+        width: 90% !important;
+        top: var(--space-md) !important;
+    }
+
+    .toast {
+        padding: var(--space-sm) var(--space-md) !important;
+        font-size: 0.75rem !important;
+        border-radius: var(--radius-lg) !important;
+    }
 }
 
 @media (max-width: 400px) {
@@ -4333,6 +4449,15 @@ textarea::placeholder {
     .floating-cart {
         display: none !important;
     }
+
+    /* Hide mobile bottom nav on welcome screen */
+    body.welcome-active .mobile-bottom-nav {
+        display: none !important;
+    }
+
+    body.welcome-active {
+        padding-bottom: 0 !important;
+    }
 }
 
 /* ==========================================
@@ -4355,6 +4480,23 @@ textarea::placeholder {
     z-index: 1;
     pointer-events: none;
     /* Ensure background doesn't steal clicks */
+}
+
+/* ==========================================
+   FIX: SPECIALS GRID LAYOUT (TABLET/MOBILE)
+   ========================================== */
+@media (max-width: 900px) {
+    .specials-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .special-card {
+        padding: var(--space-lg) !important;
+    }
+
+    .special-footer {
+        flex-wrap: wrap;
+    }
 }
 
 .table-btn-compact,
