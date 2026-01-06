@@ -175,15 +175,7 @@
                 </button>
             </header>
 
-            <!-- Table Info -->
-            <div id="cartTableInfo" class="cart-table-info">
-                <div class="table-info-icon">🪑</div>
-                <div class="table-info-text">
-                    <span class="table-info-label">Ordering for</span>
-                    <span class="table-info-number">Table <span id="cartTableNumber">-</span></span>
-                </div>
-                <div class="live-dot"></div>
-            </div>
+            <!-- Table Info Removed -->
 
             <!-- Cart Items -->
             <div class="cart-content">
@@ -527,7 +519,7 @@
                         <ul class="footer-links">
                             <li>
                                 <span class="footer-icon">📍</span>
-                                <span>123 Gulshan Avenue, Dhaka 1212</span>
+                                <span>Mirpur, Dhaka-1216</span>
                             </li>
                             <li>
                                 <span class="footer-icon">📞</span>
@@ -573,7 +565,7 @@
 
                 <!-- Footer Bottom -->
                 <div class="footer-bottom">
-                    <p>© 2024 Rannaghor. All rights reserved. Made with ❤️ in Bangladesh</p>
+                    <p>© 2025 Rannaghor. All rights reserved. Made with ❤️ in Bangladesh</p>
                 </div>
             </div>
         </footer>
@@ -754,13 +746,13 @@
                                 <span id="itemModalPrice" class="gradient-text"><span class="currency">৳</span>0</span>
                             </div>
                             <div class="item-quantity-selector">
-                                <button class="qty-btn" id="itemQtyMinus">−</button>
-                                <span class="qty-value" id="itemQtyValue">1</span>
-                                <button class="qty-btn" id="itemQtyPlus">+</button>
+                                <button class="qty-btn" id="itemQtyMinus" aria-label="Decrease quantity">−</button>
+                                <span class="qty-value" id="itemQtyValue" aria-label="Quantity">1</span>
+                                <button class="qty-btn" id="itemQtyPlus" aria-label="Increase quantity">+</button>
                             </div>
                         </div>
 
-                        <button id="addItemToCart" class="btn btn-primary btn-block">
+                        <button id="addItemToCart" class="btn btn-primary btn-block" aria-label="Add item to cart">
                             Add to Cart - <span id="itemTotalPrice"><span class="currency">৳</span>0</span>
                         </button>
                     </div>
