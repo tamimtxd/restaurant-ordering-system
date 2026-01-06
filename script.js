@@ -7,17 +7,48 @@
 // 1. CONFIGURATION & DATA
 // ==========================================
 
+// Timing Constants (Issue #4: Magic Numbers)
+const TIMINGS = {
+    MODAL_TRANSITION: 300,      // Modal open/close animation duration
+    TOAST_DURATION: 3000,        // How long toasts stay visible
+    ANIMATION_DELAY: 100,        // General animation delay
+    CART_TRANSITION: 300,        // Cart sidebar transition
+    TABLE_SELECT_DELAY: 800,     // Delay before hiding welcome screen
+    ORDER_STATUS_PREPARING: 5000,  // Time until order moves to "ready"
+    ORDER_STATUS_READY: 15000,     // Time until order is "ready"
+    ORDER_STATUS_SERVED: 25000     // Time until order is "served"
+};
+
+// Z-Index System (Issue #4: Magic Numbers)
+const Z_INDEX = {
+    MODAL: 3000,
+    TOAST: 5000,
+    NAVBAR: 1000,
+    BOTTOM_NAV: 1000,
+    FLOATING: 1500,
+    CART: 2000,
+    OVERLAY: 1999,
+    WELCOME: 100
+};
+
+// Layout Constants (Issue #4: Magic Numbers)
+const LAYOUT = {
+    MOBILE_NAV_HEIGHT: '80px',
+    TRACK_BUTTON_OFFSET: '80px'
+};
+
 const CONFIG = {
     vatRate: 0.05,
-    currency: '<span class="currency">৳</span>',
+    currency: '৳',  // Fixed Issue #1: XSS - Changed from HTML to plain text
+    currencySymbol: '৳',
     estimatedTime: '15-20 min',
     orderStatusDelay: {
-        preparing: 5000,
-        ready: 15000,
-        served: 25000
+        preparing: TIMINGS.ORDER_STATUS_PREPARING,
+        ready: TIMINGS.ORDER_STATUS_READY,
+        served: TIMINGS.ORDER_STATUS_SERVED
     },
-    toastDuration: 3000,
-    animationDelay: 100
+    toastDuration: TIMINGS.TOAST_DURATION,
+    animationDelay: TIMINGS.ANIMATION_DELAY
 };
 
 // Menu Items Data
@@ -138,6 +169,7 @@ const DOM = {
     menuSearch: document.getElementById('menuSearch'),
     clearSearch: document.getElementById('clearSearch'),
     noResults: document.getElementById('noResults'),
+    mobileBottomNav: document.querySelector('.mobile-bottom-nav'),
 
     // Cart
     cartBtn: document.getElementById('cartBtn'),
@@ -291,12 +323,14 @@ function updateTableDisplays(tableNumber) {
 function showWelcomeScreen() {
     if (DOM.welcomeScreen) {
         DOM.welcomeScreen.style.display = 'flex';
+        document.body.classList.add('welcome-active');
     }
 }
 
 function hideWelcomeScreen() {
     if (DOM.welcomeScreen) {
         DOM.welcomeScreen.style.display = 'none';
+        document.body.classList.remove('welcome-active');
     }
 }
 
@@ -400,12 +434,26 @@ function attachMenuItemListeners() {
 function initSpecialItems() {
     if (state.specialItemsInitialized) return;
 
+    // Add to cart buttons
     document.querySelectorAll('.btn-special').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
             addToCart(btn.dataset.id);
         });
+    });
+
+    // Special card click for details (Fix Issue: Not opening)
+    document.querySelectorAll('.special-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Find the button inside the card to get the ID
+            const btn = card.querySelector('.btn-special');
+            if (btn && !e.target.closest('.btn-add')) {
+                openItemModal(btn.dataset.id);
+            }
+        });
+        // Make it look clickable
+        card.style.cursor = 'pointer';
     });
 
     state.specialItemsInitialized = true;
@@ -976,14 +1024,12 @@ function showModal(modal) {
     if (!modal) return;
     modal.classList.remove('hidden');
     setTimeout(() => modal.classList.add('visible'), 10);
-    document.body.classList.add('modal-open');
 }
 
 function hideModal(modal) {
     if (!modal) return;
     modal.classList.remove('visible');
     setTimeout(() => modal.classList.add('hidden'), 300);
-    document.body.classList.remove('modal-open');
 }
 
 function showSuccessModal(orderNumber) {
@@ -1013,11 +1059,22 @@ function openItemModal(id) {
     if (DOM.itemModalTitle) DOM.itemModalTitle.textContent = item.name;
     if (DOM.itemModalTitleBn) DOM.itemModalTitleBn.textContent = item.namebn || '';
     if (DOM.itemModalDesc) DOM.itemModalDesc.textContent = item.desc;
-    if (DOM.itemModalSpicy) DOM.itemModalSpicy.textContent = getSpicyIndicator(item.spicy);
+
+    // Issue #5: Fixed - Clean single approach for spicy indicator (removed duplication)
+    if (DOM.itemModalSpicy) {
+        if (item.spicy) {
+            DOM.itemModalSpicy.textContent = 'Spicy';
+            DOM.itemModalSpicy.style.display = 'inline-block';
+        } else {
+            DOM.itemModalSpicy.style.display = 'none';
+        }
+    }
+
     if (DOM.itemModalCategory) DOM.itemModalCategory.textContent = item.category;
-    if (DOM.itemModalPrice) DOM.itemModalPrice.innerHTML = `${CONFIG.currency}${item.price}`;
+    // Issue #1: Fixed XSS - changed innerHTML to textContent
+    if (DOM.itemModalPrice) DOM.itemModalPrice.textContent = `${CONFIG.currency}${item.price}`;
     if (DOM.itemQtyValue) DOM.itemQtyValue.textContent = '1';
-    if (DOM.itemTotalPrice) DOM.itemTotalPrice.innerHTML = `${CONFIG.currency}${item.price}`;
+    if (DOM.itemTotalPrice) DOM.itemTotalPrice.textContent = `${CONFIG.currency}${item.price}`;
 
     showModal(DOM.itemModal);
 }
@@ -1288,7 +1345,8 @@ function saveToStorage() {
     try {
         localStorage.setItem(`rannaghor_table_${state.currentTable}`, JSON.stringify(data));
     } catch (e) {
-        console.warn('Could not save to localStorage:', e);
+        // Issue #2: Improved error handling with user-friendly toast
+        showToast('Unable to save data. Please check your browser settings.', 'warning');
     }
 }
 
@@ -1304,7 +1362,9 @@ function loadFromStorage() {
             updateCart();
         }
     } catch (e) {
-        console.warn('Could not load from localStorage:', e);
+        // Issue #2: Improved error handling - silently handle corrupted data
+        state.cart = [];
+        state.orders = [];
     }
 }
 
