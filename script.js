@@ -51,8 +51,8 @@ const CONFIG = {
     animationDelay: TIMINGS.ANIMATION_DELAY
 };
 
-// Menu Items Data
-const menuItems = [
+// Menu Items Data (Fallback data)
+let menuItems = [
     // Biriyani
     { id: 1, name: "Kacchi Biriyani", namebn: "কাচ্চি বিরিয়ানি", category: "biriyani", price: 350, emoji: "🍛", desc: "Aromatic mutton biriyani with potatoes", spicy: 2, popular: true },
     { id: 2, name: "Chicken Biriyani", namebn: "চিকেন বিরিয়ানি", category: "biriyani", price: 280, emoji: "🍗", desc: "Fragrant rice with tender chicken pieces", spicy: 2 },
@@ -100,8 +100,8 @@ const menuItems = [
     { id: 34, name: "Lemon Soda", namebn: "লেবু সোডা", category: "drinks", price: 40, emoji: "🍋", desc: "Fresh lemon with soda", spicy: 0 },
 ];
 
-// Special Items Data
-const specialItems = [
+// Special Items Data (Fallback data)
+let specialItems = [
     {
         id: 'special1',
         name: "Kacchi Biriyani (Special)",
@@ -242,7 +242,7 @@ const DOM = {
 
     // Order Badges
     activeOrdersBadge: document.getElementById('activeOrdersBadge'),
-    mobileOrdersBadge: document.getElementById('mobileOrdersBadge'),
+    mobileOrdersBadge: document.getElementById('bottomNavOrdersBadge'),
 
     // Toast Container
     toastContainer: document.getElementById('toastContainer')
@@ -252,7 +252,7 @@ const DOM = {
 // 4. INITIALIZATION
 // ==========================================
 
-function init() {
+async function init() {
     const tableFromURL = getTableFromURL();
 
     if (tableFromURL) {
@@ -264,8 +264,81 @@ function init() {
     setupEventListeners();
     initScrollObserver();
 
+    // Fetch dynamic menu items from Supabase
+    await fetchMenuItems();
+
     // Initialize special items listeners ONCE
     initSpecialItems();
+
+    // Sync active orders with Supabase Realtime
+    syncActiveOrders();
+}
+
+/**
+ * Sync active orders from LocalStorage with Supabase
+ */
+function syncActiveOrders() {
+    if (typeof SUPABASE_URL === 'undefined' || SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+
+    state.orders.forEach(order => {
+        if (order.status !== 'served') {
+            subscribeToOrderUpdates(order.id);
+        }
+    });
+}
+
+/**
+ * Fetch menu items from Supabase
+ */
+async function fetchMenuItems() {
+    if (typeof SUPABASE_URL === 'undefined' || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+        console.warn('Supabase not configured. Using fallback menu data.');
+        return;
+    }
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('menu_items')
+            .select('*');
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            // Map Supabase data to local format if necessary
+            const remoteMenuItems = data.filter(item => !item.is_special).map(item => ({
+                id: item.id,
+                name: item.name,
+                namebn: item.namebn,
+                category: item.category,
+                price: item.price,
+                emoji: item.emoji,
+                desc: item.description,
+                spicy: item.spicy,
+                popular: item.popular
+            }));
+
+            const remoteSpecialItems = data.filter(item => item.is_special).map(item => ({
+                id: item.id,
+                name: item.name,
+                namebn: item.namebn,
+                category: item.category,
+                price: item.price,
+                originalPrice: item.original_price,
+                emoji: item.emoji,
+                desc: item.description,
+                spicy: item.spicy
+            }));
+
+            if (remoteMenuItems.length > 0) menuItems = remoteMenuItems;
+            if (remoteSpecialItems.length > 0) specialItems = remoteSpecialItems;
+
+            console.log('Menu items fetched from Supabase');
+            renderMenu(state.selectedCategory, state.searchQuery);
+        }
+    } catch (err) {
+        console.error('Error fetching menu items:', err.message);
+        showToast('Using local menu data (Offline mode)', 'info');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', init);
@@ -647,7 +720,7 @@ function closeCart() {
 // 9. ORDER FUNCTIONS
 // ==========================================
 
-function placeOrder() {
+async function placeOrder() {
     if (state.cart.length === 0) {
         showToast('Your cart is empty!', 'warning');
         return;
@@ -668,6 +741,32 @@ function placeOrder() {
     };
     order.total = order.subtotal + order.vat;
 
+    // Save to Supabase if configured
+    if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+        try {
+            // Stringify items if your DB expects a string/text column
+            const { data, error } = await supabaseClient
+                .from('orders')
+                .insert([{
+                    order_number: order.id,
+                    table_number: parseInt(order.table),
+                    items: order.items, // Supabase usually handles JS arrays for jsonb
+                    subtotal: order.subtotal,
+                    vat: order.vat,
+                    total: order.total,
+                    instructions: order.instructions,
+                    status: order.status
+                }])
+                .select(); // Get back the record to confirm
+
+            if (error) throw error;
+            console.log('Order saved to Supabase successfully');
+        } catch (err) {
+            console.error('Error saving order to Supabase:', err.message);
+            showToast('Order saved locally (Offline mode)', 'info');
+        }
+    }
+
     state.orders.unshift(order);
     saveToStorage();
 
@@ -678,7 +777,13 @@ function placeOrder() {
     updateOrderBadges();
     closeCart();
     showSuccessModal(orderNumber);
-    simulateOrderProgress(orderNumber);
+
+    // Subscribe to updates regardless of Supabase success (uses local ID which matches order_number)
+    if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+        subscribeToOrderUpdates(orderNumber);
+    } else {
+        simulateOrderProgress(orderNumber);
+    }
 }
 
 function generateOrderNumber() {
@@ -706,42 +811,58 @@ function simulateOrderProgress(orderNumber) {
 }
 
 function updateOrderStatus(orderNumber, newStatus) {
-    const order = state.orders.find(o => o.id === orderNumber);
-    if (!order) return;
+    console.log(`Updating order #${orderNumber} status to: ${newStatus}`);
+
+    // Use loose equality and string conversion to be safe with IDs
+    const order = state.orders.find(o => String(o.id) === String(orderNumber));
+
+    if (!order) {
+        console.warn(`Order #${orderNumber} not found in local state.`);
+        return;
+    }
 
     const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
     const newStatusIndex = statusIndex[newStatus];
 
     // Trigger animation BEFORE changing status (if modal is open)
-    if (!DOM.trackOrderModal.classList.contains('hidden')) {
-        const activeOrders = state.orders.filter(o => o.status !== 'served');
-        const orderIndex = activeOrders.findIndex(o => o.id === orderNumber);
-
-        if (orderIndex !== -1) {
-            animateSingleStep(orderIndex, newStatusIndex);
-        }
+    if (DOM.trackOrderModal && !DOM.trackOrderModal.classList.contains('hidden')) {
+        // We update the status first so renderTrackOrders sees the new state
+        order.status = newStatus;
+        renderTrackOrders();
     }
 
     order.status = newStatus;
     saveToStorage();
+    updateOrderBadges();
+
+    // If modal is open, we need to refresh the list
+    if (DOM.trackOrderModal && !DOM.trackOrderModal.classList.contains('hidden')) {
+        renderTrackOrders();
+    }
+
+    if (DOM.ordersModal && !DOM.ordersModal.classList.contains('hidden')) {
+        renderOrders();
+    }
 }
 
 function updateOrderBadges() {
-    const activeCount = state.orders.filter(o => o.status !== 'served').length;
+    const activeOrdersCount = state.orders.filter(o => o.status !== 'served').length;
 
     const badges = [DOM.activeOrdersBadge, DOM.mobileOrdersBadge];
     badges.forEach(badge => {
         if (badge) {
-            badge.textContent = activeCount;
-            badge.classList.toggle('hidden', activeCount === 0);
+            badge.textContent = activeOrdersCount;
+            badge.classList.toggle('hidden', activeOrdersCount === 0);
         }
     });
 
     if (DOM.floatingTrackOrder) {
-        DOM.floatingTrackOrder.classList.toggle('hidden', activeCount === 0);
+        // Hide tracking button if all orders are served
+        DOM.floatingTrackOrder.classList.toggle('hidden', activeOrdersCount === 0);
     }
     if (DOM.floatingOrderCount) {
-        DOM.floatingOrderCount.textContent = activeCount;
+        DOM.floatingOrderCount.textContent = activeOrdersCount;
+        DOM.floatingOrderCount.classList.toggle('hidden', activeOrdersCount === 0);
     }
 }
 
@@ -795,60 +916,102 @@ function renderOrders() {
 function renderTrackOrders() {
     if (!DOM.trackOrderList) return;
 
-    const activeOrders = state.orders.filter(o => o.status !== 'served');
+    const activeOrders = state.orders;
 
     if (activeOrders.length === 0) {
         DOM.trackOrderList.innerHTML = '';
-        if (DOM.noActiveOrders) DOM.noActiveOrders.classList.remove('hidden');
         return;
     }
 
-    if (DOM.noActiveOrders) DOM.noActiveOrders.classList.add('hidden');
+    // 1. CAPTURE current visual states BEFORE any DOM changes
+    const previousStates = {};
+    document.querySelectorAll('.track-order-card').forEach(card => {
+        const id = card.getAttribute('data-order-id');
+        const progress = card.querySelector('.status-progress-fill');
+        if (id && progress) {
+            previousStates[id] = parseInt(progress.getAttribute('data-current-step'));
+        }
+    });
 
-    DOM.trackOrderList.innerHTML = activeOrders.map((order, orderIndex) => {
-        return `
-            <div class="track-order-card" data-order-id="${order.id}">
+    // 2. BUILD the HTML blocks, incorporating previous states to prevent reset flicker
+    const listEl = DOM.trackOrderList;
+    const currentCards = Array.from(listEl.children);
+
+    const orderHTMLBlocks = activeOrders.map((order) => {
+        const isServed = order.status === 'served';
+        const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
+        const targetStep = statusIndex[order.status] || 0;
+
+        // Use previous step as starting point if it exists
+        const startStep = previousStates[order.id] !== undefined ? previousStates[order.id] : -1;
+        const initialWidth = startStep >= 0 ? (startStep / 3) * 100 : 0;
+
+        // Helper for initial step visuals
+        const getStepStyle = (idx) => {
+            if (startStep === -1) return '';
+            if (idx < startStep || (idx === startStep && idx === 3))
+                return 'background: #10b981;'; // Removed glow for Served
+            if (idx === startStep)
+                return 'background: var(--gradient-primary); box-shadow: 0 0 20px rgba(255, 140, 0, 0.6);';
+            return '';
+        };
+        const getLabelClass = (idx) => {
+            if (idx < startStep || (idx === startStep && idx === 3)) return 'completed';
+            if (idx === startStep) return 'active';
+            return '';
+        };
+
+        return {
+            id: order.id,
+            status: order.status,
+            html: `
+            <div class="track-order-card ${isServed ? 'order-served' : ''}" 
+                 data-order-id="${order.id}" 
+                 data-last-status="${order.status}">
                 <div class="track-order-header">
                     <div>
                         <div class="track-order-id">Order #${order.id}</div>
                         <div class="track-order-time">${formatTime(order.timestamp)}</div>
                     </div>
-                    <span class="track-status-badge">
-                        <span class="live-dot"></span>
-                        In Progress
-                    </span>
+                    ${isServed ? `
+                        <span class="track-status-badge completed">✅ Served</span>
+                    ` : `
+                        <span class="track-status-badge">
+                            <span class="live-dot"></span>
+                            In Progress
+                        </span>
+                    `}
                 </div>
 
-                <!-- Status Tracker -->
-                <div class="status-tracker">
-                    <div class="status-steps">
-                        <div class="status-progress-line">
-                            <div class="track-progress-${orderIndex} status-progress-fill" style="width: 0%"></div>
-                        </div>
-                        
-                        <div class="track-step-${orderIndex}-0 status-step">
-                            <div class="step-icon">📝</div>
-                            <span class="step-label">Received</span>
-                        </div>
-                        
-                        <div class="track-step-${orderIndex}-1 status-step">
-                            <div class="step-icon">👨‍🍳</div>
-                            <span class="step-label">Preparing</span>
-                        </div>
-                        
-                        <div class="track-step-${orderIndex}-2 status-step">
-                            <div class="step-icon">🍽️</div>
-                            <span class="step-label">Ready</span>
-                        </div>
-                        
-                        <div class="track-step-${orderIndex}-3 status-step">
-                            <div class="step-icon">✅</div>
-                            <span class="step-label">Served</span>
+                <!-- Status Tracker (Shows if active, or if just transitioning to Served) -->
+                ${(() => {
+                    const showTracker = !isServed || (isServed && startStep >= 0 && startStep < 3);
+                    return `
+                    <div class="status-tracker ${showTracker ? '' : 'hidden'}">
+                        <div class="status-steps">
+                            <div class="status-progress-line">
+                                <div class="track-progress-${order.id} status-progress-fill" 
+                                     style="width: ${initialWidth}%" 
+                                     data-current-step="${startStep}"></div>
+                            </div>
+                            
+                            ${['Received', 'Preparing', 'Ready', 'Served'].map((label, idx) => `
+                                <div class="track-step-${order.id}-${idx} status-step">
+                                    <div class="step-icon" style="${getStepStyle(idx)}">${['📝', '👨‍🍳', '🍽️', '✅'][idx]}</div>
+                                    <span class="step-label ${getLabelClass(idx)}">${label}</span>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
-                </div>
+                    `;
+                })()}
 
-                <!-- Order Items -->
+                ${isServed ? `
+                    <div class="served-confirmation">
+                        <p>This order was served. Enjoy your meal! ❤️</p>
+                    </div>
+                ` : ''}
+
                 <div class="track-order-items">
                     ${order.items.map(item => `
                         <div class="order-item-row">
@@ -858,44 +1021,99 @@ function renderTrackOrders() {
                     `).join('')}
                 </div>
 
-                <!-- Footer -->
                 <div class="track-order-footer">
                     <div class="track-total">
                         <span class="track-total-label">Total</span>
                         <span class="track-total-value gradient-text">${CONFIG.currency}${order.total}</span>
                     </div>
-                    <div class="track-eta">
-                        <span class="track-eta-label">Estimated</span>
-                        <span class="track-eta-value">${CONFIG.estimatedTime}</span>
-                    </div>
+                    ${!isServed ? `
+                        <div class="track-eta">
+                            <span class="track-eta-label">Estimated</span>
+                            <span class="track-eta-value">${CONFIG.estimatedTime}</span>
+                        </div>
+                    ` : ''}
                 </div>
             </div>
-        `;
-    }).join('');
+            `
+        };
+    });
 
-    // Animate status trackers after render
+    // 3. GRANULAR DOM UPDATE
+    if (currentCards.length === orderHTMLBlocks.length && currentCards.length > 0) {
+        orderHTMLBlocks.forEach((data, idx) => {
+            const card = currentCards[idx];
+            if (card.getAttribute('data-order-id') !== String(data.id) ||
+                card.getAttribute('data-last-status') !== data.status) {
+                card.outerHTML = data.html;
+            }
+        });
+    } else {
+        listEl.innerHTML = orderHTMLBlocks.map(d => d.html).join('');
+    }
+
+    // 4. TRIGGER targeted animations
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            activeOrders.forEach((order, orderIndex) => {
+            activeOrders.forEach((order) => {
                 const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
-                const currentStep = statusIndex[order.status];
-                animateTrackOrderStatus(orderIndex, currentStep);
+                const targetStep = statusIndex[order.status] || 0;
+                const progressBar = document.querySelector(`.track-progress-${order.id}`);
+
+                if (!progressBar) return;
+
+                const currentStep = parseInt(progressBar.getAttribute('data-current-step'));
+                let animationMode = false;
+
+                if (!DOM.trackOrderModal.classList.contains('visible')) {
+                    animationMode = 'full';
+                } else if (currentStep < targetStep) {
+                    animationMode = 'delta';
+                }
+
+                animateTrackOrderStatus(order.id, targetStep, animationMode);
             });
         });
     });
 }
 
 // Animate the track order status - animates UP TO the actual order status
-function animateTrackOrderStatus(orderIndex, targetStep) {
-    const progressBar = document.querySelector(`.track-progress-${orderIndex}`);
+function animateTrackOrderStatus(orderId, targetStep, mode = 'full') {
+    const progressBar = document.querySelector(`.track-progress-${orderId}`);
     if (!progressBar) return;
 
-    // First, reset ALL steps to initial gray state
-    for (let i = 0; i <= 3; i++) {
-        const stepEl = document.querySelector(`.track-step-${orderIndex}-${i}`);
-        if (stepEl) {
-            const icon = stepEl.querySelector('.step-icon');
-            const text = stepEl.querySelector('.step-label');
+    // Helper function to set step visual state immediately
+    const setStepState = (step, state) => {
+        const stepEl = document.querySelector(`.track-step-${orderId}-${step}`);
+        if (!stepEl) return;
+        const icon = stepEl.querySelector('.step-icon');
+        const text = stepEl.querySelector('.step-label');
+
+        if (state === 'completed') {
+            if (icon) {
+                icon.style.background = '#10b981';
+                // Remove glow for Served step (step 3)
+                icon.style.boxShadow = step === 3 ? 'none' : '0 0 15px rgba(16, 185, 129, 0.5)';
+                icon.classList.remove('active');
+                icon.classList.add('completed');
+            }
+            if (text) {
+                text.style.color = '#10b981';
+                text.classList.remove('active');
+                text.classList.add('completed');
+            }
+        } else if (state === 'active') {
+            if (icon) {
+                icon.style.background = 'linear-gradient(135deg, #FF8C00 0%, #DC143C 100%)';
+                icon.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.6)';
+                icon.classList.add('active');
+                icon.classList.remove('completed');
+            }
+            if (text) {
+                text.style.color = '#FF8C00';
+                text.classList.add('active');
+                text.classList.remove('completed');
+            }
+        } else {
             if (icon) {
                 icon.style.background = 'rgba(255, 255, 255, 0.1)';
                 icon.style.boxShadow = 'none';
@@ -906,113 +1124,82 @@ function animateTrackOrderStatus(orderIndex, targetStep) {
                 text.classList.remove('active', 'completed');
             }
         }
-    }
-    progressBar.style.width = '0%';
+    };
 
-    const stepDelay = 600;
+    const currentStep = parseInt(progressBar.getAttribute('data-current-step'));
 
-    // Animate from step 0 UP TO targetStep
-    for (let step = 0; step <= targetStep; step++) {
-        (function (currentStep) {
-            const delay = currentStep * stepDelay;
-
-            setTimeout(() => {
-                // Turn PREVIOUS step green (completed)
-                if (currentStep > 0) {
-                    const prevStepEl = document.querySelector(`.track-step-${orderIndex}-${currentStep - 1}`);
-                    if (prevStepEl) {
-                        const prevIcon = prevStepEl.querySelector('.step-icon');
-                        const prevText = prevStepEl.querySelector('.step-label');
-                        if (prevIcon) {
-                            prevIcon.style.background = '#10b981';
-                            prevIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
-                            prevIcon.classList.remove('active');
-                            prevIcon.classList.add('completed');
-                        }
-                        if (prevText) {
-                            prevText.style.color = '#10b981';
-                            prevText.classList.remove('active');
-                            prevText.classList.add('completed');
-                        }
-                    }
-                }
-
-                // Make CURRENT step orange (active)
-                const stepEl = document.querySelector(`.track-step-${orderIndex}-${currentStep}`);
-                if (stepEl) {
-                    const icon = stepEl.querySelector('.step-icon');
-                    const text = stepEl.querySelector('.step-label');
-                    if (icon) {
-                        icon.style.background = 'linear-gradient(135deg, #FF8C00 0%, #DC143C 100%)';
-                        icon.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.6)';
-                        icon.classList.add('active');
-                    }
-                    if (text) {
-                        text.style.color = '#FF8C00';
-                        text.classList.add('active');
-                    }
-                }
-
-                // Update progress bar
-                const progressWidth = (currentStep / 3) * 100;
-                progressBar.style.width = `${progressWidth}%`;
-            }, delay);
-        })(step);
-    }
-}
-
-// Animate a single step transition (when status changes in real-time)
-function animateSingleStep(orderIndex, newStatusIndex) {
-    const prevStepIndex = newStatusIndex - 1;
-    const progressBar = document.querySelector(`.track-progress-${orderIndex}`);
-
-    // Turn previous step green (completed)
-    if (prevStepIndex >= 0) {
-        const prevStepEl = document.querySelector(`.track-step-${orderIndex}-${prevStepIndex}`);
-        if (prevStepEl) {
-            const prevIcon = prevStepEl.querySelector('.step-icon');
-            const prevText = prevStepEl.querySelector('.step-label');
-            if (prevIcon) {
-                prevIcon.style.background = '#10b981';
-                prevIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
-                prevIcon.classList.remove('active');
-                prevIcon.classList.add('completed');
-            }
-            if (prevText) {
-                prevText.style.color = '#10b981';
-                prevText.classList.remove('active');
-                prevText.classList.add('completed');
+    if (!mode) {
+        // Immediate sync: No animation
+        for (let i = 0; i <= 3; i++) {
+            if (i < targetStep) {
+                setStepState(i, 'completed');
+            } else if (i === targetStep) {
+                // If it's the final step (Served), show as completed
+                setStepState(i, i === 3 ? 'completed' : 'active');
+            } else {
+                setStepState(i, 'disabled');
             }
         }
+        progressBar.style.width = `${(targetStep / 3) * 100}%`;
+        progressBar.setAttribute('data-current-step', targetStep);
+        return;
     }
 
-    // Turn current step orange (active)
-    const currentStepEl = document.querySelector(`.track-step-${orderIndex}-${newStatusIndex}`);
-    if (currentStepEl) {
-        const icon = currentStepEl.querySelector('.step-icon');
-        const text = currentStepEl.querySelector('.step-label');
-        if (icon) {
-            icon.style.background = 'linear-gradient(135deg, #FF8C00 0%, #DC143C 100%)';
-            icon.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.6)';
-            icon.classList.add('active');
+    if (mode === 'full') {
+        // Full Intro: Reset and animate from 0
+        for (let i = 0; i <= 3; i++) setStepState(i, 'disabled');
+        progressBar.style.width = '0%';
+        progressBar.setAttribute('data-current-step', -1);
+
+        animateSteps(0, targetStep);
+    } else if (mode === 'delta') {
+        // Delta Update: Animate from current to target
+        // We DO NOT reset the progress bar here. We start from where we left off.
+        const startFrom = Math.max(0, currentStep + 1);
+        if (startFrom <= targetStep) {
+            animateSteps(startFrom, targetStep);
         }
-        if (text) {
-            text.style.color = '#FF8C00';
-            text.classList.add('active');
+    }
+
+    function animateSteps(start, end) {
+        const stepDelay = 600;
+        let animatedCount = 0;
+
+        for (let step = start; step <= end; step++) {
+            (function (s, index) {
+                const delay = index * stepDelay;
+                setTimeout(() => {
+                    // Turn PREVIOUS step green (completed)
+                    if (s > 0) {
+                        setStepState(s - 1, 'completed');
+                    }
+
+                    // For the VERY LAST STEP (3 - Served), we want it to look completed (green)
+                    // instead of remaining orange (active) forever
+                    if (s === 3) {
+                        setStepState(s, 'completed');
+                        // Use a longer delay to hide the tracker after the completion is seen
+                        setTimeout(() => {
+                            const tracker = progressBar.closest('.status-tracker');
+                            if (tracker) {
+                                tracker.style.opacity = '0';
+                                tracker.style.transition = 'opacity 0.6s ease';
+                                setTimeout(() => tracker.classList.add('hidden'), 600);
+                            }
+                        }, 2000);
+                    } else {
+                        // Make CURRENT step orange (active)
+                        setStepState(s, 'active');
+                    }
+
+                    // Update progress bar
+                    const progressWidth = (s / 3) * 100;
+                    progressBar.style.width = `${progressWidth}%`;
+                    progressBar.setAttribute('data-current-step', s);
+                }, delay);
+            })(step, animatedCount);
+            animatedCount++;
         }
-    }
-
-    // Update progress bar
-    if (progressBar) {
-        const progressWidth = (newStatusIndex / 3) * 100;
-        progressBar.style.width = `${progressWidth}%`;
-    }
-
-    // If served, re-render after animation to remove from list
-    if (newStatusIndex === 3) {
-        setTimeout(() => {
-            renderTrackOrders();
-        }, 2000);
     }
 }
 
@@ -1414,6 +1601,40 @@ function throttle(func, limit) {
 // ==========================================
 // EXPOSE FUNCTIONS TO GLOBAL SCOPE
 // ==========================================
+
+/**
+ * Realtime subscription for customer's specific order
+ */
+function subscribeToOrderUpdates(orderNumber) {
+    if (typeof supabaseClient === 'undefined') return;
+
+    console.log(`Subscribing to Realtime updates for Order #${orderNumber}`);
+
+    // Ensure we don't have multiple subscriptions for the same order
+    const channelName = `cust-order-${orderNumber}`;
+
+    const channel = supabaseClient
+        .channel(channelName)
+        .on('postgres_changes', {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'orders',
+            filter: `order_number=eq.${orderNumber}`
+        }, (payload) => {
+            console.log(`Realtime update for #${orderNumber}:`, payload.new.status);
+            updateOrderStatus(orderNumber, payload.new.status);
+
+            // Show toast for transparency
+            const statusEmojis = { 'preparing': '👨‍🍳', 'ready': '🍽️', 'served': '✅' };
+            const emoji = statusEmojis[payload.new.status] || '🔔';
+            showToast(`${emoji} Order #${orderNumber} status: ${payload.new.status}`);
+        })
+        .subscribe((status) => {
+            console.log(`Subscription status for #${orderNumber}:`, status);
+        });
+
+    return channel;
+}
 
 window.updateCartItemQty = updateCartItemQty;
 window.addToCart = addToCart;
