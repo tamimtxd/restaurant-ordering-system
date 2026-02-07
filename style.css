@@ -2572,6 +2572,7 @@ h6 {
     margin-bottom: var(--space-md);
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -3616,6 +3617,7 @@ textarea::placeholder {
 .vip-card .table-number {
     background: linear-gradient(135deg, #FFD700, #FFA500);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -3722,12 +3724,14 @@ textarea::placeholder {
 }
 
 .welcome-screen-new {
-    overflow: hidden !important;
+    overflow-y: auto !important;
     height: 100vh;
     -ms-overflow-style: none;
     /* IE and Edge */
     scrollbar-width: none;
     /* Firefox */
+    padding-bottom: 40px;
+    /* Space for admin buttons on short screens */
 }
 
 .welcome-screen-new::-webkit-scrollbar {
@@ -4068,6 +4072,7 @@ body.welcome-active {
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    overflow-y: auto;
 }
 
 .welcome-wrapper {
@@ -4526,6 +4531,7 @@ body.welcome-active {
     position: relative;
     z-index: 1001;
 }
+
 /* ============================================
    QR SCANNER & WELCOME SCREEN UPDATES
    ============================================ */
@@ -4631,11 +4637,11 @@ body.welcome-active {
     .scanner-section {
         padding: 15px;
     }
-    
+
     .scanner-icon {
         font-size: 2rem;
     }
-    
+
     .scanner-title {
         font-size: 1rem;
     }
@@ -4710,12 +4716,15 @@ body.welcome-active {
     .table-grid-premium {
         gap: 10px;
     }
+
     .table-card-premium {
         padding: 20px 10px;
     }
+
     .table-card-icon {
         font-size: 1.5rem;
     }
+
     .table-card-number {
         font-size: 0.9rem;
     }
