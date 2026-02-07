@@ -139,7 +139,8 @@ const state = {
     selectedItemQty: 1,
     isCartOpen: false,
     isMobileMenuOpen: false,
-    specialItemsInitialized: false // Flag to prevent multiple listeners
+    specialItemsInitialized: false, // Flag to prevent multiple listeners
+    html5QrCode: null // QR Scanner instance
 };
 
 // ==========================================
@@ -149,7 +150,13 @@ const state = {
 const DOM = {
     // Welcome Screen
     welcomeScreen: document.getElementById('welcomeScreen'),
-    tableCards: document.querySelectorAll('.table-btn-compact'),
+    tableCards: document.querySelectorAll('.table-btn-compact, .table-card-premium'),
+
+    scannerSection: document.getElementById('scannerSection'),
+    manualSelection: document.getElementById('manualSelection'),
+    toggleManualBtn: document.getElementById('toggleManualBtn'),
+    kitchenAdminBtn: document.getElementById('kitchenAdminBtn'),
+
 
     // Navigation
     navbar: document.getElementById('navbar'),
@@ -259,6 +266,7 @@ async function init() {
         setTable(tableFromURL);
     } else {
         showWelcomeScreen();
+        initQRScanner();
     }
 
     setupEventListeners();
@@ -1293,11 +1301,30 @@ function showWaiterModal() {
     showModal(DOM.waiterModal);
 }
 
-function confirmCallWaiter() {
-    hideModal(DOM.waiterModal);
-    if (DOM.waiterCalledTableNumber) DOM.waiterCalledTableNumber.textContent = state.currentTable;
-    showModal(DOM.waiterCalledModal);
-    showToast('🔔 Waiter has been notified!');
+async function confirmCallWaiter() {
+    if (!state.currentTable) {
+        showToast('Please select a table first!', 'error');
+        return;
+    }
+
+    try {
+        const { error } = await supabaseClient
+            .from('waiter_calls')
+            .insert([{
+                table_number: state.currentTable,
+                status: 'pending'
+            }]);
+
+        if (error) throw error;
+
+        hideModal(DOM.waiterModal);
+        if (DOM.waiterCalledTableNumber) DOM.waiterCalledTableNumber.textContent = state.currentTable;
+        showModal(DOM.waiterCalledModal);
+        showToast('🔔 Waiter has been notified!');
+    } catch (err) {
+        console.error('Error calling waiter:', err.message);
+        showToast('Failed to notify waiter. Please try again.', 'error');
+    }
 }
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1403,9 +1430,10 @@ function setupEventListeners() {
 
     // Method 2: Global Delegation (Safety Net)
     document.addEventListener('click', (e) => {
-        const tableBtn = e.target.closest('.table-btn-compact');
+        const tableBtn = e.target.closest('.table-btn-compact, .table-card-premium');
         if (tableBtn) {
             console.log('Table clicked (Delegation):', tableBtn.dataset.table);
+
             // Only trigger if not already handled (optional check, but harmless to call setTable twice rarely)
             handleTableSelect(tableBtn);
         }
@@ -1415,8 +1443,12 @@ function setupEventListeners() {
         if (!card) return;
 
         // Visual feedback
-        document.querySelectorAll('.table-btn-compact').forEach(c => c.setAttribute('aria-checked', 'false'));
-        document.querySelectorAll('.table-btn-compact').forEach(c => c.classList.remove('selected')); // Remove class from ALL
+        const allCards = document.querySelectorAll('.table-btn-compact, .table-card-premium');
+        allCards.forEach(c => {
+            c.setAttribute('aria-checked', 'false');
+            c.classList.remove('selected');
+        });
+
 
         card.setAttribute('aria-checked', 'true');
         card.classList.add('selected');
@@ -1467,6 +1499,23 @@ function setupEventListeners() {
     if (DOM.cancelWaiter) DOM.cancelWaiter.addEventListener('click', () => hideModal(DOM.waiterModal));
     if (DOM.confirmWaiter) DOM.confirmWaiter.addEventListener('click', confirmCallWaiter);
     if (DOM.closeWaiterCalled) DOM.closeWaiterCalled.addEventListener('click', () => hideModal(DOM.waiterCalledModal));
+
+    // Welcome Screen Scanner & Admin Logic
+    const toggleBtn = document.getElementById('toggleManualBtn');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleManualSelection);
+        console.log('toggleManualBtn listener attached');
+    } else {
+        console.warn('toggleManualBtn not found in DOM');
+    }
+
+    const adminBtn = document.getElementById('kitchenAdminBtn');
+    if (adminBtn) {
+        adminBtn.addEventListener('click', handleKitchenAdmin);
+        console.log('kitchenAdminBtn listener attached');
+    } else {
+        console.warn('kitchenAdminBtn not found in DOM');
+    }
 
     // Item modal
     if (DOM.closeItemModal) DOM.closeItemModal.addEventListener('click', () => hideModal(DOM.itemModal));
@@ -1640,3 +1689,119 @@ window.updateCartItemQty = updateCartItemQty;
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.openItemModal = openItemModal;
+
+// ==========================================
+// 17. QR SCANNER & ADMIN LOGIC
+// ==========================================
+
+async function initQRScanner() {
+    console.log('initQRScanner called');
+
+    // Check if welcome screen is active (either style.display is flex OR it has the welcome-active class on body)
+    const isWelcomeVisible = DOM.welcomeScreen && (DOM.welcomeScreen.style.display !== 'none') && document.body.classList.contains('welcome-active');
+
+    if (!isWelcomeVisible) {
+        console.log('initQRScanner: welcome screen not visible, skipping');
+        return;
+    }
+
+    // Check if Html5Qrcode is loaded
+    if (typeof Html5Qrcode === 'undefined') {
+        console.error('Html5Qrcode library not loaded!');
+        toggleManualSelection();
+        return;
+    }
+
+    // Prevent double init
+    if (state.html5QrCode) return;
+
+    state.html5QrCode = new Html5Qrcode("reader");
+
+    const config = {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: 1.0
+    };
+
+    try {
+        await state.html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            onScanSuccess
+        );
+    } catch (err) {
+        console.warn("QR Scanner Error:", err);
+        // Fallback to manual selection if camera fails
+        toggleManualSelection();
+        showToast("Camera access denied or unavailable. Please select table manually.", "info");
+    }
+}
+
+function onScanSuccess(decodedText, decodedResult) {
+    console.log(`Scan result: ${decodedText}`);
+
+    try {
+        const url = new URL(decodedText);
+        const table = url.searchParams.get("table");
+
+        if (table) {
+            showToast(`Table ${table} Detected! 🎯`, "success");
+            stopQRScanner();
+            setTable(table);
+        } else {
+            showToast("Invalid QR Code. Please scan a table QR.", "warning");
+        }
+    } catch (e) {
+        // Handle non-URL QR codes or other formats
+        if (!isNaN(decodedText) && (decodedText >= 1 && decodedText <= 4)) {
+            showToast(`Table ${decodedText} Detected! 🎯`, "success");
+            stopQRScanner();
+            setTable(decodedText);
+        } else {
+            showToast("Invalid QR Code.", "warning");
+        }
+    }
+}
+
+async function stopQRScanner() {
+    if (state.html5QrCode) {
+        try {
+            await state.html5QrCode.stop();
+            state.html5QrCode = null;
+        } catch (err) {
+            console.error("Error stopping scanner:", err);
+        }
+    }
+}
+
+function toggleManualSelection() {
+    console.log('toggleManualSelection called');
+    const manual = document.getElementById('manualSelection');
+    const scanner = document.getElementById('scannerSection');
+    const toggleBtn = document.getElementById('toggleManualBtn');
+
+    if (!manual || !scanner) return;
+
+    const isManualHidden = manual.classList.contains("hidden");
+
+    if (isManualHidden) {
+        manual.classList.remove("hidden");
+        scanner.classList.add("hidden");
+        if (toggleBtn) toggleBtn.textContent = "Switch to Scanner";
+        stopQRScanner();
+    } else {
+        manual.classList.add("hidden");
+        scanner.classList.remove("hidden");
+        if (toggleBtn) toggleBtn.textContent = "Switch to Manual Selection";
+        initQRScanner();
+    }
+}
+
+function handleKitchenAdmin() {
+    const password = prompt("Enter Kitchen Dashboard Password:");
+    if (password === "123") {
+        window.open("kitchen.html", "_blank");
+    } else if (password !== null) {
+        showToast("Incorrect Password!", "error");
+    }
+}
