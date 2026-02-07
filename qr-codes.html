@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table QR Codes - Rannaghor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --color-bg: #1a0a00;
+            --color-primary: #FF8C00;
+            --gradient-primary: linear-gradient(135deg, #FF8C00 0%, #DC143C 100%);
+        }
+
+        body {
+            background-color: var(--color-bg);
+            background-image: radial-gradient(circle at 50% 50%, #2d1810 0%, #1a0a00 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .qr-page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .qr-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-primary);
+        }
+
+        .qr-code-div {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .table-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .scan-hint {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .btn-outline {
+            background: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 140, 0, 0.1);
+        }
+
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .qr-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="qr-page-container">
+        <h1>Table QR Codes</h1>
+
+        <div class="qr-grid" id="qrGrid">
+            <!-- QR Codes will be generated here -->
+        </div>
+
+        <div class="actions">
+            <a href="index.html" class="btn btn-outline">
+                <span>←</span> Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const tables = [1, 2, 3, 4];
+        const baseUrl = window.location.origin + window.location.pathname.replace('qr-codes.html', 'index.html');
+        const qrGrid = document.getElementById('qrGrid');
+
+        tables.forEach(tableNum => {
+            const tableUrl = `${baseUrl}?table=${tableNum}`;
+            const card = document.createElement('div');
+            card.className = 'qr-card';
+            card.innerHTML = `
+                <div class="table-label">Table ${tableNum}</div>
+                <div id="qrcode-${tableNum}" class="qr-code-div"></div>
+                <div class="scan-hint">Scan to Order</div>
+            `;
+            qrGrid.appendChild(card);
+
+            new QRCode(document.getElementById(`qrcode-${tableNum}`), {
+                text: tableUrl,
+                width: 180,
+                height: 180,
+                colorDark: "#1a0a00",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        });
+    </script>
+</body>
+
+</html>
