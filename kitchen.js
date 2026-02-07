@@ -1,10 +1,13 @@
 /**
  * Kitchen Dashboard Logic - Rannaghor
- * Handles Realtime Order Monitoring and Status Updates
+ * Handles Realtime Order Monitoring, Status Updates, Search, and Mobile UI
  */
 
 // State
 let orders = [];
+let waiterCalls = [];
+let searchQuery = '';
+let activeMobileColumn = 'received';
 
 // DOM Elements
 const DOM = {
@@ -20,9 +23,20 @@ const DOM = {
         'ready': document.getElementById('count-ready'),
         'served': document.getElementById('count-served')
     },
+    mobileCounts: {
+        'received': document.getElementById('mobile-count-received'),
+        'preparing': document.getElementById('mobile-count-preparing'),
+        'ready': document.getElementById('mobile-count-ready'),
+        'served': document.getElementById('mobile-count-served')
+    },
     totalActive: document.getElementById('totalActiveCount'),
     notificationSound: document.getElementById('orderSound'),
-    connectionStatus: document.getElementById('connectionStatus')
+    connectionStatus: document.getElementById('connectionStatus'),
+    orderSearch: document.getElementById('orderSearch'),
+    clearSearch: document.getElementById('clearSearch'),
+    mobileTabs: document.querySelectorAll('.mobile-tab'),
+    columns: document.querySelectorAll('.order-column'),
+    serviceAlerts: document.getElementById('serviceAlerts')
 };
 
 /**
@@ -31,14 +45,65 @@ const DOM = {
 async function init() {
     console.log('Kitchen Dashboard Initializing...');
 
-    // Fetch initial active orders
-    await fetchActiveOrders();
-
-    // Setup Realtime Subscription
+    setupEventListeners();
+    await Promise.all([
+        fetchActiveOrders(),
+        fetchWaiterCalls()
+    ]);
     setupRealtime();
 
-    // Refresh elapsed time every minute
-    setInterval(renderDashboard, 60000);
+    // Refresh elapsed time every 30 seconds for higher precision
+    setInterval(renderDashboard, 30000);
+}
+
+/**
+ * Setup Event Listeners
+ */
+function setupEventListeners() {
+    // Search
+    if (DOM.orderSearch) {
+        DOM.orderSearch.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            if (DOM.clearSearch) {
+                DOM.clearSearch.classList.toggle('hidden', !searchQuery);
+            }
+            renderDashboard();
+        });
+    }
+
+    if (DOM.clearSearch) {
+        DOM.clearSearch.addEventListener('click', () => {
+            DOM.orderSearch.value = '';
+            searchQuery = '';
+            DOM.clearSearch.classList.add('hidden');
+            renderDashboard();
+        });
+    }
+
+    // Mobile Column Switching
+    DOM.mobileTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const columnId = tab.dataset.column;
+            switchMobileColumn(columnId);
+        });
+    });
+}
+
+/**
+ * Switch Mobile Column
+ */
+function switchMobileColumn(columnId) {
+    activeMobileColumn = columnId;
+
+    // Update tabs
+    DOM.mobileTabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.column === columnId);
+    });
+
+    // Update columns
+    DOM.columns.forEach(col => {
+        col.classList.toggle('active', col.id === `column-${columnId}`);
+    });
 }
 
 /**
@@ -51,15 +116,29 @@ async function fetchActiveOrders() {
             .from('orders')
             .select('*')
             .order('created_at', { ascending: false })
-            .limit(50); // Get last 50 orders (includes active + recently served)
+            .limit(100);
 
         if (error) throw error;
-
-        // Merge keeping local updates if needed, but for kitchen usually DB is source of truth
         orders = data || [];
         renderDashboard();
     } catch (err) {
         console.error('Error fetching orders:', err.message);
+    }
+}
+
+async function fetchWaiterCalls() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('waiter_calls')
+            .select('*')
+            .eq('status', 'pending')
+            .order('created_at', { ascending: true });
+
+        if (error) throw error;
+        waiterCalls = data || [];
+        renderServiceAlerts();
+    } catch (err) {
+        console.error('Error fetching waiter calls:', err.message);
     }
 }
 
@@ -69,103 +148,129 @@ async function fetchActiveOrders() {
 let pollingInterval = null;
 
 function setupRealtime() {
-    console.log('Setting up Realtime subscription...');
-
-    // Cleanup existing subscription if any
     supabaseClient.removeAllChannels();
 
-    const channel = supabaseClient
+    // Orders Channel
+    const ordersChannel = supabaseClient
         .channel('kitchen-orders')
         .on('postgres_changes', {
             event: '*',
             schema: 'public',
             table: 'orders'
         }, (payload) => {
-            console.log('Realtime payload received:', payload);
             handleOrderUpdate(payload);
         })
-        .subscribe((status, err) => {
-            console.log('Subscription status:', status);
-            updateConnectionBadge(status);
+        .subscribe();
 
-            if (status === 'SUBSCRIBED') {
-                console.log('Connected to Realtime successfully');
-                // Stop polling if we were fallback-ing
-                if (pollingInterval) {
-                    clearInterval(pollingInterval);
-                    pollingInterval = null;
-                }
-            } else if (status === 'TIMED_OUT' || status === 'CLOSED') {
-                console.warn('Realtime connection failed. Starting fallback polling...');
-                if (!pollingInterval) {
-                    startPollingFallback();
-                }
+    // Waiter Calls Channel
+    const waiterChannel = supabaseClient
+        .channel('waiter-calls')
+        .on('postgres_changes', {
+            event: '*',
+            schema: 'public',
+            table: 'waiter_calls'
+        }, (payload) => {
+            handleWaiterUpdate(payload);
+        })
+        .subscribe((status) => {
+            if (status === 'TIMED_OUT' || status === 'CLOSED') {
+                if (!pollingInterval) startPollingFallback();
             }
         });
 }
 
-/**
- * Fallback: Poll the database if Realtime fails
- */
 function startPollingFallback() {
     if (pollingInterval) clearInterval(pollingInterval);
-
-    console.log('Polling fallback active (fetching every 2 seconds)');
-    pollingInterval = setInterval(async () => {
-        await fetchActiveOrders();
-    }, 2000); // 2 second refresh
+    pollingInterval = setInterval(() => {
+        fetchActiveOrders();
+        fetchWaiterCalls();
+    }, 5000);
 }
 
 /**
- * Update the Connection UI badge
+ * Handle Realtime Payloads for Waiter
  */
-function updateConnectionBadge(status) {
-    if (!DOM.connectionStatus) return;
+function handleWaiterUpdate(payload) {
+    const { eventType, new: newRecord, old: oldRecord } = payload;
 
-    const dot = DOM.connectionStatus.querySelector('.status-dot');
-    const text = DOM.connectionStatus.querySelector('.status-text');
+    if (eventType === 'INSERT') {
+        if (newRecord.status === 'pending') {
+            waiterCalls.push(newRecord);
+            playNotification(); // Maybe a different sound eventually
+        }
+    } else if (eventType === 'UPDATE') {
+        if (newRecord.status === 'resolved') {
+            waiterCalls = waiterCalls.filter(c => c.id !== newRecord.id);
+        } else {
+            const index = waiterCalls.findIndex(c => c.id === newRecord.id);
+            if (index !== -1) waiterCalls[index] = newRecord;
+        }
+    } else if (eventType === 'DELETE') {
+        waiterCalls = waiterCalls.filter(c => c.id !== oldRecord.id);
+    }
 
-    if (status === 'SUBSCRIBED') {
-        DOM.connectionStatus.classList.remove('offline');
-        DOM.connectionStatus.classList.add('online');
-        if (text) text.textContent = 'Live';
-    } else {
-        DOM.connectionStatus.classList.remove('online');
-        DOM.connectionStatus.classList.add('offline');
-        if (text) text.textContent = 'Connecting...';
+    renderServiceAlerts();
+}
+
+/**
+ * Render Service Alerts (Waiter Calls)
+ */
+function renderServiceAlerts() {
+    if (!DOM.serviceAlerts) return;
+
+    if (waiterCalls.length === 0) {
+        DOM.serviceAlerts.classList.add('hidden');
+        DOM.serviceAlerts.innerHTML = '';
+        return;
+    }
+
+    DOM.serviceAlerts.classList.remove('hidden');
+    DOM.serviceAlerts.innerHTML = waiterCalls.map(call => `
+        <div class="service-alert" data-call-id="${call.id}">
+            <span class="alert-icon">🔔</span>
+            <span class="alert-text">Table ${call.table_number} is calling!</span>
+            <button class="btn-resolve-alert" onclick="resolveServiceAlert('${call.id}')">Handled</button>
+        </div>
+    `).join('');
+}
+
+/**
+ * Resolve Service Alert
+ */
+async function resolveServiceAlert(id) {
+    try {
+        // Optimistic UI
+        waiterCalls = waiterCalls.filter(c => c.id !== id);
+        renderServiceAlerts();
+
+        const { error } = await supabaseClient
+            .from('waiter_calls')
+            .update({ status: 'resolved' })
+            .eq('id', id);
+
+        if (error) throw error;
+    } catch (err) {
+        console.error('Resolve failed:', err);
+        fetchWaiterCalls();
     }
 }
 
 /**
- * Handle Realtime Payloads
+ * Handle Realtime Payloads for Orders
  */
 function handleOrderUpdate(payload) {
-    const eventType = payload.eventType;
-    const newRecord = payload.new;
-    const oldRecord = payload.old;
+    const { eventType, new: newRecord, old: oldRecord } = payload;
 
     if (eventType === 'INSERT') {
-        // Double check it's not a 'served' order (shouldn't be, but for safety)
-        if (newRecord.status === 'served') return;
-
-        // Only add if not already in list
-        const exists = orders.find(o => o.id === newRecord.id);
-        if (!exists) {
-            console.log('New order inserted:', newRecord);
-            orders.push(newRecord);
+        if (!orders.find(o => o.id === newRecord.id)) {
+            orders.unshift(newRecord);
             playNotification();
         }
     } else if (eventType === 'UPDATE') {
-        console.log('Order updated:', newRecord);
         const index = orders.findIndex(o => o.id === newRecord.id);
-        if (index !== -1) {
-            orders[index] = newRecord;
-        } else {
-            // If not in our list (could be a served order we skipped previously), add it
-            orders.push(newRecord);
-        }
+        if (index !== -1) orders[index] = newRecord;
+        else orders.unshift(newRecord);
     } else if (eventType === 'DELETE') {
-        console.log('Order deleted:', oldRecord);
         orders = orders.filter(o => o.id !== oldRecord.id);
     }
 
@@ -176,83 +281,108 @@ function handleOrderUpdate(payload) {
  * Render all columns
  */
 function renderDashboard() {
-    // Group orders by status with stable sorting
+    // Apply search filter if active
+    let filteredOrders = orders;
+    if (searchQuery) {
+        filteredOrders = orders.filter(o => {
+            const tableNum = (o.table_number || '').toString();
+            const orderNum = (o.order_number || '').toString();
+
+            // Flexible table match: matches "4", "Table 4", or "t4"
+            const tableMatch = tableNum.includes(searchQuery) ||
+                `table ${tableNum}`.toLowerCase().includes(searchQuery) ||
+                `t${tableNum}`.toLowerCase().includes(searchQuery);
+
+            const orderMatch = orderNum.includes(searchQuery);
+
+            // Check items for food names safely
+            let foodMatch = false;
+            try {
+                const items = typeof o.items === 'string' ? JSON.parse(o.items) : o.items;
+                if (Array.isArray(items)) {
+                    foodMatch = items.some(item =>
+                        (item.name && item.name.toLowerCase().includes(searchQuery)) ||
+                        (item.namebn && item.namebn.includes(searchQuery))
+                    );
+                }
+            } catch (e) {
+                console.error("Error parsing items for search:", e);
+            }
+
+            return tableMatch || orderMatch || foodMatch;
+        });
+    }
+
+    // Grouping
     const groups = {
-        'received': orders.filter(o => o.status === 'received').sort((a, b) => new Date(a.created_at) - new Date(b.created_at) || b.id - a.id),
-        'preparing': orders.filter(o => o.status === 'preparing').sort((a, b) => new Date(a.created_at) - new Date(b.created_at) || b.id - a.id),
-        'ready': orders.filter(o => o.status === 'ready').sort((a, b) => new Date(a.created_at) - new Date(b.created_at) || b.id - a.id),
-        'served': orders.filter(o => o.status === 'served').sort((a, b) => new Date(b.created_at) - new Date(a.created_at) || b.id - a.id).slice(0, 15)
+        'received': filteredOrders.filter(o => o.status === 'received').sort((a, b) => new Date(a.created_at) - new Date(b.created_at)),
+        'preparing': filteredOrders.filter(o => o.status === 'preparing').sort((a, b) => new Date(a.created_at) - new Date(b.created_at)),
+        'ready': filteredOrders.filter(o => o.status === 'ready').sort((a, b) => new Date(a.created_at) - new Date(b.created_at)),
+        'served': filteredOrders.filter(o => o.status === 'served').sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10)
     };
 
     // Update Counts
-    let total = 0;
+    let activeTotal = 0;
     Object.keys(groups).forEach(status => {
-        if (DOM.counts[status]) DOM.counts[status].textContent = groups[status].length;
-        total += groups[status].length;
+        const count = groups[status].length;
+        if (DOM.counts[status]) DOM.counts[status].textContent = count;
+        if (DOM.mobileCounts[status]) DOM.mobileCounts[status].textContent = count;
+        if (status !== 'served') activeTotal += count;
 
-        // ID-Based Granular Updates to Prevent Flicker
+        // Render List
         if (DOM.lists[status]) {
             const listEl = DOM.lists[status];
             const newOrders = groups[status];
 
-            // Build a map of existing cards by ID for easy lookup
-            const existingCardsMap = {};
-            Array.from(listEl.children).forEach(card => {
-                const id = card.getAttribute('data-order-id');
-                if (id) existingCardsMap[id] = card;
-            });
+            // Generate IDs string to check if the sequence changed
+            const newIds = newOrders.map(o => o.id).join(',');
+            const currentIds = Array.from(listEl.children).map(child => child.dataset.orderId).join(',');
 
-            // We need to re-render if the order of IDs changed OR if contents changed
-            const newOrderIds = newOrders.map(o => String(o.id)).join(',');
-            const currentOrderIds = Array.from(listEl.children).map(c => c.getAttribute('data-order-id')).join(',');
-
-            if (newOrderIds === currentOrderIds) {
-                // Same order: Update individual cards if content changed (e.g. time)
+            if (newIds !== currentIds) {
+                // Sequence or items changed: Full refresh
+                listEl.innerHTML = newOrders.map(o => createOrderCard(o)).join('');
+            } else {
+                // Sequence is same: Only update time labels for existing cards
                 newOrders.forEach((order, idx) => {
                     const card = listEl.children[idx];
-                    const newHTML = createOrderCard(order);
-                    if (card.outerHTML !== newHTML) {
-                        card.outerHTML = newHTML;
+                    const timeInfo = getTimeInfo(order.created_at);
+                    const timeEl = card.querySelector('.time-elapsed');
+                    if (timeEl) {
+                        const newTimeHtml = `<span class="time-icon">⏱️</span> ${timeInfo.label}`;
+                        if (timeEl.innerHTML !== newTimeHtml) {
+                            timeEl.innerHTML = newTimeHtml;
+                            // Also update classes for warnings
+                            timeEl.className = `time-elapsed ${timeInfo.textClass}`;
+                        }
                     }
                 });
-            } else {
-                // Different order or count: Re-render list
-                // (Note: we use innerHTML here, but we could do more complex DOM moving if needed.
-                // For kitchen, count changes are less frequent than time updates).
-                const listHTML = newOrders.map(order => createOrderCard(order)).join('');
-                if (listEl.innerHTML !== listHTML) {
-                    listEl.innerHTML = listHTML;
-                }
             }
         }
     });
 
-    if (DOM.totalActive) DOM.totalActive.textContent = total;
+    if (DOM.totalActive) DOM.totalActive.textContent = activeTotal;
 }
 
 /**
  * Create HTML for an order card
  */
 function createOrderCard(order) {
-    const timeAgo = formatTimeAgo(order.created_at);
+    const timeInfo = getTimeInfo(order.created_at);
+    const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
 
-    // Buttons based on status
     let actionBtn = '';
     if (order.status === 'received') {
         actionBtn = `<button class="btn-kitchen btn-next" onclick="updateStatus('${order.id}', 'preparing')">Start Cooking</button>`;
     } else if (order.status === 'preparing') {
         actionBtn = `<button class="btn-kitchen btn-finish" onclick="updateStatus('${order.id}', 'ready')">Ready</button>`;
     } else if (order.status === 'ready') {
-        actionBtn = `<button class="btn-kitchen btn-serve" onclick="updateStatus('${order.id}', 'served')">Mark Served</button>`;
-    } else if (order.status === 'served') {
+        actionBtn = `<button class="btn-kitchen btn-serve" onclick="updateStatus('${order.id}', 'served')">Serve</button>`;
+    } else {
         actionBtn = `<span class="served-badge">Served ✅</span>`;
     }
 
-    // Ensure items is an array (might be stringified if using certain DB settings)
-    const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
-
     return `
-        <article class="kitchen-card" data-order-id="${order.id}">
+        <article class="kitchen-card ${timeInfo.class}" data-order-id="${order.id}">
             <div class="card-header">
                 <span class="order-id">#${order.order_number}</span>
                 <span class="table-badge">Table ${order.table_number}</span>
@@ -267,7 +397,9 @@ function createOrderCard(order) {
             </div>
             ${order.instructions ? `<div class="card-instructions">"${order.instructions}"</div>` : ''}
             <div class="card-footer">
-                <span class="time-elapsed">${timeAgo}</span>
+                <span class="time-elapsed ${timeInfo.textClass}">
+                    <span class="time-icon">⏱️</span> ${timeInfo.label}
+                </span>
                 <div class="card-actions">
                     ${actionBtn}
                 </div>
@@ -277,58 +409,62 @@ function createOrderCard(order) {
 }
 
 /**
- * Update order status in Supabase
+ * Get time-based classes and labels
+ */
+function getTimeInfo(timestamp) {
+    const diffMs = new Date() - new Date(timestamp);
+    const mins = Math.floor(diffMs / 60000);
+    const hours = Math.floor(mins / 60);
+    const days = Math.floor(hours / 24);
+
+    let label = '';
+    if (days > 0) {
+        label = `${days}d ago`;
+    } else if (hours > 0) {
+        label = `${hours}h ago`;
+    } else if (mins < 1) {
+        label = 'Just now';
+    } else {
+        label = `${mins}m ago`;
+    }
+
+    let textClass = '';
+    if (mins >= 15) textClass = 'time-danger';
+    else if (mins >= 10) textClass = 'time-warning';
+
+    return { label, textClass, class: '' };
+}
+
+/**
+ * Update order status
  */
 async function updateStatus(id, newStatus) {
     try {
-        console.log(`Updating status for ${id} to ${newStatus}`);
+        // Optimistic UI
+        const o = orders.find(o => o.id === id);
+        if (o) o.status = newStatus;
+        renderDashboard();
 
-        // Optimistic UI update: Update local state immediately
-        const orderIndex = orders.findIndex(o => o.id === id);
-        if (orderIndex !== -1) {
-            orders[orderIndex].status = newStatus;
-            renderDashboard();
-        }
-
-        const { data, error } = await supabaseClient
+        const { error } = await supabaseClient
             .from('orders')
             .update({ status: newStatus })
-            .eq('id', id)
-            .select();
+            .eq('id', id);
 
         if (error) throw error;
-
-        if (data && data.length > 0) {
-            console.log('Status updated successfully in DB:', data[0].status);
-        } else {
-            console.warn('DB update completed but no rows returned. Check if ID exists.');
-        }
     } catch (err) {
-        console.error('Error updating status:', err.message);
-        alert('Failed to update status. Please try again.');
-        // Re-fetch to clear invalid optimistic state
+        console.error('Update failed:', err);
         await fetchActiveOrders();
     }
 }
 
-// Make updateStatus globally available for onclick
-window.updateStatus = updateStatus;
-
-/**
- * Utils
- */
-function formatTimeAgo(timestamp) {
-    const diff = Math.floor((new Date() - new Date(timestamp)) / 60000);
-    if (diff < 1) return 'Just now';
-    if (diff === 1) return '1 min ago';
-    return `${diff} mins ago`;
-}
-
 function playNotification() {
     if (DOM.notificationSound) {
-        DOM.notificationSound.play().catch(e => console.warn('Sound blocked by browser'));
+        DOM.notificationSound.play().catch(() => { });
     }
 }
+
+// Global scope for onclick
+window.updateStatus = updateStatus;
 
 // Start app
 document.addEventListener('DOMContentLoaded', init);
