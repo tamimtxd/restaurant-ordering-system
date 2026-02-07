@@ -23,19 +23,41 @@
                 <span class="brand-tagline">Kitchen Dashboard</span>
             </div>
         </div>
+
+        <div class="nav-search">
+            <div class="search-wrapper">
+                <input type="text" id="orderSearch" placeholder="Search Food, #Order, or Table...">
+                <span class="search-icon">🔍</span>
+                <button id="clearSearch" class="btn-clear hidden">&times;</button>
+            </div>
+        </div>
+
         <div class="nav-stats">
             <div class="stat-item">
-                <span class="stat-label">Total Active:</span>
+                <span class="stat-label">Active:</span>
                 <span id="totalActiveCount" class="stat-value">0</span>
-            </div>
-            <div id="connectionStatus" class="connection-status online">
-                <span class="status-dot"></span>
-                <span class="status-text">Live</span>
             </div>
         </div>
     </nav>
 
+    <!-- Mobile Column Selector -->
+    <div class="mobile-tabs-container">
+        <div class="mobile-tabs">
+            <button class="mobile-tab active" data-column="received">New <span
+                    id="mobile-count-received">0</span></button>
+            <button class="mobile-tab" data-column="preparing">Cooking <span
+                    id="mobile-count-preparing">0</span></button>
+            <button class="mobile-tab" data-column="ready">Ready <span id="mobile-count-ready">0</span></button>
+            <button class="mobile-tab" data-column="served">Past <span id="mobile-count-served">0</span></button>
+        </div>
+    </div>
+
     <main class="kitchen-container">
+        <!-- Service Alerts (Waiter Calls) -->
+        <div id="serviceAlerts" class="service-alerts-container hidden">
+            <!-- Alert cards will be injected here -->
+        </div>
+
         <!-- Order Sections -->
         <div class="orders-grid">
             <!-- Pending Orders -->
