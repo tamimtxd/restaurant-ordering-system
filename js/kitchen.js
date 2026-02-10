@@ -390,7 +390,10 @@ function createOrderCard(order) {
             <div class="card-items">
                 ${items.map(item => `
                     <div class="card-item-row">
-                        <span>${item.emoji} ${item.name}</span>
+                        <div class="item-name-wrapper">
+                            ${item.image ? `<img src="${item.image}" alt="${item.name}" class="kitchen-item-thumb">` : `<span class="item-emoji">${item.emoji || '🍽️'}</span>`}
+                            <span>${item.name}</span>
+                        </div>
                         <span class="item-qty">x${item.qty}</span>
                     </div>
                 `).join('')}

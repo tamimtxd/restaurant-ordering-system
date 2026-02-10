@@ -54,74 +54,74 @@ const CONFIG = {
 // Menu Items Data (Fallback data)
 let menuItems = [
     // Biriyani
-    { id: 1, name: "Kacchi Biriyani", namebn: "কাচ্চি বিরিয়ানি", category: "biriyani", price: 350, emoji: "🍛", desc: "Aromatic mutton biriyani with potatoes", spicy: 2, popular: true },
-    { id: 2, name: "Chicken Biriyani", namebn: "চিকেন বিরিয়ানি", category: "biriyani", price: 280, emoji: "🍗", desc: "Fragrant rice with tender chicken pieces", spicy: 2 },
-    { id: 3, name: "Beef Tehari", namebn: "গরুর তেহারি", category: "biriyani", price: 300, emoji: "🥩", desc: "Spiced beef with aromatic rice", spicy: 3 },
-    { id: 4, name: "Morog Polao", namebn: "মোরগ পোলাও", category: "biriyani", price: 320, emoji: "🍚", desc: "Chicken with fragrant pulao rice", spicy: 1 },
+    { id: 1, name: "Kacchi Biriyani", namebn: "কাচ্চি বিরিয়ানি", category: "biriyani", price: 350, image: "assets/images/food/kacchi-biriyani.jpg", desc: "Aromatic mutton biriyani with potatoes", spicy: 2, popular: true },
+    { id: 2, name: "Chicken Biriyani", namebn: "চিকেন বিরিয়ানি", category: "biriyani", price: 280, image: "assets/images/food/chicken-biriyani.jpg", desc: "Fragrant rice with tender chicken pieces", spicy: 2 },
+    { id: 3, name: "Beef Tehari", namebn: "গরুর তেহারি", category: "biriyani", price: 300, image: "assets/images/food/beef-tehari.jpg", desc: "Spiced beef with aromatic rice", spicy: 3 },
+    { id: 4, name: "Morog Polao", namebn: "মোরগ পোলাও", category: "biriyani", price: 320, image: "assets/images/food/morog-polao.jpg", desc: "Chicken with fragrant pulao rice", spicy: 1 },
 
     // Curry
-    { id: 5, name: "Chicken Rezala", namebn: "চিকেন রেজালা", category: "curry", price: 320, emoji: "🍛", desc: "Creamy white curry with tender chicken", spicy: 1 },
-    { id: 6, name: "Mutton Bhuna", namebn: "মাটন ভুনা", category: "curry", price: 380, emoji: "🍖", desc: "Slow-cooked mutton in rich spices", spicy: 3, popular: true },
-    { id: 7, name: "Chingri Malai", namebn: "চিংড়ি মালাই", category: "curry", price: 450, emoji: "🦐", desc: "Prawns in coconut milk curry", spicy: 1 },
-    { id: 8, name: "Ilish Bhapa", namebn: "ইলিশ ভাপা", category: "curry", price: 500, emoji: "🐟", desc: "Steamed hilsa in mustard paste", spicy: 2 },
-    { id: 9, name: "Beef Kala Bhuna", namebn: "গরুর কালা ভুনা", category: "curry", price: 360, emoji: "🥘", desc: "Chittagong style dark beef curry", spicy: 3 },
-    { id: 10, name: "Chicken Kosha", namebn: "চিকেন কষা", category: "curry", price: 280, emoji: "🍗", desc: "Bengali style slow-cooked chicken", spicy: 2 },
+    { id: 5, name: "Chicken Rezala", namebn: "চিকেন রেজালা", category: "curry", price: 320, image: "assets/images/food/chicken-rezala.jpg", desc: "Creamy white curry with tender chicken", spicy: 1 },
+    { id: 6, name: "Mutton Bhuna", namebn: "মাটন ভুনা", category: "curry", price: 380, image: "assets/images/food/mutton-bhuna.jpg", desc: "Slow-cooked mutton in rich spices", spicy: 3, popular: true },
+    { id: 7, name: "Chingri Malai", namebn: "চিংড়ি মালাই", category: "curry", price: 450, image: "assets/images/food/chingri-malai.jpg", desc: "Prawns in coconut milk curry", spicy: 1 },
+    { id: 8, name: "Ilish Bhapa", namebn: "ইলিশ ভাপা", category: "curry", price: 500, image: "assets/images/food/ilish-bhapa.jpg", desc: "Steamed hilsa in mustard paste", spicy: 2 },
+    { id: 9, name: "Beef Kala Bhuna", namebn: "গরুর কালা ভুনা", category: "curry", price: 360, image: "assets/images/food/beef-kala-bhuna.jpg", desc: "Chittagong style dark beef curry", spicy: 3 },
+    { id: 10, name: "Chicken Kosha", namebn: "চিকেন কষা", category: "curry", price: 280, image: "assets/images/food/chicken-kosha.jpg", desc: "Bengali style slow-cooked chicken", spicy: 2 },
 
     // Kebab
-    { id: 11, name: "Chicken Tikka", namebn: "চিকেন টিক্কা", category: "kebab", price: 280, emoji: "🍢", desc: "Grilled marinated chicken pieces", spicy: 2 },
-    { id: 12, name: "Beef Seekh Kebab", namebn: "বিফ সিক কাবাব", category: "kebab", price: 320, emoji: "🥙", desc: "Spiced minced beef on skewers", spicy: 2 },
-    { id: 13, name: "Mutton Boti Kebab", namebn: "মাটন বটি কাবাব", category: "kebab", price: 350, emoji: "🍖", desc: "Tender mutton cubes grilled", spicy: 2 },
-    { id: 14, name: "Tangri Kebab", namebn: "টাংরি কাবাব", category: "kebab", price: 300, emoji: "🍗", desc: "Marinated chicken drumsticks", spicy: 2, popular: true },
-    { id: 15, name: "Reshmi Kebab", namebn: "রেশমি কাবাব", category: "kebab", price: 290, emoji: "🥓", desc: "Soft and silky chicken kebab", spicy: 1 },
+    { id: 11, name: "Chicken Tikka", namebn: "চিকেন টিক্কা", category: "kebab", price: 280, image: "assets/images/food/chicken-tikka.jpg", desc: "Grilled marinated chicken pieces", spicy: 2 },
+    { id: 12, name: "Beef Seekh Kebab", namebn: "বিফ সিক কাবাব", category: "kebab", price: 320, image: "assets/images/food/beef-seekh-kebab.jpg", desc: "Spiced minced beef on skewers", spicy: 2 },
+    { id: 13, name: "Mutton Boti Kebab", namebn: "মাটন বটি কাবাব", category: "kebab", price: 350, image: "assets/images/food/mutton-boti-kebab.jpg", desc: "Tender mutton cubes grilled", spicy: 2 },
+    { id: 14, name: "Tangri Kebab", namebn: "টাংরি কাবাব", category: "kebab", price: 300, image: "assets/images/food/tangri-kebab.jpg", desc: "Marinated chicken drumsticks", spicy: 2, popular: true },
+    { id: 15, name: "Reshmi Kebab", namebn: "রেশমি কাবাব", category: "kebab", price: 290, image: "assets/images/food/reshmi-kebab.jpg", desc: "Soft and silky chicken kebab", spicy: 1 },
 
     // Snacks
-    { id: 16, name: "Samosa", namebn: "সমুচা", category: "snacks", price: 40, emoji: "🥟", desc: "Crispy pastry with spiced filling (2 pcs)", spicy: 1 },
-    { id: 17, name: "Singara", namebn: "সিঙ্গারা", category: "snacks", price: 30, emoji: "🔺", desc: "Bengali style potato samosa (2 pcs)", spicy: 1 },
-    { id: 18, name: "Fuchka", namebn: "ফুচকা", category: "snacks", price: 60, emoji: "🫓", desc: "Crispy shells with tangy water (6 pcs)", spicy: 2, popular: true },
-    { id: 19, name: "Chotpoti", namebn: "চটপটি", category: "snacks", price: 80, emoji: "🥣", desc: "Spicy chickpea street food", spicy: 2 },
-    { id: 20, name: "Jhalmuri", namebn: "ঝালমুড়ি", category: "snacks", price: 50, emoji: "🍿", desc: "Spiced puffed rice mix", spicy: 2 },
-    { id: 21, name: "Peyaju", namebn: "পেঁয়াজু", category: "snacks", price: 35, emoji: "🧅", desc: "Crispy onion fritters (4 pcs)", spicy: 1 },
-    { id: 22, name: "Beguni", namebn: "বেগুনি", category: "snacks", price: 35, emoji: "🍆", desc: "Fried eggplant fritters (4 pcs)", spicy: 1 },
+    { id: 16, name: "Samosa", namebn: "সমুচা", category: "snacks", price: 40, image: "assets/images/food/samosa.jpg", desc: "Crispy pastry with spiced filling (2 pcs)", spicy: 1 },
+    { id: 17, name: "Singara", namebn: "সিঙ্গারা", category: "snacks", price: 30, image: "assets/images/food/singara.jpg", desc: "Bengali style potato singara (2 pcs)", spicy: 1 },
+    { id: 18, name: "Fuchka", namebn: "ফুচকা", category: "snacks", price: 60, image: "assets/images/food/fuchka.jpg", desc: "Crispy shells with tangy water (6 pcs)", spicy: 2, popular: true },
+    { id: 19, name: "Chotpoti", namebn: "চটপটি", category: "snacks", price: 80, image: "assets/images/food/chotpoti.jpg", desc: "Spicy chickpea street food", spicy: 2 },
+    { id: 20, name: "Jhalmuri", namebn: "ঝালমুড়ি", category: "snacks", price: 50, image: "assets/images/food/jhalmuri.jpg", desc: "Spiced puffed rice mix", spicy: 2 },
+    { id: 21, name: "Peyaju", namebn: "পেঁয়াজু", category: "snacks", price: 35, image: "assets/images/food/peyaju.jpg", desc: "Crispy onion fritters (4 pcs)", spicy: 1 },
+    { id: 22, name: "Beguni", namebn: "বেগুনি", category: "snacks", price: 35, image: "assets/images/food/beguni.jpg", desc: "Fried eggplant fritters (4 pcs)", spicy: 1 },
 
     // Dessert
-    { id: 23, name: "Roshogolla", namebn: "রসগোল্লা", category: "dessert", price: 40, emoji: "⚪", desc: "Soft cheese balls in syrup (2 pcs)", spicy: 0 },
-    { id: 24, name: "Mishti Doi", namebn: "মিষ্টি দই", category: "dessert", price: 60, emoji: "🍮", desc: "Sweet fermented yogurt", spicy: 0, popular: true },
-    { id: 25, name: "Chomchom", namebn: "চমচম", category: "dessert", price: 50, emoji: "🟤", desc: "Oval shaped sweet (2 pcs)", spicy: 0 },
-    { id: 26, name: "Firni", namebn: "ফিরনি", category: "dessert", price: 70, emoji: "🥛", desc: "Rice pudding with nuts", spicy: 0 },
-    { id: 27, name: "Jilapi", namebn: "জিলাপি", category: "dessert", price: 80, emoji: "🌀", desc: "Crispy sweet spirals", spicy: 0 },
-    { id: 28, name: "Rasmalai", namebn: "রসমালাই", category: "dessert", price: 90, emoji: "🥮", desc: "Cheese patties in sweet milk (2 pcs)", spicy: 0 },
+    { id: 23, name: "Roshogolla", namebn: "রসগোল্লা", category: "dessert", price: 40, image: "assets/images/food/roshogolla.jpg", desc: "Soft cheese balls in syrup (2 pcs)", spicy: 0 },
+    { id: 24, name: "Mishti Doi", namebn: "মিষ্টি দই", category: "dessert", price: 60, image: "assets/images/food/mishti-doi.jpg", desc: "Sweet fermented yogurt", spicy: 0, popular: true },
+    { id: 25, name: "Chomchom", namebn: "চমচম", category: "dessert", price: 50, image: "assets/images/food/chomchom.jpg", desc: "Oval shaped sweet (2 pcs)", spicy: 0 },
+    { id: 26, name: "Firni", namebn: "ফিরনি", category: "dessert", price: 70, image: "assets/images/food/firni.jpg", desc: "Rice pudding with nuts", spicy: 0 },
+    { id: 27, name: "Jilapi", namebn: "জিলাপি", category: "dessert", price: 80, image: "assets/images/food/jilapi.jpg", desc: "Crispy sweet spirals", spicy: 0 },
+    { id: 28, name: "Rasmalai", namebn: "রসমালাই", category: "dessert", price: 90, image: "assets/images/food/rasmalai.jpg", desc: "Cheese patties in sweet milk (2 pcs)", spicy: 0 },
 
     // Drinks
-    { id: 29, name: "Borhani", namebn: "বোরহানি", category: "drinks", price: 60, emoji: "🥛", desc: "Spiced yogurt drink", spicy: 1, popular: true },
-    { id: 30, name: "Lassi", namebn: "লাচ্ছি", category: "drinks", price: 80, emoji: "🥤", desc: "Sweet yogurt smoothie", spicy: 0 },
-    { id: 31, name: "Mango Lassi", namebn: "আমের লাচ্ছি", category: "drinks", price: 100, emoji: "🥭", desc: "Mango flavored lassi", spicy: 0 },
-    { id: 32, name: "Cha", namebn: "চা", category: "drinks", price: 30, emoji: "🍵", desc: "Traditional milk tea", spicy: 0 },
-    { id: 33, name: "Doodh Cha", namebn: "দুধ চা", category: "drinks", price: 50, emoji: "☕", desc: "Creamy milk tea", spicy: 0 },
-    { id: 34, name: "Lemon Soda", namebn: "লেবু সোডা", category: "drinks", price: 40, emoji: "🍋", desc: "Fresh lemon with soda", spicy: 0 },
+    { id: 29, name: "Borhani", namebn: "বোরহানি", category: "drinks", price: 60, image: "assets/images/food/borhani.jpg", desc: "Spiced yogurt drink", spicy: 1, popular: true },
+    { id: 30, name: "Lassi", namebn: "লাচ্ছি", category: "drinks", price: 80, image: "assets/images/food/lassi.jpg", desc: "Sweet yogurt smoothie", spicy: 0 },
+    { id: 31, name: "Mango Lassi", namebn: "আমের লাচ্ছি", category: "drinks", price: 100, image: "assets/images/food/mango-lassi.jpg", desc: "Mango flavored lassi", spicy: 0 },
+    { id: 32, name: "Tea", namebn: "চা", category: "drinks", price: 30, image: "assets/images/food/tea.jpg", desc: "Traditional milk tea", spicy: 0 },
+    { id: 33, name: "Coffee", namebn: "কফি", category: "drinks", price: 70, image: "assets/images/food/coffee.jpg", desc: "Rich aromatic ground coffee", spicy: 0 },
+    { id: 34, name: "Lemonade", namebn: "লেমনেড", category: "drinks", price: 40, image: "assets/images/food/lemonade.jpg", desc: "Fresh lemon juice blended with cooling mint leaves", spicy: 0 },
 ];
 
 // Special Items Data (Fallback data)
 let specialItems = [
     {
         id: 'special1',
-        name: "Kacchi Biriyani (Special)",
-        namebn: "কাচ্চি বিরিয়ানি (স্পেশাল)",
-        price: 320,
-        originalPrice: 400,
-        emoji: "🍛",
-        desc: "Premium mutton slow-cooked with aromatic basmati rice, saffron & secret spices",
+        name: "Whole Tandoori Chicken",
+        namebn: "আস্ত তন্দুরি চিকেন",
+        price: 550,
+        originalPrice: 650,
+        image: "assets/images/food/whole-tandoori-chicken.jpg",
+        desc: "Succulent whole chicken marinated in spiced yogurt and slow-roasted in a traditional clay oven",
         spicy: 2,
-        category: "biriyani"
+        category: "kebab"
     },
     {
         id: 'special2',
-        name: "Chingri Malai Curry",
-        namebn: "চিংড়ি মালাই কারি",
-        price: 450,
-        emoji: "🦐",
-        desc: "Jumbo prawns cooked in rich coconut milk with authentic Bengali spices",
+        name: "Mutton Leg Roast",
+        namebn: "খাসির লেগ রোস্ট",
+        price: 1200,
+        image: "assets/images/food/mutton-leg-roast.jpg",
+        desc: "A feast-worthy whole mutton leg slow-roasted with aromatic spices and served with saffron pulao",
         spicy: 1,
-        category: "curry"
+        category: "meat"
     }
 ];
 
@@ -319,7 +319,7 @@ async function fetchMenuItems() {
                 namebn: item.namebn,
                 category: item.category,
                 price: item.price,
-                emoji: item.emoji,
+                image: item.image_url || `assets/images/food/${item.name.toLowerCase().replace(/ /g, '-')}.jpg`,
                 desc: item.description,
                 spicy: item.spicy,
                 popular: item.popular
@@ -332,7 +332,7 @@ async function fetchMenuItems() {
                 category: item.category,
                 price: item.price,
                 originalPrice: item.original_price,
-                emoji: item.emoji,
+                image: item.image_url || `assets/images/food/${item.name.toLowerCase().replace(/ /g, '-')}.jpg`,
                 desc: item.description,
                 spicy: item.spicy
             }));
@@ -464,14 +464,14 @@ function createMenuItemHTML(item, index) {
 
     return `
         <article class="food-card scroll-reveal" data-id="${item.id}" role="listitem" style="transition-delay: ${delay}s">
-            <div class="food-card-content">
-                <div class="food-card-header">
-                    <div class="food-card-icon">${item.emoji}</div>
-                    <div class="food-card-badges">
-                        ${item.popular ? '<span class="food-badge popular">Popular</span>' : ''}
-                        ${item.spicy >= 3 ? '<span class="food-badge spicy">Spicy</span>' : ''}
-                    </div>
+            <div class="food-card-image">
+                <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.src='https://placehold.co/400x400/1a1a1a/ffffff?text=${encodeURIComponent(item.name)}'">
+                <div class="food-card-badges">
+                    ${item.popular ? '<span class="food-badge popular">Popular</span>' : ''}
+                    ${item.spicy >= 3 ? '<span class="food-badge spicy">Spicy</span>' : ''}
                 </div>
+            </div>
+            <div class="food-card-content">
                 <h3 class="food-card-title">${item.name}</h3>
                 <p class="food-card-title-bn">${item.namebn}</p>
                 <p class="food-card-description">${item.desc}</p>
@@ -683,7 +683,9 @@ function renderCartItems() {
 
     DOM.cartItems.innerHTML = state.cart.map(item => `
         <div class="cart-item" data-id="${item.id}">
-            <div class="cart-item-icon">${item.emoji}</div>
+            <div class="cart-item-image">
+                <img src="${item.image}" alt="${item.name}">
+            </div>
             <div class="cart-item-details">
                 <div class="cart-item-name">${item.name}</div>
                 <div class="cart-item-price">${CONFIG.currency}${item.price} each</div>
@@ -907,7 +909,11 @@ function renderOrders() {
                 <div class="order-items-list">
                     ${order.items.map(item => `
                         <div class="order-item-row">
-                            <span>${item.emoji} ${item.name} <span class="item-qty">×${item.qty}</span></span>
+                            <span class="order-item-name">
+                                <img src="${item.image}" alt="${item.name}" class="order-item-thumb">
+                                ${item.name} 
+                                <span class="item-qty">×${item.qty}</span>
+                            </span>
                             <span>${CONFIG.currency}${item.price * item.qty}</span>
                         </div>
                     `).join('')}
@@ -1023,7 +1029,11 @@ function renderTrackOrders() {
                 <div class="track-order-items">
                     ${order.items.map(item => `
                         <div class="order-item-row">
-                            <span>${item.emoji} ${item.name} <span class="item-qty">×${item.qty}</span></span>
+                            <span class="order-item-name">
+                                <img src="${item.image}" alt="${item.name}" class="order-item-thumb">
+                                ${item.name} 
+                                <span class="item-qty">×${item.qty}</span>
+                            </span>
                             <span>${CONFIG.currency}${item.price * item.qty}</span>
                         </div>
                     `).join('')}
@@ -1250,7 +1260,9 @@ function openItemModal(id) {
     state.selectedItem = item;
     state.selectedItemQty = 1;
 
-    if (DOM.itemModalIcon) DOM.itemModalIcon.textContent = item.emoji;
+    if (DOM.itemModalIcon) {
+        DOM.itemModalIcon.innerHTML = `<img src="${item.image}" alt="${item.name}" class="modal-main-image">`;
+    }
     if (DOM.itemModalTitle) DOM.itemModalTitle.textContent = item.name;
     if (DOM.itemModalTitleBn) DOM.itemModalTitleBn.textContent = item.namebn || '';
     if (DOM.itemModalDesc) DOM.itemModalDesc.textContent = item.desc;
