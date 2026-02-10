@@ -1,7 +1,7 @@
 # Modern Restaurant Ordering System
 
 <p align="center">
-  <img src="images/Screenshot.png" alt="Rannaghor Banner" width="500">
+  <img src="assets/images/Screenshot.jpg" alt="Rannaghor Banner" width="500">
 </p>
 
 A next-generation dining experience featuring **QR Code Table Detection**, **Real-time Status Tracking**, and a stunning **Glassmorphism UI**. Designed to streamline the ordering process with style and efficiency.
@@ -29,8 +29,11 @@ A next-generation dining experience featuring **QR Code Table Detection**, **Rea
 ```
 rannaghor-website/
 ├── index.html      # Main application structure
-├── style.css       # Custom CSS for animations and theming
-├── script.js       # Application logic (Menu, Cart, Orders)
+├── css/
+│   └── style.css   # Custom CSS for animations and theming
+├── js/
+│   └── script.js   # Application logic (Menu, Cart, Orders)
+├── assets/         # Food images and assets
 └── README.md       # Project documentation
 ```
 

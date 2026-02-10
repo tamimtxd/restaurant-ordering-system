@@ -21,7 +21,7 @@
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍛</text></svg>">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- QR Scanner Library -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -38,15 +38,14 @@
             <div class="welcome-brand">
                 <div class="brand-icon-lg">🍛</div>
                 <h1 class="brand-title">Rannaghor</h1>
-                <p class="brand-subtitle">রান্নাঘর · Authentic Bangladeshi Cuisine</p>
-                <p class="brand-tagline">Experience the taste of Bangladesh</p>
+                <p class="brand-subtitle">Authentic Bangladeshi Cuisine</p>
             </div>
 
             <!-- QR Scanner Container -->
             <div id="scannerSection" class="scanner-section">
                 <div class="scanner-header">
                     <span class="scanner-icon">📸</span>
-                    <span class="scanner-title">Scan to Start Your Order</span>
+                    <span class="scanner-title">SCAN TO START YOUR ORDER</span>
                 </div>
                 <div id="reader" class="qr-reader"></div>
                 <div class="scanner-hint">Point your camera at the QR code on your table</div>
@@ -408,19 +407,21 @@
                 <div class="specials-grid">
                     <!-- Special Item 1 -->
                     <article class="special-card scroll-reveal" role="listitem">
-                        <div class="special-badge discount">20% OFF</div>
                         <div class="special-content">
-                            <div class="special-icon">🍛</div>
+                            <div class="special-image">
+                                <img src="assets/images/food/whole-tandoori-chicken.jpg" alt="Whole Tandoori Chicken">
+                                <div class="special-badge discount">SALE</div>
+                            </div>
                             <div class="special-details">
-                                <h3 class="special-title">Kacchi Biriyani</h3>
+                                <h3 class="special-title">Whole Tandoori Chicken</h3>
                                 <p class="special-description">
-                                    Premium mutton slow-cooked with aromatic basmati rice, saffron & secret
-                                    spices
+                                    Succulent whole chicken marinated in spiced yogurt and slow-roasted in a traditional
+                                    clay oven
                                 </p>
                                 <div class="special-footer">
                                     <div class="special-price">
-                                        <span class="price-current"><span class="currency">৳</span>320</span>
-                                        <span class="price-original"><span class="currency">৳</span>400</span>
+                                        <span class="price-current"><span class="currency">৳</span>550</span>
+                                        <span class="price-original"><span class="currency">৳</span>650</span>
                                     </div>
                                     <button class="btn btn-primary btn-add btn-special" data-id="special1">
                                         Add +
@@ -432,17 +433,20 @@
 
                     <!-- Special Item 2 -->
                     <article class="special-card scroll-reveal" role="listitem">
-                        <div class="special-badge chef">CHEF'S PICK</div>
                         <div class="special-content">
-                            <div class="special-icon">🦐</div>
+                            <div class="special-image">
+                                <img src="assets/images/food/mutton-leg-roast.jpg" alt="Mutton Leg Roast">
+                                <div class="special-badge chef">CHEF'S PICK</div>
+                            </div>
                             <div class="special-details">
-                                <h3 class="special-title">Chingri Malai Curry</h3>
+                                <h3 class="special-title">Mutton Leg Roast</h3>
                                 <p class="special-description">
-                                    Jumbo prawns cooked in rich coconut milk with authentic Bengali spices
+                                    A feast-worthy whole mutton leg slow-roasted with aromatic spices and served with
+                                    saffron pulao
                                 </p>
                                 <div class="special-footer">
                                     <div class="special-price">
-                                        <span class="price-current"><span class="currency">৳</span>450</span>
+                                        <span class="price-current"><span class="currency">৳</span>1200</span>
                                     </div>
                                     <button class="btn btn-primary btn-add btn-special" data-id="special2">
                                         Add +
@@ -821,8 +825,8 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    <script src="script.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>
