@@ -20,7 +20,7 @@ A next-generation dining experience featuring **QR Code Table Detection**, **Rea
 ## 🛠️ Technologies Used
 
 -   **HTML5**: Semantic structure.
--   **CSS3**: Custom styles with animations and Tailwind CSS (via CDN) for utility classes.
+-   **CSS3**: Custom styles with animations and advanced properties.
 -   **JavaScript (ES6+)**: DOM manipulation, state management, and interaction logic.
 -   **LocalStorage**: Persists cart and order data locally in the browser.
 
