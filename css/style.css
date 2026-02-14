@@ -1930,6 +1930,58 @@ h6 {
     color: var(--color-text-muted);
 }
 
+/* Payment Method Selection */
+.payment-method-container {
+    margin-bottom: var(--space-md);
+}
+
+.payment-options {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.payment-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: default;
+    transition: all var(--transition-fast);
+}
+
+.payment-option.active {
+    border-color: var(--color-primary);
+    background: rgba(255, 152, 0, 0.08);
+    box-shadow: 0 0 12px rgba(255, 152, 0, 0.15);
+}
+
+.payment-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.payment-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.payment-label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+.payment-sublabel {
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+}
+
 /* Place Order Button */
 .btn-place-order {
     width: 100%;
