@@ -765,7 +765,7 @@ h6 {
 }
 
 .btn-waiter {
-    display: flex;
+    display: none; /* Hidden on mobile by default */
     align-items: center;
     gap: var(--space-sm);
     padding: 10px 20px;
@@ -4136,7 +4136,6 @@ textarea::placeholder {
     scrollbar-width: none;
     /* Firefox */
     padding-bottom: 40px;
-    /* Space for admin buttons on short screens */
 }
 
 .welcome-screen-new::-webkit-scrollbar {
