@@ -133,6 +133,8 @@ const state = {
     currentTable: null,
     cart: [],
     orders: [],
+    ratings: {},  // { orderId: { itemId: { stars, feedback } } }
+    itemRatingsData: {},  // { itemId: { avg, count, reviews: [{stars, feedback, date}] } }
     selectedCategory: 'all',
     searchQuery: '',
     selectedItem: null,
@@ -140,7 +142,8 @@ const state = {
     isCartOpen: false,
     isMobileMenuOpen: false,
     specialItemsInitialized: false, // Flag to prevent multiple listeners
-    html5QrCode: null // QR Scanner instance
+    html5QrCode: null, // QR Scanner instance
+    ratingOrderId: null // Currently rating order
 };
 
 // ==========================================
@@ -236,7 +239,6 @@ const DOM = {
     closeItemModal: document.getElementById('closeItemModal'),
     itemModalIcon: document.getElementById('itemModalIcon'),
     itemModalTitle: document.getElementById('itemModalTitle'),
-    itemModalTitleBn: document.getElementById('itemModalTitleBn'),
     itemModalDesc: document.getElementById('itemModalDesc'),
     itemModalSpicy: document.getElementById('itemModalSpicy'),
     itemModalCategory: document.getElementById('itemModalCategory'),
@@ -252,7 +254,23 @@ const DOM = {
     mobileOrdersBadge: document.getElementById('bottomNavOrdersBadge'),
 
     // Toast Container
-    toastContainer: document.getElementById('toastContainer')
+    toastContainer: document.getElementById('toastContainer'),
+
+    // Rating Modal
+    ratingModal: document.getElementById('ratingModal'),
+    ratingView: document.getElementById('ratingView'),
+    ratingOrderNumber: document.getElementById('ratingOrderNumber'),
+    ratingItemsList: document.getElementById('ratingItemsList'),
+    closeRatingModal: document.getElementById('closeRatingModal'),
+    skipRating: document.getElementById('skipRating'),
+    submitRating: document.getElementById('submitRating'),
+
+    // Item Modal Rating & Reviews
+    itemModalRating: document.getElementById('itemModalRating'),
+    itemModalAvgRating: document.getElementById('itemModalAvgRating'),
+    itemModalRatingCount: document.getElementById('itemModalRatingCount'),
+    itemReviewsList: document.getElementById('itemReviewsList'),
+    noReviews: document.getElementById('noReviews')
 };
 
 // ==========================================
@@ -274,6 +292,9 @@ async function init() {
 
     // Fetch dynamic menu items from Supabase
     await fetchMenuItems();
+
+    // Fetch item ratings from Supabase
+    await fetchItemRatings();
 
     // Initialize special items listeners ONCE
     initSpecialItems();
@@ -461,6 +482,9 @@ function renderMenu(category = 'all', searchQuery = '') {
 function createMenuItemHTML(item, index) {
     const spicyIndicator = getSpicyIndicator(item.spicy);
     const delay = Math.min(index * 0.05, 0.5);
+    const ratingData = state.itemRatingsData[item.id];
+    const avgRating = ratingData ? ratingData.avg.toFixed(1) : '0.0';
+    const ratingCount = ratingData ? ratingData.count : 0;
 
     return `
         <article class="food-card scroll-reveal" data-id="${item.id}" role="listitem" style="transition-delay: ${delay}s">
@@ -472,8 +496,14 @@ function createMenuItemHTML(item, index) {
                 </div>
             </div>
             <div class="food-card-content">
-                <h3 class="food-card-title">${item.name}</h3>
-                <p class="food-card-title-bn">${item.namebn}</p>
+                <div class="food-card-header">
+                    <h3 class="food-card-title">${item.name}</h3>
+                    <div class="food-card-rating">
+                        <span class="card-rating-star">⭐</span>
+                        <span class="card-rating-value">${avgRating}</span>
+                        <span class="card-rating-count">(${ratingCount})</span>
+                    </div>
+                </div>
                 <p class="food-card-description">${item.desc}</p>
                 <div class="food-card-footer">
                     <span class="food-card-price gradient-text">${CONFIG.currency}${item.price}</span>
@@ -817,6 +847,8 @@ function simulateOrderProgress(orderNumber) {
         updateOrderStatus(orderNumber, 'served');
         showToast('✅ Order served. Enjoy your meal!');
         updateOrderBadges();
+        // Auto-trigger rating modal for served order
+        setTimeout(() => showRatingModal(orderNumber), 5000);
     }, served);
 }
 
@@ -896,6 +928,9 @@ function renderOrders() {
         };
 
         const status = statusConfig[order.status];
+        const orderRatings = state.ratings[order.id];
+        const isRated = orderRatings && Object.keys(orderRatings).length > 0;
+        const isServed = order.status === 'served';
 
         return `
             <div class="order-item">
@@ -907,21 +942,27 @@ function renderOrders() {
                     <span class="order-status ${status.class}">${status.label}</span>
                 </div>
                 <div class="order-items-list">
-                    ${order.items.map(item => `
+                    ${order.items.map(item => {
+                        const itemRating = orderRatings && orderRatings[item.id];
+                        const starsHTML = itemRating ? `<span class="order-item-rating">${'⭐'.repeat(itemRating.stars)}</span>` : '';
+                        return `
                         <div class="order-item-row">
                             <span class="order-item-name">
                                 <img src="${item.image}" alt="${item.name}" class="order-item-thumb">
                                 ${item.name} 
                                 <span class="item-qty">×${item.qty}</span>
+                                ${starsHTML}
                             </span>
                             <span>${CONFIG.currency}${item.price * item.qty}</span>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
                 <div class="order-total">
                     <span>Total (incl. VAT)</span>
                     <span class="total-value gradient-text">${CONFIG.currency}${order.total}</span>
                 </div>
+                ${isServed && !isRated ? `<button class="rate-order-btn" onclick="showRatingModal('${order.id}')">⭐ Rate Items</button>` : ''}
+                ${isRated ? '<span class="rated-badge">✅ Rated</span>' : ''}
             </div>
         `;
     }).join('');
@@ -1264,7 +1305,6 @@ function openItemModal(id) {
         DOM.itemModalIcon.innerHTML = `<img src="${item.image}" alt="${item.name}" class="modal-main-image">`;
     }
     if (DOM.itemModalTitle) DOM.itemModalTitle.textContent = item.name;
-    if (DOM.itemModalTitleBn) DOM.itemModalTitleBn.textContent = item.namebn || '';
     if (DOM.itemModalDesc) DOM.itemModalDesc.textContent = item.desc;
 
     // Issue #5: Fixed - Clean single approach for spicy indicator (removed duplication)
@@ -1282,6 +1322,30 @@ function openItemModal(id) {
     if (DOM.itemModalPrice) DOM.itemModalPrice.textContent = `${CONFIG.currency}${item.price}`;
     if (DOM.itemQtyValue) DOM.itemQtyValue.textContent = '1';
     if (DOM.itemTotalPrice) DOM.itemTotalPrice.textContent = `${CONFIG.currency}${item.price}`;
+
+    // Display average rating and reviews
+    const ratingData = state.itemRatingsData[item.id];
+    if (DOM.itemModalAvgRating) DOM.itemModalAvgRating.textContent = ratingData ? ratingData.avg.toFixed(1) : '0.0';
+    if (DOM.itemModalRatingCount) DOM.itemModalRatingCount.textContent = ratingData ? `(${ratingData.count} review${ratingData.count !== 1 ? 's' : ''})` : '(0 reviews)';
+
+    // Render reviews
+    if (DOM.itemReviewsList && DOM.noReviews) {
+        if (ratingData && ratingData.reviews.length > 0) {
+            DOM.noReviews.classList.add('hidden');
+            DOM.itemReviewsList.innerHTML = ratingData.reviews.slice(0, 10).map(review => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="review-stars">${'⭐'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span>
+                        ${review.date ? `<span class="review-date">${formatReviewDate(review.date)}</span>` : ''}
+                    </div>
+                    ${review.feedback ? `<p class="review-text">${escapeHTML(review.feedback)}</p>` : ''}
+                </div>
+            `).join('');
+        } else {
+            DOM.noReviews.classList.remove('hidden');
+            DOM.itemReviewsList.innerHTML = '';
+        }
+    }
 
     showModal(DOM.itemModal);
 }
@@ -1535,6 +1599,11 @@ function setupEventListeners() {
     if (DOM.itemQtyPlus) DOM.itemQtyPlus.addEventListener('click', () => updateItemModalQty(1));
     if (DOM.addItemToCart) DOM.addItemToCart.addEventListener('click', addSelectedItemToCart);
 
+    // Rating modal
+    if (DOM.closeRatingModal) DOM.closeRatingModal.addEventListener('click', () => hideModal(DOM.ratingModal));
+    if (DOM.skipRating) DOM.skipRating.addEventListener('click', () => hideModal(DOM.ratingModal));
+    if (DOM.submitRating) DOM.submitRating.addEventListener('click', handleSubmitRatings);
+
     // Back to top
     if (DOM.backToTop) DOM.backToTop.addEventListener('click', scrollToTop);
 
@@ -1587,7 +1656,8 @@ function saveToStorage() {
 
     const data = {
         cart: state.cart,
-        orders: state.orders
+        orders: state.orders,
+        ratings: state.ratings
     };
 
     try {
@@ -1607,12 +1677,14 @@ function loadFromStorage() {
             const parsed = JSON.parse(data);
             state.cart = parsed.cart || [];
             state.orders = parsed.orders || [];
+            state.ratings = parsed.ratings || {};
             updateCart();
         }
     } catch (e) {
         // Issue #2: Improved error handling - silently handle corrupted data
         state.cart = [];
         state.orders = [];
+        state.ratings = {};
     }
 }
 
@@ -1689,6 +1761,11 @@ function subscribeToOrderUpdates(orderNumber) {
             const statusEmojis = { 'preparing': '👨‍🍳', 'ready': '🍽️', 'served': '✅' };
             const emoji = statusEmojis[payload.new.status] || '🔔';
             showToast(`${emoji} Order #${orderNumber} status: ${payload.new.status}`);
+
+            // Auto-trigger rating when order is served
+            if (payload.new.status === 'served') {
+                setTimeout(() => showRatingModal(orderNumber), 5000);
+            }
         })
         .subscribe((status) => {
             console.log(`Subscription status for #${orderNumber}:`, status);
@@ -1701,6 +1778,276 @@ window.updateCartItemQty = updateCartItemQty;
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.openItemModal = openItemModal;
+window.showRatingModal = showRatingModal;
+
+// ==========================================
+// RATING SYSTEM
+// ==========================================
+
+function showRatingModal(orderNumber) {
+    const order = state.orders.find(o => String(o.id) === String(orderNumber));
+    if (!order) return;
+
+    // Don't show if already rated
+    if (state.ratings[orderNumber] && Object.keys(state.ratings[orderNumber]).length > 0) {
+        showToast('You already rated this order!', 'info');
+        return;
+    }
+
+    state.ratingOrderId = orderNumber;
+
+    // Reset views
+    if (DOM.ratingView) DOM.ratingView.classList.remove('hidden');
+    if (DOM.ratingThankYou) DOM.ratingThankYou.classList.add('hidden');
+    if (DOM.ratingOrderNumber) DOM.ratingOrderNumber.textContent = orderNumber;
+
+    // Build per-item rating rows
+    if (DOM.ratingItemsList) {
+        DOM.ratingItemsList.innerHTML = order.items.map(item => `
+            <div class="rating-item-row" data-item-id="${item.id}">
+                <img src="${item.image}" alt="${item.name}" class="rating-item-thumb"
+                     onerror="this.src='https://placehold.co/112x112/1a1a1a/ffffff?text=${encodeURIComponent(item.name)}'">
+                <div class="rating-item-info">
+                    <div class="rating-item-name">${item.name}</div>
+                    <div class="rating-item-qty">Qty: ${item.qty}</div>
+                    <div class="star-selector" data-item-id="${item.id}">
+                        ${[1,2,3,4,5].map(s => `<button class="star-btn" data-star="${s}" aria-label="${s} star">⭐</button>`).join('')}
+                    </div>
+                    <input type="text" class="rating-feedback-input" data-item-id="${item.id}"
+                           placeholder="Any feedback? (optional)" maxlength="120">
+                </div>
+            </div>
+        `).join('');
+
+        // Attach star interaction listeners
+        DOM.ratingItemsList.querySelectorAll('.star-selector').forEach(selector => {
+            const stars = selector.querySelectorAll('.star-btn');
+
+            stars.forEach((star, idx) => {
+                star.addEventListener('mouseenter', () => {
+                    stars.forEach((s, i) => {
+                        s.classList.toggle('hovered', i <= idx);
+                    });
+                });
+
+                star.addEventListener('mouseleave', () => {
+                    stars.forEach(s => s.classList.remove('hovered'));
+                });
+
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.star);
+                    stars.forEach((s, i) => {
+                        s.classList.toggle('active', i < rating);
+                    });
+                    // Mark the row as rated visually
+                    selector.closest('.rating-item-row').classList.add('rated');
+                });
+            });
+        });
+    }
+
+    showModal(DOM.ratingModal);
+}
+
+function handleSubmitRatings() {
+    const orderNumber = state.ratingOrderId;
+    if (!orderNumber) return;
+
+    const order = state.orders.find(o => String(o.id) === String(orderNumber));
+    if (!order) return;
+
+    const itemRatings = {};
+    let hasAnyRating = false;
+
+    order.items.forEach(item => {
+        const selector = DOM.ratingItemsList.querySelector(`.star-selector[data-item-id="${item.id}"]`);
+        const feedbackInput = DOM.ratingItemsList.querySelector(`.rating-feedback-input[data-item-id="${item.id}"]`);
+
+        if (selector) {
+            const activeStars = selector.querySelectorAll('.star-btn.active').length;
+            if (activeStars > 0) {
+                hasAnyRating = true;
+                itemRatings[item.id] = {
+                    stars: activeStars,
+                    feedback: feedbackInput ? feedbackInput.value.trim() : '',
+                    itemName: item.name
+                };
+            }
+        }
+    });
+
+    if (!hasAnyRating) {
+        showToast('Please rate at least one item!', 'warning');
+        return;
+    }
+
+    // Save ratings
+    state.ratings[orderNumber] = itemRatings;
+    saveToStorage();
+
+    // Update local itemRatingsData cache so menu shows new avg
+    Object.entries(itemRatings).forEach(([itemId, rating]) => {
+        if (!state.itemRatingsData[itemId]) {
+            state.itemRatingsData[itemId] = { avg: 0, count: 0, reviews: [] };
+        }
+        const data = state.itemRatingsData[itemId];
+        const newCount = data.count + 1;
+        const newAvg = ((data.avg * data.count) + rating.stars) / newCount;
+        data.avg = newAvg;
+        data.count = newCount;
+        data.reviews.unshift({
+            stars: rating.stars,
+            feedback: rating.feedback,
+            date: new Date().toISOString()
+        });
+    });
+
+    // Re-render menu to update avg ratings on cards
+    renderMenu(state.selectedCategory, state.searchQuery);
+
+    // Update special items ratings in DOM
+    document.querySelectorAll('.special-rating').forEach(el => {
+        const id = el.dataset.id;
+        const ratingData = state.itemRatingsData[id];
+        if (ratingData) {
+            const avgEl = el.querySelector('.card-rating-value');
+            const countEl = el.querySelector('.card-rating-count');
+            if (avgEl) avgEl.textContent = ratingData.avg.toFixed(1);
+            if (countEl) countEl.textContent = `(${ratingData.count})`;
+        }
+    });
+
+    // Save to Supabase if configured
+    if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+        saveRatingsToSupabase(orderNumber, itemRatings);
+    }
+
+    // Hide the rating modal immediately
+    hideModal(DOM.ratingModal);
+
+    showToast('Thank you for your feedback! ⭐');
+
+    // Refresh order history if open
+    if (DOM.ordersModal && !DOM.ordersModal.classList.contains('hidden')) {
+        renderOrders();
+    }
+
+    state.ratingOrderId = null;
+}
+
+async function saveRatingsToSupabase(orderNumber, itemRatings) {
+    try {
+        const ratingRows = Object.entries(itemRatings).map(([itemId, rating]) => ({
+            order_number: String(orderNumber),
+            table_number: parseInt(state.currentTable),
+            item_id: String(itemId),
+            item_name: rating.itemName,
+            stars: rating.stars,
+            feedback: rating.feedback || '',
+            created_at: new Date().toISOString()
+        }));
+
+        const { error } = await supabaseClient
+            .from('ratings')
+            .insert(ratingRows);
+
+        if (error) throw error;
+        console.log('Ratings saved to Supabase');
+    } catch (err) {
+        console.error('Error saving ratings to Supabase:', err.message);
+    }
+}
+
+/**
+ * Fetch aggregated item ratings from Supabase
+ */
+async function fetchItemRatings() {
+    if (typeof SUPABASE_URL === 'undefined' || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+        console.warn('Supabase not configured. No ratings to fetch.');
+        return;
+    }
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('ratings')
+            .select('item_id, item_name, stars, feedback, created_at')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            // Aggregate ratings per item
+            const aggregated = {};
+            data.forEach(row => {
+                const id = row.item_id;
+                if (!aggregated[id]) {
+                    aggregated[id] = { total: 0, count: 0, reviews: [] };
+                }
+                aggregated[id].total += row.stars;
+                aggregated[id].count++;
+                aggregated[id].reviews.push({
+                    stars: row.stars,
+                    feedback: row.feedback || '',
+                    date: row.created_at
+                });
+            });
+
+            // Calculate averages
+            Object.keys(aggregated).forEach(id => {
+                const d = aggregated[id];
+                state.itemRatingsData[id] = {
+                    avg: d.total / d.count,
+                    count: d.count,
+                    reviews: d.reviews
+                };
+            });
+
+            console.log('Item ratings fetched from Supabase:', Object.keys(state.itemRatingsData).length, 'items');
+
+            // Re-render menu with updated ratings
+            renderMenu(state.selectedCategory, state.searchQuery);
+
+            // Update special items ratings in DOM if they exist
+            document.querySelectorAll('.special-rating').forEach(el => {
+                const id = el.dataset.id;
+                const ratingData = state.itemRatingsData[id];
+                if (ratingData) {
+                    const avgEl = el.querySelector('.card-rating-value');
+                    const countEl = el.querySelector('.card-rating-count');
+                    if (avgEl) avgEl.textContent = ratingData.avg.toFixed(1);
+                    if (countEl) countEl.textContent = `(${ratingData.count})`;
+                }
+            });
+        }
+    } catch (err) {
+        console.error('Error fetching item ratings:', err.message);
+    }
+}
+
+/**
+ * Format a review date for display
+ */
+function formatReviewDate(isoString) {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+/**
+ * Escape HTML to prevent XSS in review text
+ */
+function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
 
 // ==========================================
 // 17. QR SCANNER & ADMIN LOGIC

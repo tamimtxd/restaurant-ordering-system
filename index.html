@@ -105,7 +105,6 @@
                 </div>
                 <div class="brand-text">
                     <span class="brand-name">Rannaghor</span>
-                    <span class="brand-tagline">রান্নাঘর</span>
                 </div>
             </a>
 
@@ -271,6 +270,10 @@
                 <div class="orb orb-1"></div>
                 <div class="orb orb-2"></div>
                 <div class="orb orb-3"></div>
+                <div class="hero-visuals">
+                    <div class="visual-blur blur-1"></div>
+                    <div class="visual-blur blur-2"></div>
+                </div>
             </div>
 
             <div class="hero-container">
@@ -305,18 +308,27 @@
                 <!-- Quick Stats -->
                 <div class="hero-stats scroll-reveal">
                     <div class="stat-item">
-                        <span class="stat-number">50+</span>
-                        <span class="stat-label">Dishes</span>
+                        <div class="stat-icon">🍲</div>
+                        <div class="stat-details">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Dishes</span>
+                        </div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
-                        <span class="stat-number">15-20</span>
-                        <span class="stat-label">Min Delivery</span>
+                        <div class="stat-icon">🚀</div>
+                        <div class="stat-details">
+                            <span class="stat-number">15-20</span>
+                            <span class="stat-label">Min Delivery</span>
+                        </div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
-                        <span class="stat-number">4.8</span>
-                        <span class="stat-label">Rating ⭐</span>
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-details">
+                            <span class="stat-number">4.8</span>
+                            <span class="stat-label">Trust Rating</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -426,7 +438,14 @@
                                 <div class="special-badge discount">SALE</div>
                             </div>
                             <div class="special-details">
-                                <h3 class="special-title">Whole Tandoori Chicken</h3>
+                                <div class="special-header">
+                                    <h3 class="special-title">Whole Tandoori Chicken</h3>
+                                    <div class="food-card-rating special-rating" data-id="special1">
+                                        <span class="card-rating-star">⭐</span>
+                                        <span class="card-rating-value">0.0</span>
+                                        <span class="card-rating-count">(0)</span>
+                                    </div>
+                                </div>
                                 <p class="special-description">
                                     Succulent whole chicken marinated in spiced yogurt and slow-roasted in a traditional
                                     clay oven
@@ -452,7 +471,14 @@
                                 <div class="special-badge chef">CHEF'S PICK</div>
                             </div>
                             <div class="special-details">
-                                <h3 class="special-title">Mutton Leg Roast</h3>
+                                <div class="special-header">
+                                    <h3 class="special-title">Mutton Leg Roast</h3>
+                                    <div class="food-card-rating special-rating" data-id="special2">
+                                        <span class="card-rating-star">⭐</span>
+                                        <span class="card-rating-value">0.0</span>
+                                        <span class="card-rating-count">(0)</span>
+                                    </div>
+                                </div>
                                 <p class="special-description">
                                     A feast-worthy whole mutton leg slow-roasted with aromatic spices and served with
                                     saffron pulao
@@ -772,12 +798,31 @@
                     <div class="item-modal-icon" id="itemModalIcon">🍛</div>
                     <div class="item-modal-details">
                         <h3 id="itemModalTitle" class="item-modal-title">Item Name</h3>
-                        <p id="itemModalTitleBn" class="item-modal-subtitle">বাংলা নাম</p>
                         <p id="itemModalDesc" class="item-modal-description">Description</p>
 
                         <div class="item-modal-meta">
                             <div id="itemModalSpicy" class="spicy-level"></div>
                             <div class="item-modal-category" id="itemModalCategory">Category</div>
+                        </div>
+
+                        <!-- Average Rating Display -->
+                        <div id="itemModalRating" class="item-modal-rating">
+                            <div class="item-avg-rating">
+                                <span class="avg-rating-stars">⭐</span>
+                                <span id="itemModalAvgRating" class="avg-rating-value">0.0</span>
+                                <span id="itemModalRatingCount" class="avg-rating-count">(0 reviews)</span>
+                            </div>
+                        </div>
+
+                        <!-- Reviews Section -->
+                        <div id="itemModalReviews" class="item-modal-reviews">
+                            <h4 class="reviews-title">Customer Reviews</h4>
+                            <div id="itemReviewsList" class="reviews-list">
+                                <!-- Reviews inserted by JS -->
+                            </div>
+                            <div id="noReviews" class="no-reviews">
+                                <span>No reviews yet</span>
+                            </div>
                         </div>
 
                         <div class="item-modal-footer">
@@ -793,6 +838,41 @@
 
                         <button id="addItemToCart" class="btn btn-primary btn-block" aria-label="Add item to cart">
                             Add to Cart - <span id="itemTotalPrice"><span class="currency">৳</span>0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div id="ratingModal" class="modal hidden" role="dialog" aria-labelledby="ratingModalTitle" aria-modal="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div class="modal-content modal-md">
+                <!-- Rating View -->
+                <div id="ratingView">
+                    <header class="modal-header">
+                        <div>
+                            <h3 id="ratingModalTitle" class="modal-title">Rate Your Food</h3>
+                            <p class="rating-order-id">Order #<span id="ratingOrderNumber">-</span></p>
+                        </div>
+                        <button id="closeRatingModal" class="btn-close" aria-label="Close">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="modal-body">
+                        <p class="rating-subtitle">How was each dish? Tap the stars to rate!</p>
+                        <div id="ratingItemsList" class="rating-items-list">
+                            <!-- Per-item rating rows inserted by JS -->
+                        </div>
+                    </div>
+                    <div class="rating-actions">
+                        <button id="skipRating" class="btn btn-outline">Skip</button>
+                        <button id="submitRating" class="btn btn-primary">
+                            <span>Submit</span>
                         </button>
                     </div>
                 </div>
