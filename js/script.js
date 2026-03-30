@@ -80,7 +80,7 @@ let menuItems = [
     { id: 18, name: "Fuchka", namebn: "ফুচকা", category: "snacks", price: 60, image: "assets/images/food/fuchka.jpg", desc: "Crispy shells with tangy water (6 pcs)", spicy: 2, popular: true },
     { id: 19, name: "Chotpoti", namebn: "চটপটি", category: "snacks", price: 80, image: "assets/images/food/chotpoti.jpg", desc: "Spicy chickpea street food", spicy: 2 },
     { id: 20, name: "Jhalmuri", namebn: "ঝালমুড়ি", category: "snacks", price: 50, image: "assets/images/food/jhalmuri.jpg", desc: "Spiced puffed rice mix", spicy: 2 },
-    { id: 21, name: "Peyaju", namebn: "পেঁয়াজু", category: "snacks", price: 35, image: "assets/images/food/peyaju.jpg", desc: "Crispy onion fritters (4 pcs)", spicy: 1 },
+    { id: 21, name: "Peyaju", namebn: "পেঁয়াজু", category: "snacks", price: 30, image: "assets/images/food/peyaju.jpg", desc: "Crispy onion fritters (5 pcs)", spicy: 1 },
     { id: 22, name: "Beguni", namebn: "বেগুনি", category: "snacks", price: 35, image: "assets/images/food/beguni.jpg", desc: "Fried eggplant fritters (4 pcs)", spicy: 1 },
 
     // Dessert
