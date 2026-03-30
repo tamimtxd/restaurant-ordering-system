@@ -109,18 +109,15 @@
             </a>
 
 
-            <!-- Desktop Navigation -->
-            <div class="navbar-menu">
-                <a href="#menu" class="nav-link">Menu</a>
-                <a href="#specials" class="nav-link">Specials</a>
-                <button id="viewOrdersBtn" class="nav-link nav-btn">
-                    My Orders
-                    <span id="activeOrdersBadge" class="order-badge hidden">0</span>
-                </button>
-            </div>
-
             <!-- Action Buttons -->
             <div class="navbar-actions">
+                <!-- My Orders -->
+                <button id="viewOrdersBtn" class="btn btn-outline btn-navbar-action">
+                    <span class="btn-icon">📋</span>
+                    <span class="btn-text">My Orders</span>
+                    <span id="activeOrdersBadge" class="order-badge hidden">0</span>
+                </button>
+
                 <!-- Call Waiter (Desktop) -->
                 <button id="callWaiterBtn" class="btn btn-outline btn-waiter">
                     <span class="btn-icon">🔔</span>
@@ -152,30 +149,7 @@
         </div>
     </nav>
 
-    <!-- ==================== -->
-    <!-- MOBILE BOTTOM NAVIGATION -->
-    <!-- ==================== -->
-    <nav class="mobile-bottom-nav">
-        <a href="#menu" class="nav-item">
-            <span class="nav-icon">📖</span>
-            <span class="nav-label">Menu</span>
-        </a>
-        <a href="#specials" class="nav-item">
-            <span class="nav-icon">⭐</span>
-            <span class="nav-label">Specials</span>
-        </a>
-        <button id="bottomNavOrdersBtn" class="nav-item">
-            <div class="icon-container">
-                <span class="nav-icon">📋</span>
-                <span id="bottomNavOrdersBadge" class="nav-badge hidden">0</span>
-            </div>
-            <span class="nav-label">Orders</span>
-        </button>
-        <button id="bottomNavWaiterBtn" class="nav-item">
-            <span class="nav-icon">🔔</span>
-            <span class="nav-label">Waiter</span>
-        </button>
-    </nav>
+    <!-- Bottom navigation removed - buttons unified into top navbar -->
 
 
     <!-- ==================== -->
@@ -264,75 +238,55 @@
         <!-- HERO SECTION -->
         <!-- ==================== -->
         <section class="hero-section" aria-labelledby="heroTitle">
-            <!-- Background Effects -->
-            <div class="hero-bg">
-                <div class="mesh-gradient"></div>
-                <div class="orb orb-1"></div>
-                <div class="orb orb-2"></div>
-                <div class="orb orb-3"></div>
-                <div class="hero-visuals">
-                    <div class="visual-blur blur-1"></div>
-                    <div class="visual-blur blur-2"></div>
+            <!-- Unified Full-Screen Specials Background Slider -->
+            <div id="specials" class="specials-slider">
+                <!-- Slide 1 -->
+                <div class="slide active" style="background-image: url('assets/images/food/whole-tandoori-chicken.jpg');">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <span class="slide-eyebrow">Today's Special</span>
+                        <div class="special-badge discount">SALE</div>
+                        <h3 class="slide-title">Whole Tandoori Chicken</h3>
+                        <p class="slide-description">
+                            Succulent whole chicken marinated in spiced yogurt and slow-roasted in a traditional clay oven
+                        </p>
+                        <div class="slide-footer">
+                            <div class="slide-price">
+                                <span class="price-current"><span class="currency">৳</span>550</span>
+                                <span class="price-original"><span class="currency">৳</span>650</span>
+                            </div>
+                            <button class="btn btn-primary btn-add btn-special" data-id="special1">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide" style="background-image: url('assets/images/food/mutton-leg-roast.jpg');">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <span class="slide-eyebrow">Today's Special</span>
+                        <div class="special-badge chef">CHEF'S PICK</div>
+                        <h3 class="slide-title">Mutton Leg Roast</h3>
+                        <p class="slide-description">
+                            A feast-worthy whole mutton leg slow-roasted with aromatic spices and served with saffron pulao
+                        </p>
+                        <div class="slide-footer">
+                            <div class="slide-price">
+                                <span class="price-current"><span class="currency">৳</span>1200</span>
+                            </div>
+                            <button class="btn btn-primary btn-add btn-special" data-id="special2">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="slider-pagination">
+                    <button class="slider-dot active" aria-label="Go to slide 1"></button>
+                    <button class="slider-dot" aria-label="Go to slide 2"></button>
                 </div>
             </div>
 
-            <div class="hero-container">
-                <!-- Session Info Badge -->
-                <div id="sessionInfo" class="session-badge scroll-reveal">
-                    <div class="live-dot"></div>
-                    <span class="session-text">Session Active • Table <span id="heroTableNumber">-</span></span>
-                </div>
-
-                <!-- Hero Content -->
-                <h1 id="heroTitle" class="hero-title scroll-reveal">
-                    What would you like<br>
-                    <span class="gradient-text">to eat today?</span>
-                </h1>
-
-                <p class="hero-description scroll-reveal">
-                    Browse our menu, add items to your cart, and your order will be sent directly to our kitchen.
-                </p>
-
-                <!-- CTA Buttons -->
-                <div class="hero-actions scroll-reveal">
-                    <a href="#menu" class="btn btn-primary btn-lg">
-                        <span>Start Ordering</span>
-                        <span>🍽️</span>
-                    </a>
-                    <a href="#specials" class="btn btn-outline btn-lg">
-                        <span>View Specials</span>
-                        <span>⭐</span>
-                    </a>
-                </div>
-
-                <!-- Quick Stats -->
-                <div class="hero-stats scroll-reveal">
-                    <div class="stat-item">
-                        <div class="stat-icon">🍲</div>
-                        <div class="stat-details">
-                            <span class="stat-number">50+</span>
-                            <span class="stat-label">Dishes</span>
-                        </div>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <div class="stat-icon">🚀</div>
-                        <div class="stat-details">
-                            <span class="stat-number">15-20</span>
-                            <span class="stat-label">Min Delivery</span>
-                        </div>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <div class="stat-icon">⭐</div>
-                        <div class="stat-details">
-                            <span class="stat-number">4.8</span>
-                            <span class="stat-label">Trust Rating</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- The hero-container (text and stats) has been completely removed to let the slider shine -->
         </section>
 
         <!-- ==================== -->
@@ -343,7 +297,7 @@
                 <!-- Section Header -->
                 <header class="section-header">
                     <h2 id="menuTitle" class="section-title scroll-reveal">
-                        Our <span class="gradient-text">Menu</span>
+                        Our <span class="gradient-text">Regular Menu</span>
                     </h2>
                     <p class="section-subtitle scroll-reveal">
                         Authentic Bangladeshi dishes made with love
@@ -412,91 +366,6 @@
             </div>
         </section>
 
-        <!-- ==================== -->
-        <!-- SPECIALS SECTION -->
-        <!-- ==================== -->
-        <section id="specials" class="specials-section" aria-labelledby="specialsTitle">
-            <div class="section-container">
-                <!-- Section Header -->
-                <header class="section-header">
-                    <h2 id="specialsTitle" class="section-title scroll-reveal">
-                        Today's <span class="gradient-text">Specials</span>
-                    </h2>
-                    <p class="section-subtitle scroll-reveal">
-                        Chef's recommended dishes - Limited time offers!
-                    </p>
-                </header>
-
-
-                <!-- Specials Grid -->
-                <div class="specials-grid">
-                    <!-- Special Item 1 -->
-                    <article class="special-card scroll-reveal" role="listitem">
-                        <div class="special-content">
-                            <div class="special-image">
-                                <img src="assets/images/food/whole-tandoori-chicken.jpg" alt="Whole Tandoori Chicken">
-                                <div class="special-badge discount">SALE</div>
-                            </div>
-                            <div class="special-details">
-                                <div class="special-header">
-                                    <h3 class="special-title">Whole Tandoori Chicken</h3>
-                                    <div class="food-card-rating special-rating" data-id="special1">
-                                        <span class="card-rating-star">⭐</span>
-                                        <span class="card-rating-value">0.0</span>
-                                        <span class="card-rating-count">(0)</span>
-                                    </div>
-                                </div>
-                                <p class="special-description">
-                                    Succulent whole chicken marinated in spiced yogurt and slow-roasted in a traditional
-                                    clay oven
-                                </p>
-                                <div class="special-footer">
-                                    <div class="special-price">
-                                        <span class="price-current"><span class="currency">৳</span>550</span>
-                                        <span class="price-original"><span class="currency">৳</span>650</span>
-                                    </div>
-                                    <button class="btn btn-primary btn-add btn-special" data-id="special1">
-                                        Add +
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Special Item 2 -->
-                    <article class="special-card scroll-reveal" role="listitem">
-                        <div class="special-content">
-                            <div class="special-image">
-                                <img src="assets/images/food/mutton-leg-roast.jpg" alt="Mutton Leg Roast">
-                                <div class="special-badge chef">CHEF'S PICK</div>
-                            </div>
-                            <div class="special-details">
-                                <div class="special-header">
-                                    <h3 class="special-title">Mutton Leg Roast</h3>
-                                    <div class="food-card-rating special-rating" data-id="special2">
-                                        <span class="card-rating-star">⭐</span>
-                                        <span class="card-rating-value">0.0</span>
-                                        <span class="card-rating-count">(0)</span>
-                                    </div>
-                                </div>
-                                <p class="special-description">
-                                    A feast-worthy whole mutton leg slow-roasted with aromatic spices and served with
-                                    saffron pulao
-                                </p>
-                                <div class="special-footer">
-                                    <div class="special-price">
-                                        <span class="price-current"><span class="currency">৳</span>1200</span>
-                                    </div>
-                                    <button class="btn btn-primary btn-add btn-special" data-id="special2">
-                                        Add +
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
 
         <!-- ==================== -->
         <!-- FEATURES SECTION -->

@@ -699,7 +699,6 @@ h6 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    line-height: 1;
 }
 
 /* Table Badge */
@@ -764,8 +763,10 @@ h6 {
     gap: var(--space-md);
 }
 
-.btn-waiter {
-    display: none; /* Hidden on mobile by default */
+.btn-waiter,
+.btn-navbar-action {
+    display: inline-flex;
+    /* Always visible on all screen sizes */
     align-items: center;
     gap: var(--space-sm);
     padding: 10px 20px;
@@ -778,17 +779,62 @@ h6 {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
 }
 
-.btn-waiter:hover {
+/* Compact buttons on mobile */
+@media (max-width: 767px) {
+    .btn-waiter,
+    .btn-navbar-action {
+        padding: 7px 12px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+
+    .btn-waiter .btn-text,
+    .btn-navbar-action .btn-text {
+        display: none;
+    }
+
+    .btn-waiter .btn-icon,
+    .btn-navbar-action .btn-icon {
+        font-size: 1.1rem;
+        filter: none;
+    }
+
+    .btn-cart {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .cart-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.btn-waiter:hover,
+.btn-navbar-action:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
 }
 
-.btn-waiter .btn-icon {
+.btn-waiter .btn-icon,
+.btn-navbar-action .btn-icon {
     font-size: var(--text-base);
     filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+}
+
+/* Specific Badge Adjustment for Navbar Buttons */
+.btn-navbar-action .order-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    box-shadow: 0 0 10px rgba(var(--color-primary-rgb), 0.5);
+    z-index: 5;
 }
 
 /* Cart Button Modernized */
@@ -1100,8 +1146,8 @@ h6 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: calc(var(--navbar-height) + var(--space-3xl)) var(--container-padding) var(--space-3xl);
+    justify-content: flex-start; /* Prevent top-clipping when content exceeds min-height 100vh */
+    padding: calc(var(--navbar-height) + var(--space-2xl)) 0 var(--space-2xl);
     overflow: hidden;
 }
 
@@ -1207,10 +1253,11 @@ h6 {
 /* Hero Container */
 .hero-container {
     position: relative;
-    z-index: 1;
+    z-index: 10;
     max-width: 800px;
     width: 100%;
     margin: 0 auto;
+    padding: 0 var(--container-padding);
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -1320,20 +1367,20 @@ h6 {
 .hero-stats {
     display: flex;
     justify-content: center;
-    align-items: stretch;
+    align-items: center; /* keep it centered */
     gap: var(--space-2xl);
-    padding: var(--space-xl) var(--space-3xl);
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: var(--radius-2xl);
-    border: 1px solid rgba(255, 255, 255, 0.08); /* Slightly more visible border */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    margin-top: var(--space-xl);
+    padding: var(--space-xl) 0; /* remove side padding */
+    margin-top: var(--space-md);
+    background: transparent; /* Remove weird box */
+    border: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .stat-item {
     display: flex;
-    flex-direction: column; /* Stacked for better centering */
+    flex-direction: column;
+    /* Stacked for better centering */
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
@@ -1350,7 +1397,8 @@ h6 {
 .stat-details {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centered text details */
+    align-items: center;
+    /* Centered text details */
     text-align: center;
 }
 
@@ -1360,12 +1408,14 @@ h6 {
     font-family: var(--font-display);
     color: #ffffff;
     line-height: 1;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Visibility boost */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    /* Visibility boost */
 }
 
 .stat-label {
     font-size: 0.7rem;
-    color: #aaaaaa; /* Brighter than muted for better visibility */
+    color: #aaaaaa;
+    /* Brighter than muted for better visibility */
     text-transform: uppercase;
     letter-spacing: 0.15em;
     font-weight: 700;
@@ -1556,61 +1606,92 @@ h6 {
    11. SPECIALS SECTION
    ========================================== */
 
-.specials-section {
-    position: relative;
-    padding: var(--space-3xl) 0;
-    overflow: hidden;
-}
-
-.specials-section::before {
-    content: '';
+/* Full-Bleed Specials Slider (Hero Background) */
+.specials-slider {
     position: absolute;
     inset: 0;
-    background: linear-gradient(-45deg, #1a0a00, #8B4513, #D2691E, #1a0a00);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
-    opacity: 0.3;
-}
-
-.specials-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
-}
-
-/* Special Card - UPDATED (removed meta section) */
-.special-card {
-    position: relative;
-    background: var(--color-bg-card);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-xl);
+    width: 100%;
+    height: 100%;
+    margin: 0;
     overflow: hidden;
-    transition: all var(--transition-base);
+    z-index: 0; /* Behind everything else in hero */
+    background: #000;
 }
 
-.special-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--color-border-hover);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+/* Integrated Slide Eyebrow */
+.slide-eyebrow {
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-primary);
+    margin-bottom: var(--space-xs);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Slide Base Styling */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, transform 10s ease-out; /* Slow cinematic zoom effect */
+    z-index: 1;
+    transform: scale(1.05); /* Start slightly zoomed in */
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 2;
+    transform: scale(1); /* Zoom out to normal size */
+}
+
+/* Dark Gradient Overlay for text readability */
+.slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.75) 0%,   /* Dark top for hero title legibility */
+        rgba(0, 0, 0, 0.2) 40%,   /* Clear middle to show food */
+        rgba(0, 0, 0, 0.95) 100%  /* Dark bottom for slide info legibility */
+    );
+    z-index: 2;
+}
+
+/* Text Content aligned to bottom right */
+.slide-content {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    padding: var(--space-3xl) 10vw calc(var(--space-3xl) + 40px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.slide-content > * {
+    pointer-events: auto; /* Re-enable clicks for buttons/text */
 }
 
 .special-badge {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-sm);
+    display: inline-block;
     padding: 6px 12px;
     border-radius: var(--radius-md);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: var(--shadow-md);
-    z-index: 10;
+    margin-bottom: var(--space-md);
 }
 
 .special-badge.discount {
@@ -1623,61 +1704,69 @@ h6 {
     color: white;
 }
 
-.special-content {
-    display: flex;
-    gap: var(--space-lg);
-}
-
-.special-image {
-    width: 240px;
-    height: 174px;
-    /* 16:9 Ratio */
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-lg);
-    position: relative;
-    /* For badge placement */
-}
-
-.special-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.special-details {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.special-title {
-    font-size: var(--text-xl);
-    font-weight: var(--font-bold);
-    margin-bottom: var(--space-xs);
-    line-height: 1.2;
-}
-
-.special-description {
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
+.slide-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    color: #ffffff;
     margin-bottom: var(--space-md);
-    flex: 1;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    max-width: 900px;
+    line-height: 1.1;
 }
 
-.special-footer {
+.slide-description {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 600px;
+    margin-bottom: var(--space-xl);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    line-height: 1.6;
+}
+
+.slide-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
+    gap: var(--space-xl);
 }
 
-.special-price {
+.slide-price {
     display: flex;
     align-items: baseline;
     gap: var(--space-sm);
+}
+
+/* Pagination Dots */
+.slider-pagination {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    outline: none;
+}
+
+.slider-dot:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.slider-dot.active {
+    background: #ffffff;
+    border-color: #ffffff;
+    transform: scale(1.4);
 }
 
 .price-current {
@@ -3389,23 +3478,28 @@ textarea::placeholder {
     .hero-stats {
         flex-direction: row;
         align-items: center;
-        justify-content: space-between; /* Better for tight spaces */
+        justify-content: space-between;
+        /* Better for tight spaces */
         width: 100%;
-        max-width: 100%; /* Allow it to use full parent width */
-        gap: 8px; /* Tighten gap */
+        max-width: 100%;
+        /* Allow it to use full parent width */
+        gap: 8px;
+        /* Tighten gap */
         padding: 12px 10px;
         margin: 0 auto;
     }
 
     .stat-item {
         flex: 1;
-        min-width: 0; /* Important: allow shrinking below default min-width */
+        min-width: 0;
+        /* Important: allow shrinking below default min-width */
     }
 
     .stat-divider {
         display: block;
         width: 1px;
-        height: 20px; /* Shorter for tiny screens */
+        height: 20px;
+        /* Shorter for tiny screens */
         background: rgba(255, 255, 255, 0.15);
         margin: 0;
         flex-shrink: 0;
@@ -3417,7 +3511,8 @@ textarea::placeholder {
 
     .stat-label {
         font-size: 0.5rem;
-        white-space: nowrap; /* Keep it on one line but it will shrink if needed */
+        white-space: nowrap;
+        /* Keep it on one line but it will shrink if needed */
     }
 
     .stat-icon {
@@ -3535,9 +3630,7 @@ textarea::placeholder {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .specials-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    /* Removed .specials-grid override for tablet to maintain horizontal carousel */
 
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -3570,13 +3663,7 @@ textarea::placeholder {
         display: none;
     }
 
-    .navbar-menu {
-        display: flex;
-    }
-
-    .btn-waiter {
-        display: inline-flex;
-    }
+    /* btn-waiter and btn-navbar-action are now always visible */
 
     .hero-section {
         min-height: 100vh;
@@ -4760,22 +4847,8 @@ body.welcome-active {
    ========================================== */
 
 .mobile-bottom-nav {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.5rem 1rem;
-    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
-    z-index: 1000;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    display: none !important;
+    /* Bottom nav removed - buttons unified into top navbar */
 }
 
 @media (max-width: 768px) {
@@ -4784,8 +4857,7 @@ body.welcome-active {
     .modal {
         align-items: flex-start !important;
         padding-top: 5vh !important;
-        padding-bottom: 120px !important;
-        /* Large padding to clear nav */
+        padding-bottom: 20px !important;
         overflow-y: auto !important;
     }
 
@@ -4796,7 +4868,7 @@ body.welcome-active {
 
     .modal-content {
         max-height: none !important;
-        margin-bottom: 120px !important;
+        margin-bottom: 20px !important;
     }
 
     .modal-body {
@@ -4869,16 +4941,9 @@ body.welcome-active {
     border: 2px solid rgba(10, 10, 10, 0.95);
 }
 
-/* Show only on mobile/tablet */
+/* Mobile adjustments - bottom nav removed */
 @media (max-width: 768px) {
-    .mobile-bottom-nav {
-        display: flex;
-    }
-
-    /* Add padding to body so content doesn't get hidden behind nav */
-    body {
-        padding-bottom: 80px;
-    }
+    /* No bottom padding needed - bottom nav removed */
 
     /* Hide standard desktop nav items if visible */
     .navbar-menu {
@@ -4890,15 +4955,6 @@ body.welcome-active {
     /* Fix Issue 3: No need for floating cart on mobile */
     .floating-cart {
         display: none !important;
-    }
-
-    /* Hide mobile bottom nav on welcome screen */
-    body.welcome-active .mobile-bottom-nav {
-        display: none !important;
-    }
-
-    body.welcome-active {
-        padding-bottom: 0 !important;
     }
 }
 
@@ -4928,9 +4984,7 @@ body.welcome-active {
    FIX: SPECIALS GRID LAYOUT (TABLET/MOBILE)
    ========================================== */
 @media (max-width: 900px) {
-    .specials-grid {
-        grid-template-columns: 1fr !important;
-    }
+    /* Removed .specials-grid layout override since it's now flex */
 
     .special-card {
         padding: var(--space-lg) !important;

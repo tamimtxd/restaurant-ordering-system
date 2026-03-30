@@ -554,18 +554,49 @@ function initSpecialItems() {
         });
     });
 
-    // Special card click for details (Fix Issue: Not opening)
-    document.querySelectorAll('.special-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            // Find the button inside the card to get the ID
-            const btn = card.querySelector('.btn-special');
-            if (btn && !e.target.closest('.btn-add')) {
-                openItemModal(btn.dataset.id);
-            }
+    // Slider logic
+    const slides = document.querySelectorAll('.specials-slider .slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    let currentSlide = 0;
+    let slideInterval;
+
+    if (slides.length > 0) {
+        const showSlide = (index) => {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            if (dots[index]) dots[index].classList.add('active');
+            currentSlide = index;
+        };
+
+        const nextSlide = () => {
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        };
+
+        // Start auto-play
+        const startSlider = () => {
+            if (slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000);
+        };
+
+        // Handle dot clicks and hovers
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+                startSlider();
+            });
+            dot.addEventListener('mouseenter', () => {
+                showSlide(index);
+                startSlider();
+            });
         });
-        // Make it look clickable
-        card.style.cursor = 'pointer';
-    });
+
+        // Initialize first slide and start playback
+        showSlide(0);
+        startSlider();
+    }
 
     state.specialItemsInitialized = true;
 }
