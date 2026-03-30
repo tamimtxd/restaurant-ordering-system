@@ -554,6 +554,15 @@ function initSpecialItems() {
         });
     });
 
+    // Make special item content clickable for details
+    document.querySelectorAll('.slide-title, .slide-description, .special-rating').forEach(el => {
+        el.addEventListener('click', (e) => {
+            const slide = el.closest('.slide-content');
+            const btn = slide.querySelector('.btn-special');
+            if (btn) openItemModal(btn.dataset.id);
+        });
+    });
+
     // Slider logic
     const slides = document.querySelectorAll('.specials-slider .slide');
     const dots = document.querySelectorAll('.slider-dot');

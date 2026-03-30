@@ -44,6 +44,34 @@ body.kitchen-body {
     z-index: 1000;
 }
 
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    font-size: 1.8rem;
+}
+
+.brand-text {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .brand-text {
+        gap: 6px;
+    }
+    .brand-text .brand-name {
+        font-size: 1.4rem;
+    }
+    .brand-tagline {
+        font-size: 0.7rem;
+    }
+}
+
 .brand-text .brand-name {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -52,6 +80,16 @@ body.kitchen-body {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+.brand-tagline {
+    font-size: 0.85rem;
+    color: var(--primary-orange);
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
 }
 
 /* Search Bar */
@@ -123,6 +161,52 @@ body.kitchen-body {
     color: var(--primary-orange);
 }
 
+/* Manual Refresh Button (Icon Only) */
+.btn-refresh-icon {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.btn-refresh-icon:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary-orange);
+    color: var(--primary-orange);
+    transform: rotate(45deg);
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+}
+
+.refreshing {
+    animation: rotate 1s linear infinite !important;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.no-label {
+    padding: 0.4rem !important;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 /* Mobile Tabs */
 .mobile-tabs-container {
@@ -548,7 +632,17 @@ body.kitchen-body {
     }
 
     .nav-search {
-        display: none;
+        display: flex;
+        flex: 1;
+        margin: 0 10px;
+    }
+
+    .search-wrapper {
+        padding: 0.4rem 0.8rem;
+    }
+
+    .search-wrapper input {
+        font-size: 0.85rem;
     }
 
     /* Search on mobile via small icon or modal would be better, but for now just hide */
@@ -579,10 +673,6 @@ body.kitchen-body {
 }
 
 @media (max-width: 480px) {
-    .nav-brand .brand-tagline {
-        display: none;
-    }
-
     .nav-stats .stat-item {
         padding: 4px 8px;
         font-size: 0.8rem;

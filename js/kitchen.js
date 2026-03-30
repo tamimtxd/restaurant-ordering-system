@@ -29,14 +29,13 @@ const DOM = {
         'ready': document.getElementById('mobile-count-ready'),
         'served': document.getElementById('mobile-count-served')
     },
-    totalActive: document.getElementById('totalActiveCount'),
     notificationSound: document.getElementById('orderSound'),
-    connectionStatus: document.getElementById('connectionStatus'),
     orderSearch: document.getElementById('orderSearch'),
     clearSearch: document.getElementById('clearSearch'),
     mobileTabs: document.querySelectorAll('.mobile-tab'),
     columns: document.querySelectorAll('.order-column'),
-    serviceAlerts: document.getElementById('serviceAlerts')
+    serviceAlerts: document.getElementById('serviceAlerts'),
+    manualRefresh: document.getElementById('manualRefresh')
 };
 
 /**
@@ -87,6 +86,25 @@ function setupEventListeners() {
             switchMobileColumn(columnId);
         });
     });
+    // Manual Refresh
+    if (DOM.manualRefresh) {
+        DOM.manualRefresh.addEventListener('click', () => {
+            DOM.manualRefresh.classList.add('refreshing');
+            Promise.all([
+                fetchActiveOrders(),
+                fetchWaiterCalls()
+            ]).finally(() => {
+                setTimeout(() => DOM.manualRefresh.classList.remove('refreshing'), 500);
+            });
+        });
+    }
+
+    // Refresh on focus
+    window.addEventListener('focus', () => {
+        console.log('Window focused: Refreshing data...');
+        fetchActiveOrders();
+        fetchWaiterCalls();
+    });
 }
 
 /**
@@ -107,22 +125,59 @@ function switchMobileColumn(columnId) {
 }
 
 /**
- * Fetch orders that are not served yet
+ * Fetch orders that are not served yet, plus a small history of served orders
  */
 async function fetchActiveOrders() {
     try {
-        console.log('Fetching active orders...');
-        const { data, error } = await supabaseClient
+        console.log('Fetching orders from Supabase...');
+        
+        // 1. Fetch all active orders (received, preparing, ready)
+        // This ensures the kitchen never "loses" an order that needs action
+        const { data: activeData, error: activeError } = await supabaseClient
             .from('orders')
             .select('*')
-            .order('created_at', { ascending: false })
-            .limit(100);
+            .in('status', ['received', 'preparing', 'ready'])
+            .order('created_at', { ascending: true }); // Oldest first for active
 
-        if (error) throw error;
-        orders = data || [];
+        if (activeError) throw activeError;
+
+        // 2. Fetch recent history (served)
+        const { data: servedData, error: servedError } = await supabaseClient
+            .from('orders')
+            .select('*')
+            .eq('status', 'served')
+            .order('created_at', { ascending: false })
+            .limit(15);
+
+        if (servedError) throw servedError;
+
+        // Combine and update state
+        const allOrders = [...(activeData || []), ...(servedData || [])];
+        
+        // Use a Set to ensure uniqueness if any duplicates occur during merge
+        const uniqueOrders = [];
+        const seenIds = new Set();
+        
+        allOrders.forEach(o => {
+            if (!seenIds.has(o.id)) {
+                uniqueOrders.push(o);
+                seenIds.add(o.id);
+            }
+        });
+
+        orders = uniqueOrders;
+        console.log(`Successfully fetched ${orders.length} orders total (${(activeData || []).length} active).`);
         renderDashboard();
     } catch (err) {
-        console.error('Error fetching orders:', err.message);
+        console.error('CRITICAL: Error fetching orders:', err.message);
+        // If we have no orders at all, maybe show a warning in the UI
+        if (orders.length === 0) {
+            const statusEl = document.getElementById('connectionStatus');
+            if (statusEl) {
+                statusEl.textContent = 'Offline - Error Loading Orders';
+                statusEl.className = 'status-badge status-offline';
+            }
+        }
     }
 }
 
@@ -160,7 +215,9 @@ function setupRealtime() {
         }, (payload) => {
             handleOrderUpdate(payload);
         })
-        .subscribe();
+        .subscribe((status) => {
+            console.log('Orders Channel Status:', status);
+        });
 
     // Waiter Calls Channel
     const waiterChannel = supabaseClient
@@ -173,18 +230,13 @@ function setupRealtime() {
             handleWaiterUpdate(payload);
         })
         .subscribe((status) => {
-            if (status === 'TIMED_OUT' || status === 'CLOSED') {
-                if (!pollingInterval) startPollingFallback();
-            }
+            // No action needed for waiter status anymore
         });
 }
 
 function startPollingFallback() {
-    if (pollingInterval) clearInterval(pollingInterval);
-    pollingInterval = setInterval(() => {
-        fetchActiveOrders();
-        fetchWaiterCalls();
-    }, 5000);
+    // Polling removed as per user request
+    console.log('Polling fallback disabled.');
 }
 
 /**
@@ -359,8 +411,6 @@ function renderDashboard() {
             }
         }
     });
-
-    if (DOM.totalActive) DOM.totalActive.textContent = activeTotal;
 }
 
 /**
