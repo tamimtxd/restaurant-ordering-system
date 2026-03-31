@@ -468,7 +468,7 @@
                         <ul class="footer-links">
                             <li>
                                 <span class="footer-icon">📍</span>
-                                <span>Mirpur, Dhaka-1216</span>
+                                <a href="https://maps.app.goo.gl/3uwBWRVSph2sTfhd8">Mirpur, Dhaka-1216</a>
                             </li>
                             <li>
                                 <span class="footer-icon">📞</span>
@@ -679,17 +679,39 @@
                 </button>
 
                 <div class="item-modal-content">
-                    <div class="item-modal-icon" id="itemModalIcon">🍛</div>
-                    <div class="item-modal-details">
-                        <h3 id="itemModalTitle" class="item-modal-title">Item Name</h3>
-                        <p id="itemModalDesc" class="item-modal-description">Description</p>
+                    <!-- Left Column: Image & Details -->
+                    <div class="item-modal-info-column">
+                        <div class="item-modal-icon" id="itemModalIcon">🍛</div>
 
-                        <div class="item-modal-meta">
-                            <div id="itemModalSpicy" class="spicy-level"></div>
-                            <div class="item-modal-category" id="itemModalCategory">Category</div>
+                        <div class="item-modal-details">
+                            <h3 id="itemModalTitle" class="item-modal-title">Item Name</h3>
+                            <p id="itemModalDesc" class="item-modal-description">Description</p>
+
+                            <div class="item-modal-meta">
+                                <div id="itemModalSpicy" class="spicy-level"></div>
+                                <div class="item-modal-category" id="itemModalCategory">Category</div>
+                            </div>
+
+                            <div class="item-modal-footer">
+                                <div class="item-modal-price">
+                                    <span id="itemModalPrice" class="gradient-text"><span
+                                            class="currency">৳</span>0</span>
+                                </div>
+                                <div class="item-quantity-selector">
+                                    <button class="qty-btn" id="itemQtyMinus" aria-label="Decrease quantity">−</button>
+                                    <span class="qty-value" id="itemQtyValue" aria-label="Quantity">1</span>
+                                    <button class="qty-btn" id="itemQtyPlus" aria-label="Increase quantity">+</button>
+                                </div>
+                            </div>
+
+                            <button id="addItemToCart" class="btn btn-primary btn-block" aria-label="Add item to cart">
+                                Add to Cart - <span id="itemTotalPrice"><span class="currency">৳</span>0</span>
+                            </button>
                         </div>
+                    </div>
 
-                        <!-- Average Rating Display -->
+                    <!-- Right Column: Reviews -->
+                    <div class="item-modal-reviews-column">
                         <div id="itemModalRating" class="item-modal-rating">
                             <div class="item-avg-rating">
                                 <span class="avg-rating-stars">⭐</span>
@@ -698,7 +720,6 @@
                             </div>
                         </div>
 
-                        <!-- Reviews Section -->
                         <div id="itemModalReviews" class="item-modal-reviews">
                             <h4 class="reviews-title">Customer Reviews</h4>
                             <div id="itemReviewsList" class="reviews-list">
@@ -708,21 +729,6 @@
                                 <span>No reviews yet</span>
                             </div>
                         </div>
-
-                        <div class="item-modal-footer">
-                            <div class="item-modal-price">
-                                <span id="itemModalPrice" class="gradient-text"><span class="currency">৳</span>0</span>
-                            </div>
-                            <div class="item-quantity-selector">
-                                <button class="qty-btn" id="itemQtyMinus" aria-label="Decrease quantity">−</button>
-                                <span class="qty-value" id="itemQtyValue" aria-label="Quantity">1</span>
-                                <button class="qty-btn" id="itemQtyPlus" aria-label="Increase quantity">+</button>
-                            </div>
-                        </div>
-
-                        <button id="addItemToCart" class="btn btn-primary btn-block" aria-label="Add item to cart">
-                            Add to Cart - <span id="itemTotalPrice"><span class="currency">৳</span>0</span>
-                        </button>
                     </div>
                 </div>
             </div>
