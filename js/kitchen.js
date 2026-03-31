@@ -49,10 +49,22 @@ async function init() {
         fetchActiveOrders(),
         fetchWaiterCalls()
     ]);
+    // Setup Realtime connection (Instant updates)
     setupRealtime();
 
-    // Refresh elapsed time every 30 seconds for higher precision
-    setInterval(renderDashboard, 30000);
+    // Background Sync Loop: Ensures data stays current even if Realtime is throttled/dropped
+    // Runs every 5 seconds as a robust fallback for cross-device updates
+    setInterval(async () => {
+        console.log('Background sync check...');
+        await Promise.all([
+            fetchActiveOrders(),
+            fetchWaiterCalls()
+        ]);
+        renderDashboard();
+    }, 5000);
+
+    // Initial render
+    renderDashboard();
 }
 
 /**
@@ -257,6 +269,7 @@ function startPollingFallback() {
  * Handle Realtime Payloads for Waiter
  */
 function handleWaiterUpdate(payload) {
+    console.log('Realtime Waiter Update Received:', payload.eventType, payload.new?.id);
     const { eventType, new: newRecord, old: oldRecord } = payload;
 
     if (eventType === 'INSERT') {
@@ -325,6 +338,7 @@ async function resolveServiceAlert(id) {
  * Handle Realtime Payloads for Orders
  */
 function handleOrderUpdate(payload) {
+    console.log('Realtime Order Update Received:', payload.eventType, payload.new?.order_number);
     const { eventType, new: newRecord, old: oldRecord } = payload;
 
     if (eventType === 'INSERT') {

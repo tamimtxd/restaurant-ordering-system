@@ -56,33 +56,14 @@ body.kitchen-body {
 
 .brand-text {
     display: flex;
-    align-items: baseline;
-    gap: 10px;
+    flex-direction: column;
+    gap: 2px;
 }
 
-@media (max-width: 600px) {
-    .brand-text {
-        gap: 6px;
-    }
-
-    .brand-text .brand-name {
-        font-size: 1.4rem;
-    }
-
-    .brand-tagline {
-        font-size: 0.7rem;
-    }
-}
-
-.brand-text .brand-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary-orange), #FFD700);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1.2;
+.brand-sub-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .brand-tagline {
@@ -92,6 +73,15 @@ body.kitchen-body {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 500;
+}
+
+@media (max-width: 600px) {
+    .brand-text .brand-name {
+        font-size: 1.4rem;
+    }
+    .brand-tagline {
+        font-size: 0.65rem;
+    }
 }
 
 /* Search Bar */
