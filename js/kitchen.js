@@ -99,11 +99,25 @@ function setupEventListeners() {
         });
     }
 
-    // Refresh on focus
+    // Refresh on visibility change (more robust than focus)
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            console.log('Tab visible: Synchronizing data...');
+            Promise.all([
+                fetchActiveOrders(),
+                fetchWaiterCalls()
+            ]);
+            // Ensure real-time is still healthy
+            setupRealtime();
+        }
+    });
+
+    // Also keep focus as a backup for some browsers
     window.addEventListener('focus', () => {
-        console.log('Window focused: Refreshing data...');
-        fetchActiveOrders();
-        fetchWaiterCalls();
+        if (document.visibilityState === 'visible') {
+            fetchActiveOrders();
+            fetchWaiterCalls();
+        }
     });
 }
 
