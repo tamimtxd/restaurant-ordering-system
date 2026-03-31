@@ -5313,20 +5313,6 @@ body.welcome-active {
     object-fit: cover !important;
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-    .scanner-section {
-        padding: 15px;
-    }
-
-    .scanner-icon {
-        font-size: 2rem;
-    }
-
-    .scanner-title {
-        font-size: 1rem;
-    }
-}
 
 /* Premium Table Selection Styling */
 .table-grid-premium {
@@ -5393,23 +5379,6 @@ body.welcome-active {
     font-family: 'Poppins', sans-serif;
 }
 
-@media (max-width: 480px) {
-    .table-grid-premium {
-        gap: 10px;
-    }
-
-    .table-card-premium {
-        padding: 20px 10px;
-    }
-
-    .table-card-icon {
-        font-size: 1.5rem;
-    }
-
-    .table-card-number {
-        font-size: 0.9rem;
-    }
-}
 
 /* ==========================================
    21. RATING SYSTEM
@@ -5556,13 +5525,6 @@ body.welcome-active {
     flex: 1;
 }
 
-/* Actions */
-.rating-actions {
-    display: flex;
-    gap: var(--space-sm);
-    padding: var(--space-lg) var(--space-lg) var(--space-lg);
-    border-top: 1px solid var(--color-border);
-}
 
 /* Rated badge in order history */
 .order-item-rating {
@@ -5611,30 +5573,6 @@ body.welcome-active {
     margin-top: var(--space-sm);
 }
 
-/* Mobile responsive */
-@media (max-width: 480px) {
-    .rating-item-row {
-        gap: var(--space-sm);
-        padding: var(--space-sm);
-    }
-
-    .rating-item-thumb {
-        width: 44px;
-        height: 44px;
-    }
-
-    .star-btn {
-        font-size: 1.3rem;
-    }
-
-    .rating-actions {
-        padding: var(--space-md);
-    }
-
-    .rating-items-list {
-        max-height: 50vh;
-    }
-}
 
 /* ==========================================
    22. FOOD CARD & ITEM MODAL RATINGS
@@ -5779,9 +5717,19 @@ body.welcome-active {
     font-style: italic;
 }
 
-/* Mobile responsive for reviews */
+/* Unified Mobile Adjustments */
 @media (max-width: 480px) {
-    .reviews-list {
-        max-height: 140px;
-    }
+    .scanner-section { padding: 15px; }
+    .scanner-icon { font-size: 2rem; }
+    .scanner-title { font-size: 1rem; }
+    .table-grid-premium { gap: 10px; }
+    .table-card-premium { padding: 20px 10px; }
+    .table-card-icon { font-size: 1.5rem; }
+    .table-card-number { font-size: 0.9rem; }
+    .rating-item-row { gap: var(--space-sm); padding: var(--space-sm); }
+    .rating-item-thumb { width: 44px; height: 44px; }
+    .star-btn { font-size: 1.3rem; }
+    .rating-actions { padding: var(--space-md); }
+    .rating-items-list { max-height: 50vh; }
+    .reviews-list { max-height: 140px; }
 }
