@@ -624,12 +624,12 @@ h6 {
     left: 0;
     right: 0;
     height: var(--navbar-height);
-    background: rgba(26, 10, 0, 0.7);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(18, 12, 10, 0.7); /* Deep dark glass */
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     z-index: var(--z-sticky);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .navbar.scrolled {
@@ -664,7 +664,7 @@ h6 {
 .brand-logo {
     width: 44px;
     height: 44px;
-    border-radius: 12px;
+    border-radius: 14px; /* More rounded squircle */
     background: var(--gradient-primary);
     display: flex;
     align-items: center;
@@ -748,17 +748,19 @@ h6 {
 }
 
 .order-badge {
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
     background: var(--color-primary);
-    color: var(--color-text-primary);
-    font-size: var(--text-xs);
-    font-weight: var(--font-bold);
-    border-radius: var(--radius-full);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid rgba(18, 12, 10, 0.8);
+    box-shadow: 0 2px 8px rgba(255, 140, 0, 0.4);
 }
 
 /* Navbar Actions Refined */
@@ -773,19 +775,19 @@ h6 {
     display: inline-flex;
     align-items: center;
     gap: var(--space-sm);
-    padding: 10px 22px;
-    border-radius: var(--radius-full);
+    padding: 9px 20px;
+    border-radius: 50px; /* Pill shaped */
     border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--color-text-primary);
+    background: rgba(255, 255, 255, 0.03);
+    color: #ffffff;
     font-size: var(--text-sm);
     font-weight: 600;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Compact buttons on mobile */
@@ -812,9 +814,14 @@ h6 {
     }
 
     .btn-cart {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
+        padding: 8px 14px;
+        border-radius: 50px;
+        width: auto;
+        height: auto;
+    }
+
+    .btn-cart .btn-text {
+        display: none;
     }
 }
 
@@ -839,9 +846,10 @@ h6 {
 
 .btn-waiter:hover,
 .btn-navbar-action:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 140, 0, 0.35); /* Subtle brand glow */
     transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 140, 0, 0.15);
 }
 
 .btn-waiter .btn-icon,
@@ -859,24 +867,30 @@ h6 {
     z-index: 5;
 }
 
-/* Cart Button Modernized */
 .btn-cart {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: var(--gradient-primary);
-    border: none;
-    display: flex;
+    border-radius: 50px; /* Pill shaped like the others */
+    width: auto;
+    height: auto;
+    padding: 9px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: var(--space-sm);
     position: relative;
-    box-shadow: 0 8px 20px rgba(255, 46, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    will-change: transform;
 }
 
 .btn-cart:hover {
-    transform: scale(1.05) translateY(-2px);
-    box-shadow: 0 12px 25px rgba(255, 46, 0, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    border-color: rgba(255, 140, 0, 0.35);
+    box-shadow: 0 8px 25px rgba(255, 140, 0, 0.15);
 }
 
 .cart-icon {
@@ -887,21 +901,22 @@ h6 {
 
 .cart-count {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    background: var(--color-primary-dark);
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: var(--color-primary);
     color: #ffffff;
-    font-weight: 700;
-    min-width: 20px;
-    height: 20px;
     font-size: 10px;
-    border-radius: var(--radius-full);
+    font-weight: 800;
+    border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
-    border: 2px solid #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(18, 12, 10, 0.8);
+    box-shadow: 0 2px 8px rgba(255, 140, 0, 0.4);
+    z-index: 5;
     pointer-events: none;
 }
 
@@ -1791,12 +1806,13 @@ h6 {
     align-items: center;
     gap: 8px;
     margin-bottom: var(--space-xl);
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
     width: fit-content;
-    padding: 8px 16px;
-    border-radius: var(--radius-full);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 6px 16px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
 }
@@ -1804,7 +1820,7 @@ h6 {
 .special-rating:hover {
     background: rgba(255, 255, 255, 0.12);
     transform: translateY(-2px);
-    border-color: var(--color-primary);
+    border-color: rgba(255, 140, 0, 0.2);
 }
 
 .special-rating .card-rating-star {
@@ -2457,7 +2473,16 @@ h6 {
 .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: var(--color-bg-overlay);
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 0.5s linear;
+    will-change: opacity;
+}
+
+.modal.visible .modal-backdrop {
+    opacity: 1;
 }
 
 .modal-container {
@@ -2473,10 +2498,24 @@ h6 {
     position: relative;
     width: 100%;
     max-height: 100vh;
-    background: #2a1a10;
+    background: rgba(18, 12, 10, 0.65);
+    /* Even deeper dark glass */
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-2xl);
     overflow: hidden;
-    animation: modalSlideUp var(--transition-base);
+    /* Smooth 2-way Transition instead of 1-way animation */
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+}
+
+.modal.visible .modal-content {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 .modal-sm {
@@ -2957,7 +2996,7 @@ h6 {
 }
 
 .item-modal-info-column {
-    flex: 1.2;
+    flex: 2;
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
@@ -2985,13 +3024,15 @@ h6 {
 
     .item-modal-info-column {
         padding: var(--space-xl);
-        background: rgba(255, 255, 255, 0.02);
+        background: transparent;
+        /* Let the modal-content glass show through */
     }
 
     .item-modal-reviews-column {
         padding: var(--space-xl);
-        border-left: 1px solid var(--color-border);
-        background: rgba(0, 0, 0, 0.1);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.15);
+        /* Subtle dark glass overlay */
         max-width: 420px;
         display: flex;
         flex-direction: column;
@@ -3048,6 +3089,7 @@ h6 {
     align-items: center;
     gap: var(--space-md);
     margin-bottom: var(--space-lg);
+    display: none;
 }
 
 .item-modal-category {
@@ -3603,12 +3645,12 @@ textarea::placeholder {
 }
 
 @keyframes modalSlideUp {
-    from {
+    0% {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(40px) scale(0.92);
     }
 
-    to {
+    100% {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
@@ -5592,8 +5634,22 @@ body.welcome-active {
 .food-card-rating {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 3px 10px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.food-card-rating:hover {
+    background: rgba(0, 0, 0, 0.6);
+    transform: translateY(-2px);
+    border-color: rgba(255, 140, 0, 0.2);
 }
 
 .card-rating-star {
@@ -5614,10 +5670,25 @@ body.welcome-active {
 
 /* Item Modal Rating Display */
 .item-modal-rating {
-    padding: var(--space-sm) var(--space-md);
-    background: rgba(255, 215, 0, 0.08);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 215, 0, 0.15);
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    /* Matching review-card */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Matching review-card border */
+    width: fit-content;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.item-modal-rating:hover {
+    background: rgba(255, 255, 255, 0.06);
+    /* Matching review-card hover */
+    transform: translateY(-2px);
+    border-color: rgba(255, 140, 0, 0.2);
+    /* Matching review-card hover border */
 }
 
 .item-avg-rating {
@@ -5719,17 +5790,57 @@ body.welcome-active {
 
 /* Unified Mobile Adjustments */
 @media (max-width: 480px) {
-    .scanner-section { padding: 15px; }
-    .scanner-icon { font-size: 2rem; }
-    .scanner-title { font-size: 1rem; }
-    .table-grid-premium { gap: 10px; }
-    .table-card-premium { padding: 20px 10px; }
-    .table-card-icon { font-size: 1.5rem; }
-    .table-card-number { font-size: 0.9rem; }
-    .rating-item-row { gap: var(--space-sm); padding: var(--space-sm); }
-    .rating-item-thumb { width: 44px; height: 44px; }
-    .star-btn { font-size: 1.3rem; }
-    .rating-actions { padding: var(--space-md); }
-    .rating-items-list { max-height: 50vh; }
-    .reviews-list { max-height: 140px; }
+    .scanner-section {
+        padding: 15px;
+    }
+
+    .scanner-icon {
+        font-size: 2rem;
+    }
+
+    .scanner-title {
+        font-size: 1rem;
+    }
+
+    .table-grid-premium {
+        gap: 10px;
+    }
+
+    .table-card-premium {
+        padding: 20px 10px;
+    }
+
+    .table-card-icon {
+        font-size: 1.5rem;
+    }
+
+    .table-card-number {
+        font-size: 0.9rem;
+    }
+
+    .rating-item-row {
+        gap: var(--space-sm);
+        padding: var(--space-sm);
+    }
+
+    .rating-item-thumb {
+        width: 44px;
+        height: 44px;
+    }
+
+    .star-btn {
+        font-size: 1.3rem;
+    }
+
+    .rating-actions {
+        padding: var(--space-md);
+    }
+
+    .rating-items-list {
+        max-height: 50vh;
+    }
+
+    .reviews-list {
+        max-height: 140px;
+    }
 }
