@@ -39,7 +39,7 @@
     --color-primary-light: #FFD700;
 
     /* Colors - Background */
-    --color-bg-dark: #1a0a00;
+    --color-bg-dark: #0d0500;
     --color-bg-card: rgba(255, 255, 255, 0.05);
     --color-bg-card-hover: rgba(255, 255, 255, 0.08);
     --color-bg-overlay: rgba(0, 0, 0, 0.8);
@@ -184,7 +184,8 @@ body {
     font-weight: var(--font-normal);
     line-height: var(--leading-normal);
     color: var(--color-text-primary);
-    background-color: var(--color-bg-dark);
+    background: radial-gradient(circle at top center, #160a03 0%, var(--color-bg-dark) 80%);
+    background-attachment: fixed;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -624,7 +625,8 @@ h6 {
     left: 0;
     right: 0;
     height: var(--navbar-height);
-    background: rgba(18, 12, 10, 0.7); /* Deep dark glass */
+    background: rgba(18, 12, 10, 0.7);
+    /* Deep dark glass */
     backdrop-filter: blur(15px) saturate(180%);
     -webkit-backdrop-filter: blur(15px) saturate(180%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -664,7 +666,8 @@ h6 {
 .brand-logo {
     width: 44px;
     height: 44px;
-    border-radius: 14px; /* More rounded squircle */
+    border-radius: 14px;
+    /* More rounded squircle */
     background: var(--gradient-primary);
     display: flex;
     align-items: center;
@@ -776,7 +779,8 @@ h6 {
     align-items: center;
     gap: var(--space-sm);
     padding: 9px 20px;
-    border-radius: 50px; /* Pill shaped */
+    border-radius: 50px;
+    /* Pill shaped */
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.03);
     color: #ffffff;
@@ -847,7 +851,8 @@ h6 {
 .btn-waiter:hover,
 .btn-navbar-action:hover {
     background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 140, 0, 0.35); /* Subtle brand glow */
+    border-color: rgba(255, 140, 0, 0.35);
+    /* Subtle brand glow */
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 140, 0, 0.15);
 }
@@ -868,7 +873,8 @@ h6 {
 }
 
 .btn-cart {
-    border-radius: 50px; /* Pill shaped like the others */
+    border-radius: 50px;
+    /* Pill shaped like the others */
     width: auto;
     height: auto;
     padding: 9px 20px;
@@ -1197,7 +1203,8 @@ h6 {
     inset: 0;
     overflow: hidden;
     z-index: 0;
-    background: radial-gradient(circle at 50% -20%, #2a1a10 0%, #1a0a00 100%);
+    background: transparent;
+    /* Changed from hard gradient to allow seamless body gradient blend */
 }
 
 .mesh-gradient {
@@ -1498,7 +1505,6 @@ h6 {
 
 .menu-section {
     padding: var(--space-3xl) 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* Search Container */
@@ -1659,7 +1665,7 @@ h6 {
     overflow: hidden;
     z-index: 0;
     /* Behind everything else in hero */
-    background: #000;
+    background: transparent;
 }
 
 /* Integrated Slide Eyebrow */
@@ -1704,6 +1710,8 @@ h6 {
     /* Start more zoomed for better effect */
     transition: transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     will-change: transform;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 85%);
+    mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 85%);
 }
 
 .slide.active .slide-bg {
@@ -1724,6 +1732,8 @@ h6 {
             /* Dark bottom for slide info legibility */
         );
     z-index: 2;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 85%);
+    mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 85%);
 }
 
 /* Text Content aligned to bottom right */
@@ -1732,7 +1742,8 @@ h6 {
     bottom: 0;
     right: 0;
     width: 100%;
-    padding: var(--space-3xl) 10vw calc(var(--space-3xl) + 40px);
+    /* Increased bottom padding even more to lift text and buttons significantly off the bottom */
+    padding: var(--space-3xl) 10vw calc(var(--space-3xl) + 160px);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -1910,12 +1921,13 @@ h6 {
 /* Pagination Dots */
 .slider-pagination {
     position: absolute;
-    bottom: 30px;
+    /* Lifted dots significantly off the bottom */
+    bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 12px;
-    z-index: 10;
+    z-index: 50;
 }
 
 .slider-dot {
@@ -2148,9 +2160,9 @@ h6 {
     width: 100%;
     max-width: 420px;
     height: 100%;
-    background: rgba(26, 10, 0, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(17, 9, 3, 0.7);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border-left: 1px solid var(--color-border);
     z-index: 2500;
     transform: translateX(100%);
@@ -2462,7 +2474,7 @@ h6 {
     padding: var(--space-md);
     opacity: 0;
     visibility: hidden;
-    transition: all var(--transition-base);
+    transition: opacity var(--transition-base), visibility var(--transition-base);
 }
 
 .modal.visible {
@@ -2475,7 +2487,7 @@ h6 {
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(5px);
     opacity: 0;
     transition: opacity 0.5s linear;
     will-change: opacity;
@@ -2498,17 +2510,15 @@ h6 {
     position: relative;
     width: 100%;
     max-height: 100vh;
-    background: rgba(18, 12, 10, 0.65);
-    /* Even deeper dark glass */
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    background: rgb(17 9 3 / 80%);
+    /* Made background more solid since we removed the inner blur to stop the black flash crash */
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-2xl);
     overflow: hidden;
-    /* Smooth 2-way Transition instead of 1-way animation */
+    /* Explicitly transition only opacity and transform, avoiding 'all' which crashes backdrop-filter rendering on open */
     opacity: 0;
     transform: translateY(40px) scale(0.95);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
 }
@@ -3157,7 +3167,7 @@ h6 {
 
 .food-card-content {
     position: relative;
-    padding: var(--space-lg);
+    padding: var(--space-xl);
 }
 
 .food-card-header {
@@ -3170,11 +3180,11 @@ h6 {
 .food-card-image {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     /* Changed from 1 to rectangular 16:10 */
     overflow: hidden;
     background: var(--color-bg-dark);
-    border-radius: var(--radius-2xl);
+    /* border-radius: var(--radius-2xl); */
 }
 
 .food-card-image img {
@@ -4182,10 +4192,10 @@ textarea::placeholder {
 /* ==========================================
    MENU ITEMS SIZE OPTIMIZATION
    ========================================== */
-.food-card,
+/* .food-card,
 .special-card {
     padding: 1rem !important;
-}
+} */
 
 .food-card .food-emoji,
 .special-card .special-emoji {
@@ -4222,10 +4232,10 @@ textarea::placeholder {
         font-size: 0.7rem;
     }
 
-    .food-card,
+    /* .food-card,
     .special-card {
         padding: 0.875rem !important;
-    }
+    } */
 
     .food-card .food-emoji,
     .special-card .special-emoji {
@@ -5790,6 +5800,16 @@ body.welcome-active {
 
 /* Unified Mobile Adjustments */
 @media (max-width: 480px) {
+
+    /* Compress slider spacing to fit tightly on phone screens */
+    .slide-content {
+        padding: var(--space-lg) var(--space-xl) calc(var(--space-lg) + 80px);
+    }
+
+    .slider-pagination {
+        bottom: 40px;
+    }
+
     .scanner-section {
         padding: 15px;
     }
