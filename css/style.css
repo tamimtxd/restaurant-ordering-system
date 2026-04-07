@@ -5197,7 +5197,7 @@ body.welcome-active {
     z-index: 100;
     background: linear-gradient(135deg, #1a0a00 0%, #2d1810 100%);
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
     padding: 1rem;
     overflow-y: auto;
