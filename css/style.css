@@ -4367,7 +4367,7 @@ textarea::placeholder {
 /* Height-based adjustments */
 @media (max-height: 700px) {
     .hero-section {
-        min-height: auto;
+        min-height: 100%;
         padding-top: calc(var(--navbar-height) + var(--space-xl));
         padding-bottom: var(--space-xl);
     }
