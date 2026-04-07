@@ -65,6 +65,9 @@ async function init() {
 
     // Initial render
     renderDashboard();
+
+    // Initial Lucide icons render
+    if (window.lucide) lucide.createIcons();
 }
 
 /**
@@ -306,11 +309,13 @@ function renderServiceAlerts() {
     DOM.serviceAlerts.classList.remove('hidden');
     DOM.serviceAlerts.innerHTML = waiterCalls.map(call => `
         <div class="service-alert" data-call-id="${call.id}">
-            <span class="alert-icon">🔔</span>
+            <span class="alert-icon"><i data-lucide="bell"></i></span>
             <span class="alert-text">Table ${call.table_number} is calling!</span>
             <button class="btn-resolve-alert" onclick="resolveServiceAlert('${call.id}')">Handled</button>
         </div>
     `).join('');
+    
+    if (window.lucide) lucide.createIcons();
 }
 
 /**
@@ -428,7 +433,7 @@ function renderDashboard() {
                     const timeInfo = getTimeInfo(order.created_at);
                     const timeEl = card.querySelector('.time-elapsed');
                     if (timeEl) {
-                        const newTimeHtml = `<span class="time-icon">⏱️</span> ${timeInfo.label}`;
+                        const newTimeHtml = `<span class="time-icon"><i data-lucide="clock"></i></span> ${timeInfo.label}`;
                         if (timeEl.innerHTML !== newTimeHtml) {
                             timeEl.innerHTML = newTimeHtml;
                             // Also update classes for warnings
@@ -439,6 +444,8 @@ function renderDashboard() {
             }
         }
     });
+
+    if (window.lucide) lucide.createIcons();
 }
 
 /**
@@ -456,7 +463,7 @@ function createOrderCard(order) {
     } else if (order.status === 'ready') {
         actionBtn = `<button class="btn-kitchen btn-serve" onclick="updateStatus('${order.id}', 'served')">Serve</button>`;
     } else {
-        actionBtn = `<span class="served-badge">Served ✅</span>`;
+        actionBtn = `<span class="served-badge">Served <i data-lucide="check-circle"></i></span>`;
     }
 
     return `
@@ -479,7 +486,7 @@ function createOrderCard(order) {
             ${order.instructions ? `<div class="card-instructions">"${order.instructions}"</div>` : ''}
             <div class="card-footer">
                 <span class="time-elapsed ${timeInfo.textClass}">
-                    <span class="time-icon">⏱️</span> ${timeInfo.label}
+                    <span class="time-icon"><i data-lucide="clock"></i></span> ${timeInfo.label}
                 </span>
                 <div class="card-actions">
                     ${actionBtn}

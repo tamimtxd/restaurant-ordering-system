@@ -1,71 +1,99 @@
-# Modern Restaurant Ordering System
+<div align="center">
+  <img src="assets/images/Screenshot.png" alt="Rannaghor Banner" width="100%">
+  
+  <h1>Rannaghor</h1>
+  <p><strong>A Next-Generation Restaurant Ordering & Management System</strong></p>
 
-<p align="center">
-  <img src="assets/images/Screenshot.png" alt="Rannaghor Banner" width="500">
-</p>
+  <p>
+    <a href="https://tamimtxd.github.io/restaurant-ordering-system/" target="_blank" rel="noopener noreferrer"><strong>Explore the Live Demo »</strong></a>
+  </p>
+</div>
 
-A next-generation dining experience featuring **QR Code Table Detection**, **Real-time Status Tracking**, and a stunning **Glassmorphism UI**. Designed to streamline the ordering process with style and efficiency.
+***
 
-🔗 **Live Demo:** [https://tamimtxd.github.io/restaurant-ordering-system/](https://tamimtxd.github.io/restaurant-ordering-system/)
+## 📖 Overview
 
-## ✨ Features
+**Rannaghor** is a modern, high-performance web application designed to bridge the gap between dining customers and restaurant kitchens. Built entirely with vanilla web technologies and powered by Supabase for real-time synchronization, it delivers an app-like experience without requiring any downloads.
 
--   **Real-time Kitchen Dashboard**: A dedicated interface for staff to manage orders as they arrive, featuring instant synchronization and mobile-optimized search.
--   **Premium Desktop Experience**: A sophisticated two-column landscape modal for item details and customer reviews, designed for high-end desktop displays.
--   **Dynamic Menu**: Browse categories like Biriyani, Curry, Kebab, Snacks, and Desserts with cinematic slider backgrounds.
--   **Interactive Cart**: Add items, adjust quantities, and view real-time totals with automatic tax calculation.
--   **Order Tracking**: Visual status tracker synchronized across devices via Supabase.
--   **Table Management**: Automated QR code table selection flow with persistent session tracking.
--   **Ultra-Responsive Layout**: Fully optimized for everything from compact mobile screens to large desktop monitors.
+The system features a **luxury dark-mode Glassmorphic UI**, seamless order tracking, and a dedicated synchronization dashboard that allows staff to manage tables and orders in real-time.
 
-## 🛠️ Technologies Used
+## ✨ Key Features
 
--   **HTML5 & CSS3**: Modern structural semantic and advanced glassmorphism theming.
--   **JavaScript (ES6+)**: High-performance DOM manipulation and state management.
--   **Supabase**: Real-time PostgreSQL database for instant order synchronization across multiple devices.
--   **LocalStorage**: Secondary persistence for user preferences and offline cart recovery.
+### 🎨 Elite User Interface & Experience
+- **Cinematic Dark Mode & Glassmorphism:** A breathtaking modern aesthetic featuring frosted glass panels, deep mesh gradients, and tactile micro-animations.
+- **Fluid Responsiveness:** Built without relying heavily on media queries, utilizing advanced CSS `clamp()` functions to ensure typography and geometry scale flawlessly across mobile, tablet, and desktop displays.
+- **Dynamic Interactions:** Features sophisticated hover states, interactive light-shine effects on primary actions, and smooth physical push-scaling for intuitive feedback.
 
-## 📂 Project Structure
+### 🍽️ Customer Ordering System
+- **QR Code Table Detection:** Customers scan a QR code at their table to instantly launch the app assigned to their specific dining session.
+- **Interactive Menu:** A categorized, highly visual menu with a full-bleed hero slider for "Today's Specials".
+- **Real-Time Cart & Checkout:** Add items, modify quantities, and check out with instant tax calculations. No refreshing required.
+- **Live Order Tracking:** Customers watch their order status change in real-time as the kitchen prepares it (Received → Preparing → Ready).
 
-```
-rannaghor-website/
-├── index.html          # Main customer application
-├── kitchen.html        # Real-time kitchen staff dashboard
-├── qr-codes.html       # QR code table selection interface
+### 👨‍🍳 Kitchen Staff Dashboard
+- **Instant Synchronization:** Connected to the Supabase Realtime API, new orders appear instantly on the dashboard with a notification chime.
+- **Order Lifecycle Management:** Kitchen staff can smoothly transition orders through preparation stages.
+- **Staff Gateway:** Password-protected (`123`) authorization layer to prevent unauthorized access by customers.
+
+## 🛠️ Technology Stack
+
+Rannaghor is built to be fast, lightweight, and deployable anywhere. 
+
+*   **Frontend:** HTML5, CSS3 (Vanilla), JavaScript (ES6+). No heavy frameworks.
+*   **Design System:** Custom CSS tokens, advanced Flexbox/Grid layouts, CSS transitions, and keyframe animations.
+*   **Icons:** <a href="https://lucide.dev/" target="_blank" rel="noopener noreferrer">Lucide Icons</a> (Lightweight SVG integration).
+*   **Backend / Database:** <a href="https://supabase.com/" target="_blank" rel="noopener noreferrer">Supabase</a>. Handles PostgreSQL storage and WebSocket real-time event subscriptions.
+
+## 📂 Architecture & Project Structure
+
+```text
+rannaghor/
+├── index.html              # The main customer-facing application
+├── kitchen.html            # The secure real-time Kitchen Dashboard
+├── qr-codes.html           # Utility page for generating table connection QR codes
 ├── css/
-│   ├── style.css       # Global styles and primary UI components
-│   └── kitchen.css     # Specialized dashboard design system
+│   ├── style.css           # Global design system, animations, and main UI
+│   └── kitchen.css         # Specialized stylesheet for the dashboard grids
 ├── js/
-│   ├── script.js       # Core customer logic and cart management
-│   ├── kitchen.js      # Dashboard real-time synchronization logic
-│   └── supabase-config.js # Database connection and real-time settings
-├── assets/             # Food photography and brand assets
-└── README.md           # Project documentation
+│   ├── script.js           # Core state management, DOM logic, and cart math
+│   ├── kitchen.js          # Staff dashboard logic and order state mutations
+│   └── supabase-config.js  # Database initialization and realtime listeners
+└── assets/                 # High-resolution food photography and media
 ```
 
-## 🚀 Getting Started
+## 🚀 Quick Setup Guide
 
-To run this project locally:
+Want to run Rannaghor locally or fork the project for your own restaurant? 
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/tamimtxd/restaurant-ordering-system.git
-    ```
-2.  **Open `index.html`**: Simply open the file in your browser. 
-3.  **Real-time Support**: Ensure your Supabase credentials in `js/supabase-config.js` are active for cross-device sync.
+### 1. Clone the Repository
+```bash
+git clone https://github.com/tamimtxd/restaurant-ordering-system.git
+cd restaurant-ordering-system
+```
 
-## 🔮 Future Roadmap
+### 2. Configure Supabase (Optional but Recommended)
+Rannaghor functions with heavy caching and `localStorage` as a fallback, but the magic happens when connected to a live database.
+1. Create a free account at <a href="https://supabase.com/" target="_blank" rel="noopener noreferrer">Supabase</a>.
+2. Create a new project and initialize a table named **`orders`**.
+3. Obtain your `SUPABASE_URL` and `SUPABASE_KEY` from your project settings.
+4. Open the `js/supabase-config.js` file and replace the placeholder API credentials with yours.
 
--   [x] **Backend Integration**: Connected to Supabase real-time infrastructure.
--   [x] **Database**: Reliable PostgreSQL storage for persistence.
--   [x] **Kitchen Dashboard**: Dedicated professional interface for staff.
--   [ ] **Admin Panel**: Advanced menu management and analytics.
--   [ ] **Payment Gateway**: Integration of online payment processing.
+### 3. Launch
+Because it uses vanilla web architecture, you do not need Node.js or a build step.
+Simply open `index.html` in your favorite modern browser, or use a tool like VS Code Live Server to run it locally.
 
-## 📄 License
+## 🔮 Roadmap & Future Expansion
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is actively maintained. Upcoming milestones include:
 
----
+- [ ] **Dynamic Admin Panel:** A secure interface for restaurant managers to seamlessly add or edit menu items.
+- [ ] **Digital Checkout Flow:** Secure integration with payment gateways (e.g., Stripe) to allow customers to pay digitally.
+- [ ] **Advanced Analytics:** A dashboard for restaurant owners to track peak hours and revenue metrics.
+- [ ] **User Accounts:** Persistent profiles and order histories using Supabase Auth.
+- [ ] **Rewards System:** A simple loyalty program to reward frequent diners.
 
-Made with ❤️ in Bangladesh
+## 📄 License & Credits
+
+This project is open-sourced under the **MIT License**. You are free to copy, modify, and distribute the work for both personal and commercial use. 
+
+*Designed and Developed passionately in Bangladesh.* 🇧🇩

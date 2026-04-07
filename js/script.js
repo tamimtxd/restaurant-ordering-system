@@ -240,14 +240,16 @@ const DOM = {
     itemModalIcon: document.getElementById('itemModalIcon'),
     itemModalTitle: document.getElementById('itemModalTitle'),
     itemModalDesc: document.getElementById('itemModalDesc'),
-    itemModalSpicy: document.getElementById('itemModalSpicy'),
-    itemModalCategory: document.getElementById('itemModalCategory'),
     itemModalPrice: document.getElementById('itemModalPrice'),
     itemQtyMinus: document.getElementById('itemQtyMinus'),
     itemQtyValue: document.getElementById('itemQtyValue'),
     itemQtyPlus: document.getElementById('itemQtyPlus'),
     itemTotalPrice: document.getElementById('itemTotalPrice'),
     addItemToCart: document.getElementById('addItemToCart'),
+    itemModalAvgRating: document.getElementById('itemModalAvgRating'),
+    itemModalRatingCount: document.getElementById('itemModalRatingCount'),
+    itemReviewsList: document.getElementById('itemReviewsList'),
+    noReviews: document.getElementById('noReviews'),
 
     // Order Badges
     activeOrdersBadge: document.getElementById('activeOrdersBadge'),
@@ -270,8 +272,15 @@ const DOM = {
     itemModalAvgRating: document.getElementById('itemModalAvgRating'),
     itemModalRatingCount: document.getElementById('itemModalRatingCount'),
     itemReviewsList: document.getElementById('itemReviewsList'),
-    noReviews: document.getElementById('noReviews')
+    noReviews: document.getElementById('noReviews'),
+    kitchenAdminBtn: document.getElementById('kitchenAdminBtn'),
 };
+
+// ==========================================
+// 4. GLOBAL LISTENERS
+// ==========================================
+
+DOM.kitchenAdminBtn?.addEventListener('click', handleKitchenAdmin);
 
 // ==========================================
 // 4. INITIALIZATION
@@ -301,6 +310,9 @@ async function init() {
 
     // Sync active orders with Supabase Realtime
     syncActiveOrders();
+
+    // Initial Lucide icons render
+    if (window.lucide) lucide.createIcons();
 }
 
 /**
@@ -361,7 +373,8 @@ async function fetchMenuItems() {
             if (remoteMenuItems.length > 0) menuItems = remoteMenuItems;
             if (remoteSpecialItems.length > 0) specialItems = remoteSpecialItems;
 
-            console.log('Menu items fetched from Supabase');
+            console.log('Menu items fetched from Supabase. Menu count:', menuItems.length, 'Specials count:', specialItems.length);
+            console.log('First menu item ID type:', typeof menuItems[0]?.id, 'Value:', menuItems[0]?.id);
             renderMenu(state.selectedCategory, state.searchQuery);
         }
     } catch (err) {
@@ -475,6 +488,9 @@ function renderMenu(category = 'all', searchQuery = '') {
 
     DOM.menuGrid.innerHTML = filtered.map((item, index) => createMenuItemHTML(item, index)).join('');
 
+    // Re-initialize icons for new menu items
+    if (window.lucide) lucide.createIcons();
+
     observeScrollElements();
     attachMenuItemListeners();
 }
@@ -486,6 +502,14 @@ function createMenuItemHTML(item, index) {
     const avgRating = ratingData ? ratingData.avg.toFixed(1) : '0.0';
     const ratingCount = ratingData ? ratingData.count : 0;
 
+    const ratingHTML = `
+        <div class="food-card-rating">
+            <span class="card-rating-star"><i data-lucide="star" class="icon-star-filled"></i></span>
+            <span class="card-rating-value">${avgRating}</span>
+            <span class="card-rating-count">(${ratingCount})</span>
+        </div>
+    `;
+
     return `
         <article class="food-card scroll-reveal" data-id="${item.id}" role="listitem" style="transition-delay: ${delay}s">
             <div class="food-card-image">
@@ -494,15 +518,11 @@ function createMenuItemHTML(item, index) {
                     ${item.popular ? '<span class="food-badge popular">Popular</span>' : ''}
                     ${item.spicy >= 3 ? '<span class="food-badge spicy">Spicy</span>' : ''}
                 </div>
+                ${ratingHTML}
             </div>
             <div class="food-card-content">
                 <div class="food-card-header">
                     <h3 class="food-card-title">${item.name}</h3>
-                    <div class="food-card-rating">
-                        <span class="card-rating-star">⭐</span>
-                        <span class="card-rating-value">${avgRating}</span>
-                        <span class="card-rating-count">(${ratingCount})</span>
-                    </div>
                 </div>
                 <p class="food-card-description">${item.desc}</p>
                 <div class="food-card-footer">
@@ -518,7 +538,7 @@ function createMenuItemHTML(item, index) {
 
 function getSpicyIndicator(level) {
     if (!level) return '';
-    return '🌶️'.repeat(level);
+    return `<i data-lucide="flame" class="inline-icon spicy-icon"></i>`.repeat(level);
 }
 
 // Attach listeners ONLY to menu grid items (not special items)
@@ -550,6 +570,7 @@ function initSpecialItems() {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
+            console.log('Special item Add button clicked:', btn.dataset.id);
             addToCart(btn.dataset.id);
         });
     });
@@ -558,10 +579,20 @@ function initSpecialItems() {
     document.querySelectorAll('.slide-title, .slide-description, .special-rating').forEach(el => {
         el.addEventListener('click', (e) => {
             const slide = el.closest('.slide-content');
-            const btn = slide.querySelector('.btn-special');
-            if (btn) openItemModal(btn.dataset.id);
+            if (slide) {
+                const btn = slide.querySelector('.btn-special');
+                if (btn) {
+                    console.log('Special item detail click:', btn.dataset.id);
+                    openItemModal(btn.dataset.id);
+                }
+            }
         });
     });
+
+    // Initial sync of ratings if data already exists
+    if (Object.keys(state.itemRatingsData).length > 0) {
+        updateSpecialsRatings();
+    }
 
     // Slider logic
     const slides = document.querySelectorAll('.specials-slider .slide');
@@ -573,8 +604,8 @@ function initSpecialItems() {
         const showSlide = (index) => {
             slides.forEach(s => s.classList.remove('active'));
             dots.forEach(d => d.classList.remove('active'));
-            
-            slides[index].classList.add('active');
+
+            if (slides[index]) slides[index].classList.add('active');
             if (dots[index]) dots[index].classList.add('active');
             currentSlide = index;
         };
@@ -598,6 +629,9 @@ function initSpecialItems() {
             });
             dot.addEventListener('mouseenter', () => {
                 showSlide(index);
+                clearInterval(slideInterval);
+            });
+            dot.addEventListener('mouseleave', () => {
                 startSlider();
             });
         });
@@ -904,7 +938,8 @@ function updateOrderStatus(orderNumber, newStatus) {
     }
 
     const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
-    const newStatusIndex = statusIndex[newStatus];
+    const normalizedStatus = String(newStatus || '').toLowerCase();
+    const newStatusIndex = statusIndex[normalizedStatus] ?? 0;
 
     // Trigger animation BEFORE changing status (if modal is open)
     if (DOM.trackOrderModal && !DOM.trackOrderModal.classList.contains('hidden')) {
@@ -961,10 +996,10 @@ function renderOrders() {
 
     DOM.ordersList.innerHTML = state.orders.map(order => {
         const statusConfig = {
-            'received': { label: '📝 Received', class: 'active' },
-            'preparing': { label: '👨‍🍳 Preparing', class: 'active' },
-            'ready': { label: '🍽️ Ready', class: 'active' },
-            'served': { label: '✅ Served', class: 'completed' }
+            'received': { label: '<i data-lucide="file-text"></i> Received', class: 'active' },
+            'preparing': { label: '<i data-lucide="chef-hat"></i> Preparing', class: 'active' },
+            'ready': { label: '<i data-lucide="utensils"></i> Ready', class: 'active' },
+            'served': { label: '<i data-lucide="check-circle"></i> Served', class: 'completed' }
         };
 
         const status = statusConfig[order.status];
@@ -983,9 +1018,9 @@ function renderOrders() {
                 </div>
                 <div class="order-items-list">
                     ${order.items.map(item => {
-                        const itemRating = orderRatings && orderRatings[item.id];
-                        const starsHTML = itemRating ? `<span class="order-item-rating">${'⭐'.repeat(itemRating.stars)}</span>` : '';
-                        return `
+            const itemRating = orderRatings && orderRatings[item.id];
+            const starsHTML = itemRating ? `<span class="order-item-rating">${'<i data-lucide="star"></i>'.repeat(itemRating.stars)}</span>` : '';
+            return `
                         <div class="order-item-row">
                             <span class="order-item-name">
                                 <img src="${item.image}" alt="${item.name}" class="order-item-thumb">
@@ -1001,17 +1036,20 @@ function renderOrders() {
                     <span>Total (incl. VAT)</span>
                     <span class="total-value gradient-text">${CONFIG.currency}${order.total}</span>
                 </div>
-                ${isServed && !isRated ? `<button class="rate-order-btn" onclick="showRatingModal('${order.id}')">⭐ Rate Items</button>` : ''}
-                ${isRated ? '<span class="rated-badge">✅ Rated</span>' : ''}
+                ${isServed && !isRated ? `<button class="rate-order-btn" onclick="showRatingModal('${order.id}')"><i data-lucide="star"></i> Rate Items</button>` : ''}
+                ${isRated ? '<span class="rated-badge"><i data-lucide="check-circle"></i> Rated</span>' : ''}
             </div>
         `;
     }).join('');
+
+    if (window.lucide) lucide.createIcons();
 }
 
 function renderTrackOrders() {
     if (!DOM.trackOrderList) return;
 
     const activeOrders = state.orders;
+    const statusMapping = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
 
     if (activeOrders.length === 0) {
         DOM.trackOrderList.innerHTML = '';
@@ -1033,9 +1071,9 @@ function renderTrackOrders() {
     const currentCards = Array.from(listEl.children);
 
     const orderHTMLBlocks = activeOrders.map((order) => {
-        const isServed = order.status === 'served';
-        const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
-        const targetStep = statusIndex[order.status] || 0;
+        const normalized = String(order.status || '').toLowerCase();
+        const targetStep = statusMapping[normalized] ?? 0;
+        const isServed = normalized === 'served';
 
         // Use previous step as starting point if it exists
         const startStep = previousStates[order.id] !== undefined ? previousStates[order.id] : -1;
@@ -1050,6 +1088,8 @@ function renderTrackOrders() {
                 return 'background: var(--gradient-primary); box-shadow: 0 0 20px rgba(255, 140, 0, 0.6);';
             return '';
         };
+
+
         const getLabelClass = (idx) => {
             if (idx < startStep || (idx === startStep && idx === 3)) return 'completed';
             if (idx === startStep) return 'active';
@@ -1069,7 +1109,7 @@ function renderTrackOrders() {
                         <div class="track-order-time">${formatTime(order.timestamp)}</div>
                     </div>
                     ${isServed ? `
-                        <span class="track-status-badge completed">✅ Served</span>
+                        <span class="track-status-badge completed"><i data-lucide="check-circle"></i> Served</span>
                     ` : `
                         <span class="track-status-badge">
                             <span class="live-dot"></span>
@@ -1092,7 +1132,9 @@ function renderTrackOrders() {
                             
                             ${['Received', 'Preparing', 'Ready', 'Served'].map((label, idx) => `
                                 <div class="track-step-${order.id}-${idx} status-step">
-                                    <div class="step-icon" style="${getStepStyle(idx)}">${['📝', '👨‍🍳', '🍽️', '✅'][idx]}</div>
+                                    <div class="step-icon" style="${getStepStyle(idx)}">
+                                        <i data-lucide="${['file-text', 'chef-hat', 'utensils', 'check-circle'][idx]}"></i>
+                                    </div>
                                     <span class="step-label ${getLabelClass(idx)}">${label}</span>
                                 </div>
                             `).join('')}
@@ -1103,7 +1145,7 @@ function renderTrackOrders() {
 
                 ${isServed ? `
                     <div class="served-confirmation">
-                        <p>This order was served. Enjoy your meal! ❤️</p>
+                        <p>This order was served. Enjoy your meal! <i data-lucide="heart" class="icon-heart inline-icon"></i></p>
                     </div>
                 ` : ''}
 
@@ -1150,12 +1192,14 @@ function renderTrackOrders() {
         listEl.innerHTML = orderHTMLBlocks.map(d => d.html).join('');
     }
 
+    if (window.lucide) lucide.createIcons();
+
     // 4. TRIGGER targeted animations
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             activeOrders.forEach((order) => {
-                const statusIndex = { 'received': 0, 'preparing': 1, 'ready': 2, 'served': 3 };
-                const targetStep = statusIndex[order.status] || 0;
+                const normalized = String(order.status || '').toLowerCase();
+                const targetStep = statusMapping[normalized] ?? 0;
                 const progressBar = document.querySelector(`.track-progress-${order.id}`);
 
                 if (!progressBar) return;
@@ -1342,23 +1386,12 @@ function openItemModal(id) {
     state.selectedItemQty = 1;
 
     if (DOM.itemModalIcon) {
-        DOM.itemModalIcon.innerHTML = `<img src="${item.image}" alt="${item.name}" class="modal-main-image">`;
+        DOM.itemModalIcon.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
     }
     if (DOM.itemModalTitle) DOM.itemModalTitle.textContent = item.name;
     if (DOM.itemModalDesc) DOM.itemModalDesc.textContent = item.desc;
 
-    // Issue #5: Fixed - Clean single approach for spicy indicator (removed duplication)
-    if (DOM.itemModalSpicy) {
-        if (item.spicy) {
-            DOM.itemModalSpicy.textContent = 'Spicy';
-            DOM.itemModalSpicy.style.display = 'inline-block';
-        } else {
-            DOM.itemModalSpicy.style.display = 'none';
-        }
-    }
 
-    if (DOM.itemModalCategory) DOM.itemModalCategory.textContent = item.category;
-    // Issue #1: Fixed XSS - changed innerHTML to textContent
     if (DOM.itemModalPrice) DOM.itemModalPrice.textContent = `${CONFIG.currency}${item.price}`;
     if (DOM.itemQtyValue) DOM.itemQtyValue.textContent = '1';
     if (DOM.itemTotalPrice) DOM.itemTotalPrice.textContent = `${CONFIG.currency}${item.price}`;
@@ -1366,7 +1399,7 @@ function openItemModal(id) {
     // Display average rating and reviews
     const ratingData = state.itemRatingsData[item.id];
     if (DOM.itemModalAvgRating) DOM.itemModalAvgRating.textContent = ratingData ? ratingData.avg.toFixed(1) : '0.0';
-    if (DOM.itemModalRatingCount) DOM.itemModalRatingCount.textContent = ratingData ? `(${ratingData.count} review${ratingData.count !== 1 ? 's' : ''})` : '(0 reviews)';
+    if (DOM.itemModalRatingCount) DOM.itemModalRatingCount.textContent = ratingData ? `(${ratingData.count} reviews)` : '(0 reviews)';
 
     // Render reviews
     if (DOM.itemReviewsList && DOM.noReviews) {
@@ -1375,7 +1408,10 @@ function openItemModal(id) {
             DOM.itemReviewsList.innerHTML = ratingData.reviews.slice(0, 10).map(review => `
                 <div class="review-card">
                     <div class="review-header">
-                        <span class="review-stars">${'⭐'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span>
+                        <span class="review-stars">
+                            ${'<i data-lucide="star" class="icon-star-filled"></i>'.repeat(review.stars)}
+                            ${'<i data-lucide="star"></i>'.repeat(5 - review.stars)}
+                        </span>
                         ${review.date ? `<span class="review-date">${formatReviewDate(review.date)}</span>` : ''}
                     </div>
                     ${review.feedback ? `<p class="review-text">${escapeHTML(review.feedback)}</p>` : ''}
@@ -1387,16 +1423,39 @@ function openItemModal(id) {
         }
     }
 
+    // Attach control listeners dynamically every time modal opens to ensure they aren't stale
+    const minusBtn = document.getElementById('itemQtyMinus');
+    const plusBtn = document.getElementById('itemQtyPlus');
+    const addBtn = document.getElementById('addItemToCart');
+    const closeBtn = document.getElementById('closeItemModal');
+
+    if (minusBtn) minusBtn.onclick = () => updateItemModalQty(-1);
+    if (plusBtn) plusBtn.onclick = () => updateItemModalQty(1);
+    if (addBtn) addBtn.onclick = addSelectedItemToCart;
+    if (closeBtn) closeBtn.onclick = () => hideModal(DOM.itemModal);
+
     showModal(DOM.itemModal);
+    if (window.lucide) lucide.createIcons();
+}
+
+function updateSpecialsRatings() {
+    document.querySelectorAll('.special-rating').forEach(el => {
+        const id = el.dataset.id;
+        const ratingData = state.itemRatingsData[id];
+        if (ratingData) {
+            const avgEl = el.querySelector('.card-rating-value');
+            const countEl = el.querySelector('.card-rating-count');
+            if (avgEl) avgEl.textContent = ratingData.avg.toFixed(1);
+            if (countEl) countEl.textContent = `(${ratingData.count})`;
+        }
+    });
 }
 
 function updateItemModalQty(change) {
     state.selectedItemQty = Math.max(1, state.selectedItemQty + change);
     if (DOM.itemQtyValue) DOM.itemQtyValue.textContent = state.selectedItemQty;
-
-    if (state.selectedItem && DOM.itemTotalPrice) {
-        const total = state.selectedItem.price * state.selectedItemQty;
-        DOM.itemTotalPrice.innerHTML = `${CONFIG.currency}${total}`;
+    if (DOM.itemTotalPrice && state.selectedItem) {
+        DOM.itemTotalPrice.textContent = `${CONFIG.currency}${state.selectedItem.price * state.selectedItemQty}`;
     }
 }
 
@@ -1413,11 +1472,10 @@ function addSelectedItemToCart() {
 // ==========================================
 
 function showWaiterModal() {
-    if (DOM.waiterTableNumber) DOM.waiterTableNumber.textContent = state.currentTable;
-    showModal(DOM.waiterModal);
+    // Deprecated for one-click action but kept for structural compatibility if needed later
 }
 
-async function confirmCallWaiter() {
+async function callWaiter() {
     if (!state.currentTable) {
         showToast('Please select a table first!', 'error');
         return;
@@ -1433,10 +1491,7 @@ async function confirmCallWaiter() {
 
         if (error) throw error;
 
-        hideModal(DOM.waiterModal);
-        if (DOM.waiterCalledTableNumber) DOM.waiterCalledTableNumber.textContent = state.currentTable;
-        showModal(DOM.waiterCalledModal);
-        showToast('🔔 Waiter has been notified!');
+        showToast('Waiter has been notified.', 'success');
     } catch (err) {
         console.error('Error calling waiter:', err.message);
         showToast('Failed to notify waiter. Please try again.', 'error');
@@ -1523,62 +1578,166 @@ function handleMouseMove(e) {
 // ==========================================
 
 function setupEventListeners() {
-    // Table selection (Robust Implementation)
-    console.log('SetupEventListeners: initializing table selection');
+    console.log('SetupEventListeners: initializing global delegation');
 
-    // Method 1: Direct attachment (backup)
-    if (DOM.tableCards && DOM.tableCards.length > 0) {
-        DOM.tableCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                console.log('Table clicked (Direct):', card.dataset.table);
-                handleTableSelect(card);
-            });
-        });
-    } else {
-        console.error('CRITICAL: DOM.tableCards not found or empty!');
-        // Re-query in case DOM was not ready
-        const cards = document.querySelectorAll('.table-btn-compact');
-        console.log('Re-query found cards:', cards.length);
-        cards.forEach(card => {
-            card.addEventListener('click', () => handleTableSelect(card));
-        });
-    }
-
-    // Method 2: Global Delegation (Safety Net)
+    // 1. UNIVERSAL CLICK DELEGATION
     document.addEventListener('click', (e) => {
-        const tableBtn = e.target.closest('.table-btn-compact, .table-card-premium');
-        if (tableBtn) {
-            console.log('Table clicked (Delegation):', tableBtn.dataset.table);
+        const target = e.target;
 
-            // Only trigger if not already handled (optional check, but harmless to call setTable twice rarely)
-            handleTableSelect(tableBtn);
+        // Table selection on welcome screen (Manual Selection)
+        const tableBtn = target.closest('.table-btn-compact, .table-card-premium');
+        if (tableBtn) {
+            const table = tableBtn.dataset.table;
+            console.log('Table clicked (Delegated):', table);
+
+            // Visual feedback
+            document.querySelectorAll('.table-btn-compact, .table-card-premium').forEach(c => {
+                c.setAttribute('aria-checked', 'false');
+                c.classList.remove('selected');
+            });
+            tableBtn.setAttribute('aria-checked', 'true');
+            tableBtn.classList.add('selected');
+
+            setTimeout(() => setTable(table), 100);
+            return;
+        }
+
+        // Toggle Manual Selection Button
+        if (target.closest('#toggleManualBtn')) {
+            console.log('toggleManualBtn clicked (Delegated)');
+            toggleManualSelection();
+            return;
+        }
+
+        // Add to Cart from Menu Card (Regular Items)
+        const menuAddBtn = target.closest('.btn-menu-item');
+        if (menuAddBtn) {
+            e.stopPropagation();
+            addToCart(menuAddBtn.dataset.id);
+            return;
+        }
+
+        // Add to Cart from Special Slide
+        const specialAddBtn = target.closest('.btn-special');
+        if (specialAddBtn) {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Special item Add button clicked:', specialAddBtn.dataset.id);
+            addToCart(specialAddBtn.dataset.id);
+            return;
+        }
+
+        // Open Modal from Menu Card
+        const foodCard = target.closest('.food-card');
+        if (foodCard && !target.closest('.btn-add')) {
+            openItemModal(foodCard.dataset.id);
+            return;
+        }
+
+        // Open Modal from Special Slide Detail (Title, Desc, Rating)
+        if (target.closest('.slide-title, .slide-description, .special-rating')) {
+            const slide = target.closest('.slide-content');
+            if (slide) {
+                const btn = slide.querySelector('.btn-special');
+                if (btn) openItemModal(btn.dataset.id);
+            }
+            return;
+        }
+
+        // Item Modal: Quantity Controls
+        if (target.closest('#itemQtyMinus')) {
+            updateItemModalQty(-1);
+            return;
+        }
+        if (target.closest('#itemQtyPlus')) {
+            updateItemModalQty(1);
+            return;
+        }
+
+        // Item Modal: Add to Cart
+        if (target.closest('#addItemToCart')) {
+            addSelectedItemToCart();
+            return;
+        }
+
+        // Item Modal: Close
+        if (target.closest('#closeItemModal')) {
+            hideModal(DOM.itemModal);
+            return;
+        }
+
+        // Cart Actions
+        if (target.closest('#cartBtn') || target.closest('#floatingCartBtn')) {
+            openCart();
+            return;
+        }
+        if (target.closest('#closeCart') || target.closest('#cartOverlay')) {
+            closeCart();
+            return;
+        }
+        if (target.closest('#placeOrder')) {
+            placeOrder();
+            return;
+        }
+
+        // Navigation / Modals
+        if (target.closest('#viewOrdersBtn') || target.closest('#bottomNavOrdersBtn')) {
+            showOrdersModal();
+            return;
+        }
+        if (target.closest('#closeOrdersModal')) {
+            hideModal(DOM.ordersModal);
+            return;
+        }
+        if (target.closest('#floatingTrackBtn')) {
+            showTrackOrderModal();
+            return;
+        }
+        if (target.closest('#closeTrackOrderModal')) {
+            hideModal(DOM.trackOrderModal);
+            return;
+        }
+        if (target.closest('#closeSuccessModal')) {
+            hideModal(DOM.successModal);
+            return;
+        }
+
+        // Waiter Calling
+        if (target.closest('#callWaiterBtn') || target.closest('#mobileWaiterBtn')) {
+            callWaiter();
+            return;
+        }
+        if (target.closest('#cancelWaiter')) {
+            hideModal(DOM.waiterModal);
+            return;
+        }
+        if (target.closest('#confirmWaiter')) {
+            confirmCallWaiter();
+            return;
+        }
+        if (target.closest('#closeWaiterCalled')) {
+            hideModal(DOM.waiterCalledModal);
+            return;
+        }
+
+        // Rating Modal
+        if (target.closest('#closeRatingModal') || target.closest('#skipRating')) {
+            hideModal(DOM.ratingModal);
+            return;
+        }
+        if (target.closest('#submitRating')) {
+            handleSubmitRatings();
+            return;
+        }
+
+        // Back to top
+        if (target.closest('#backToTop')) {
+            scrollToTop();
+            return;
         }
     });
 
-    function handleTableSelect(card) {
-        if (!card) return;
-
-        // Visual feedback
-        const allCards = document.querySelectorAll('.table-btn-compact, .table-card-premium');
-        allCards.forEach(c => {
-            c.setAttribute('aria-checked', 'false');
-            c.classList.remove('selected');
-        });
-
-
-        card.setAttribute('aria-checked', 'true');
-        card.classList.add('selected');
-
-        console.log('Setting table to:', card.dataset.table);
-        setTimeout(() => setTable(card.dataset.table), 100);
-    }
-
-    // Category tabs
-    DOM.categoryTabs.forEach(tab => {
-        tab.addEventListener('click', () => setCategory(tab.dataset.category));
-    });
-
-    // Search
+    // 2. INPUT LISTENERS (Non-click events)
     if (DOM.menuSearch) {
         DOM.menuSearch.addEventListener('input', (e) => handleSearch(e.target.value));
         DOM.menuSearch.addEventListener('keydown', (e) => {
@@ -1586,66 +1745,15 @@ function setupEventListeners() {
         });
     }
 
+    if (DOM.categoryTabs) {
+        DOM.categoryTabs.forEach(tab => {
+            tab.addEventListener('click', () => setCategory(tab.dataset.category));
+        });
+    }
+
     if (DOM.clearSearch) {
         DOM.clearSearch.addEventListener('click', clearSearch);
     }
-
-    // Cart
-    if (DOM.cartBtn) DOM.cartBtn.addEventListener('click', openCart);
-    if (DOM.floatingCartBtn) DOM.floatingCartBtn.addEventListener('click', openCart);
-    if (DOM.closeCart) DOM.closeCart.addEventListener('click', closeCart);
-    if (DOM.cartOverlay) DOM.cartOverlay.addEventListener('click', closeCart);
-    if (DOM.placeOrderBtn) DOM.placeOrderBtn.addEventListener('click', placeOrder);
-
-    // Orders modal
-    if (DOM.viewOrdersBtn) DOM.viewOrdersBtn.addEventListener('click', showOrdersModal);
-    if (DOM.mobileOrdersBtn) DOM.mobileOrdersBtn.addEventListener('click', showOrdersModal);
-    if (DOM.closeOrdersModal) DOM.closeOrdersModal.addEventListener('click', () => hideModal(DOM.ordersModal));
-
-    // Track order
-    if (DOM.floatingTrackBtn) DOM.floatingTrackBtn.addEventListener('click', showTrackOrderModal);
-    if (DOM.closeTrackOrderModal) DOM.closeTrackOrderModal.addEventListener('click', () => hideModal(DOM.trackOrderModal));
-
-    // Success modal
-    if (DOM.closeSuccessModal) DOM.closeSuccessModal.addEventListener('click', () => hideModal(DOM.successModal));
-
-    // Waiter modals
-    if (DOM.callWaiterBtn) DOM.callWaiterBtn.addEventListener('click', showWaiterModal);
-    if (DOM.mobileWaiterBtn) DOM.mobileWaiterBtn.addEventListener('click', showWaiterModal);
-    if (DOM.cancelWaiter) DOM.cancelWaiter.addEventListener('click', () => hideModal(DOM.waiterModal));
-    if (DOM.confirmWaiter) DOM.confirmWaiter.addEventListener('click', confirmCallWaiter);
-    if (DOM.closeWaiterCalled) DOM.closeWaiterCalled.addEventListener('click', () => hideModal(DOM.waiterCalledModal));
-
-    // Welcome Screen Scanner & Admin Logic
-    const toggleBtn = document.getElementById('toggleManualBtn');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', toggleManualSelection);
-        console.log('toggleManualBtn listener attached');
-    } else {
-        console.warn('toggleManualBtn not found in DOM');
-    }
-
-    const adminBtn = document.getElementById('kitchenAdminBtn');
-    if (adminBtn) {
-        adminBtn.addEventListener('click', handleKitchenAdmin);
-        console.log('kitchenAdminBtn listener attached');
-    } else {
-        console.warn('kitchenAdminBtn not found in DOM');
-    }
-
-    // Item modal
-    if (DOM.closeItemModal) DOM.closeItemModal.addEventListener('click', () => hideModal(DOM.itemModal));
-    if (DOM.itemQtyMinus) DOM.itemQtyMinus.addEventListener('click', () => updateItemModalQty(-1));
-    if (DOM.itemQtyPlus) DOM.itemQtyPlus.addEventListener('click', () => updateItemModalQty(1));
-    if (DOM.addItemToCart) DOM.addItemToCart.addEventListener('click', addSelectedItemToCart);
-
-    // Rating modal
-    if (DOM.closeRatingModal) DOM.closeRatingModal.addEventListener('click', () => hideModal(DOM.ratingModal));
-    if (DOM.skipRating) DOM.skipRating.addEventListener('click', () => hideModal(DOM.ratingModal));
-    if (DOM.submitRating) DOM.submitRating.addEventListener('click', handleSubmitRatings);
-
-    // Back to top
-    if (DOM.backToTop) DOM.backToTop.addEventListener('click', scrollToTop);
 
     // Scroll events
     window.addEventListener('scroll', debounce(handleScroll, 10));
@@ -1851,13 +1959,14 @@ function showRatingModal(orderNumber) {
                     <div class="rating-item-name">${item.name}</div>
                     <div class="rating-item-qty">Qty: ${item.qty}</div>
                     <div class="star-selector" data-item-id="${item.id}">
-                        ${[1,2,3,4,5].map(s => `<button class="star-btn" data-star="${s}" aria-label="${s} star">⭐</button>`).join('')}
+                        ${[1, 2, 3, 4, 5].map(s => `<button class="star-btn" data-star="${s}" aria-label="${s} star"><i data-lucide="star"></i></button>`).join('')}
                     </div>
                     <input type="text" class="rating-feedback-input" data-item-id="${item.id}"
                            placeholder="Any feedback? (optional)" maxlength="120">
                 </div>
             </div>
         `).join('');
+        if (window.lucide) lucide.createIcons();
 
         // Attach star interaction listeners
         DOM.ratingItemsList.querySelectorAll('.star-selector').forEach(selector => {
@@ -2010,16 +2119,21 @@ async function fetchItemRatings() {
     try {
         const { data, error } = await supabaseClient
             .from('ratings')
-            .select('item_id, item_name, stars, feedback, created_at')
+            .select('item_id, stars, feedback, created_at')
             .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase Ratings Error:', error);
+            return;
+        }
+
+        console.log('Ratings fetched from Supabase:', data ? data.length : 0, 'rows');
 
         if (data && data.length > 0) {
             // Aggregate ratings per item
             const aggregated = {};
             data.forEach(row => {
-                const id = row.item_id;
+                const id = String(row.item_id); // Force to string
                 if (!aggregated[id]) {
                     aggregated[id] = { total: 0, count: 0, reviews: [] };
                 }
@@ -2032,7 +2146,7 @@ async function fetchItemRatings() {
                 });
             });
 
-            // Calculate averages
+            // Calculate averages and update state
             Object.keys(aggregated).forEach(id => {
                 const d = aggregated[id];
                 state.itemRatingsData[id] = {
@@ -2047,17 +2161,8 @@ async function fetchItemRatings() {
             // Re-render menu with updated ratings
             renderMenu(state.selectedCategory, state.searchQuery);
 
-            // Update special items ratings in DOM if they exist
-            document.querySelectorAll('.special-rating').forEach(el => {
-                const id = el.dataset.id;
-                const ratingData = state.itemRatingsData[id];
-                if (ratingData) {
-                    const avgEl = el.querySelector('.card-rating-value');
-                    const countEl = el.querySelector('.card-rating-count');
-                    if (avgEl) avgEl.textContent = ratingData.avg.toFixed(1);
-                    if (countEl) countEl.textContent = `(${ratingData.count})`;
-                }
-            });
+            // Update special items ratings in DOM
+            updateSpecialsRatings();
         }
     } catch (err) {
         console.error('Error fetching item ratings:', err.message);

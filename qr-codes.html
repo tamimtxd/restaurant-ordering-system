@@ -11,6 +11,9 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
             --color-bg: #1a0a00;
@@ -146,7 +149,7 @@
 
         <div class="actions">
             <a href="index.html" class="btn btn-outline">
-                <span>←</span> Back to Home
+                <i data-lucide="arrow-left"></i> Back to Home
             </a>
         </div>
     </div>
@@ -255,6 +258,11 @@
                 correctLevel: QRCode.CorrectLevel.H
             });
         });
+
+        // Initialize Lucide Icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
 
         function openModal(tableNum, url) {
             currentTable = tableNum;

@@ -17,14 +17,16 @@
         rel="stylesheet">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍛</text></svg>">
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
 
     <!-- QR Scanner Library -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -36,7 +38,9 @@
         <div class="welcome-wrapper">
             <!-- Compact Header -->
             <div class="welcome-brand">
-                <div class="brand-icon-lg">🍛</div>
+                <div class="brand-icon-lg">
+                    <img src="assets/images/logo.png" alt="Rannaghor Logo">
+                </div>
                 <h1 class="brand-title">Rannaghor</h1>
                 <p class="brand-subtitle">Authentic Bangladeshi Cuisine</p>
             </div>
@@ -44,7 +48,7 @@
             <!-- QR Scanner Container -->
             <div id="scannerSection" class="scanner-section">
                 <div class="scanner-header">
-                    <span class="scanner-icon">📸</span>
+                    <span class="scanner-icon"><i data-lucide="camera"></i></span>
                     <span class="scanner-title">SCAN TO START YOUR ORDER</span>
                 </div>
                 <div id="reader" class="qr-reader"></div>
@@ -56,19 +60,19 @@
                 <h2 class="selector-title">Select Your Table</h2>
                 <div class="table-grid-premium">
                     <button class="table-card-premium" data-table="1">
-                        <span class="table-card-icon">🪑</span>
+                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
                         <span class="table-card-number">Table 1</span>
                     </button>
                     <button class="table-card-premium" data-table="2">
-                        <span class="table-card-icon">🪑</span>
+                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
                         <span class="table-card-number">Table 2</span>
                     </button>
                     <button class="table-card-premium" data-table="3">
-                        <span class="table-card-icon">🪑</span>
+                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
                         <span class="table-card-number">Table 3</span>
                     </button>
                     <button class="table-card-premium" data-table="4">
-                        <span class="table-card-icon">🪑</span>
+                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
                         <span class="table-card-number">Table 4</span>
                     </button>
                 </div>
@@ -81,11 +85,11 @@
                 <div class="admin-links">
                     <a href="qr-codes.html" class="btn btn-outline btn-sm">
                         <span>QR Codes</span>
-                        <span>📄</span>
+                        <i data-lucide="qr-code"></i>
                     </a>
                     <button id="kitchenAdminBtn" class="btn btn-outline btn-sm">
                         <span>Kitchen Dashboard</span>
-                        <span>👨‍🍳</span>
+                        <i data-lucide="chef-hat"></i>
                     </button>
                 </div>
             </div>
@@ -101,7 +105,7 @@
             <!-- Logo -->
             <a href="#" class="navbar-brand">
                 <div class="brand-logo">
-                    <span>🍛</span>
+                    <img src="assets/images/logo.png" alt="Rannaghor Logo">
                 </div>
                 <div class="brand-text">
                     <span class="brand-name">Rannaghor</span>
@@ -113,19 +117,19 @@
             <div class="navbar-actions">
                 <!-- My Orders -->
                 <button id="viewOrdersBtn" class="btn btn-outline btn-navbar-action">
-                    <span class="btn-icon">📋</span>
+                    <span class="btn-icon"><i data-lucide="clipboard-list"></i></span>
                     <span class="btn-text">My Orders</span>
                     <span id="activeOrdersBadge" class="order-badge hidden">0</span>
                 </button>
 
                 <!-- Call Waiter (Desktop) -->
                 <button id="callWaiterBtn" class="btn btn-outline btn-waiter">
-                    <span class="btn-icon">🔔</span>
+                    <span class="btn-icon"><i data-lucide="bell"></i></span>
                     <span class="btn-text">Call Waiter</span>
                 </button>
 
                 <!-- Cart Button -->
-                <button id="cartBtn" class="btn btn-navbar-action btn-cart" aria-label="View cart">
+                <button id="cartBtn" class="btn btn-outline btn-navbar-action btn-cart" aria-label="View cart">
                     <span class="btn-icon">
                         <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -181,7 +185,7 @@
 
                 <!-- Empty Cart State -->
                 <div id="emptyCart" class="empty-cart">
-                    <div class="empty-cart-icon">🍽️</div>
+                    <div class="empty-cart-icon"><i data-lucide="shopping-bag"></i></div>
                     <p class="empty-cart-title">Your cart is empty</p>
                     <p class="empty-cart-subtitle">Add some delicious items!</p>
                 </div>
@@ -213,7 +217,7 @@
                 <div class="payment-method-container">
                     <div class="payment-options">
                         <div class="payment-option active">
-                            <span class="payment-icon">💵</span>
+                            <span class="payment-icon"><i data-lucide="banknote"></i></span>
                             <div class="payment-details">
                                 <span class="payment-label">Cash Payment</span>
                                 <span class="payment-sublabel">Please pay at the counter</span>
@@ -225,7 +229,7 @@
                 <!-- Place Order Button -->
                 <button id="placeOrder" class="btn btn-primary btn-place-order">
                     <span>Place Order</span>
-                    <span>🍛</span>
+                    <i data-lucide="send"></i>
                 </button>
             </div>
         </div>
@@ -256,7 +260,7 @@
                             oven
                         </p>
                         <div class="special-rating" data-id="special1">
-                            <span class="card-rating-star">⭐</span>
+                            <span class="card-rating-star"><i data-lucide="star" class="icon-star-filled"></i></span>
                             <span class="card-rating-value">0.0</span>
                             <span class="card-rating-count">(0)</span>
                         </div>
@@ -284,7 +288,7 @@
                             pulao
                         </p>
                         <div class="special-rating" data-id="special2">
-                            <span class="card-rating-star">⭐</span>
+                            <span class="card-rating-star"><i data-lucide="star" class="icon-star-filled"></i></span>
                             <span class="card-rating-value">0.0</span>
                             <span class="card-rating-count">(0)</span>
                         </div>
@@ -342,30 +346,31 @@
                 <!-- Category Tabs -->
                 <div class="category-tabs scroll-reveal" role="tablist" aria-label="Menu categories">
                     <button class="category-tab active" data-category="all" role="tab" aria-selected="true">
-                        All
+                        <span class="tab-icon"><i data-lucide="layout-grid"></i></span>
+                        <span class="tab-text">All</span>
                     </button>
                     <button class="category-tab" data-category="biriyani" role="tab" aria-selected="false">
-                        <span class="tab-icon">🍚</span>
+                        <span class="tab-icon"><i data-lucide="utensils-crossed"></i></span>
                         <span class="tab-text">Biriyani</span>
                     </button>
                     <button class="category-tab" data-category="curry" role="tab" aria-selected="false">
-                        <span class="tab-icon">🍛</span>
+                        <span class="tab-icon"><i data-lucide="soup"></i></span>
                         <span class="tab-text">Curry</span>
                     </button>
                     <button class="category-tab" data-category="kebab" role="tab" aria-selected="false">
-                        <span class="tab-icon">🍢</span>
+                        <span class="tab-icon"><i data-lucide="flame"></i></span>
                         <span class="tab-text">Kebab</span>
                     </button>
                     <button class="category-tab" data-category="snacks" role="tab" aria-selected="false">
-                        <span class="tab-icon">🥟</span>
+                        <span class="tab-icon"><i data-lucide="cookie"></i></span>
                         <span class="tab-text">Snacks</span>
                     </button>
                     <button class="category-tab" data-category="dessert" role="tab" aria-selected="false">
-                        <span class="tab-icon">🍮</span>
+                        <span class="tab-icon"><i data-lucide="cake-slice"></i></span>
                         <span class="tab-text">Dessert</span>
                     </button>
                     <button class="category-tab" data-category="drinks" role="tab" aria-selected="false">
-                        <span class="tab-icon">🥤</span>
+                        <span class="tab-icon"><i data-lucide="cup-soda"></i></span>
                         <span class="tab-text">Drinks</span>
                     </button>
                 </div>
@@ -377,7 +382,7 @@
 
                 <!-- No Results Message -->
                 <div id="noResults" class="no-results hidden">
-                    <div class="no-results-icon">🔍</div>
+                    <div class="no-results-icon"><i data-lucide="search"></i></div>
                     <p class="no-results-title">No dishes found</p>
                     <p class="no-results-subtitle">Try a different search term</p>
                 </div>
@@ -398,23 +403,23 @@
 
                 <div class="features-grid">
                     <div class="feature-card scroll-reveal">
-                        <div class="feature-icon">👨‍🍳</div>
+                        <div class="feature-icon"><i data-lucide="chef-hat"></i></div>
                         <h3 class="feature-title">Expert Chefs</h3>
                         <p class="feature-description">Our chefs bring decades of experience in authentic
                             Bangladeshi cuisine</p>
                     </div>
                     <div class="feature-card scroll-reveal">
-                        <div class="feature-icon">🌿</div>
+                        <div class="feature-icon"><i data-lucide="leaf"></i></div>
                         <h3 class="feature-title">Fresh Ingredients</h3>
                         <p class="feature-description">We source the freshest local ingredients daily</p>
                     </div>
                     <div class="feature-card scroll-reveal">
-                        <div class="feature-icon">⚡</div>
+                        <div class="feature-icon"><i data-lucide="zap"></i></div>
                         <h3 class="feature-title">Quick Service</h3>
                         <p class="feature-description">Hot food served to your table in 15-20 minutes</p>
                     </div>
                     <div class="feature-card scroll-reveal">
-                        <div class="feature-icon">💯</div>
+                        <div class="feature-icon"><i data-lucide="check-circle"></i></div>
                         <h3 class="feature-title">Quality Promise</h3>
                         <p class="feature-description">100% satisfaction guaranteed or we'll make it right</p>
                     </div>
@@ -432,7 +437,7 @@
                     <div class="footer-brand">
                         <div class="footer-logo">
                             <div class="brand-logo">
-                                <span>🍛</span>
+                                <img src="assets/images/logo.png" alt="Rannaghor Logo">
                             </div>
                             <div class="brand-text">
                                 <span class="brand-name">Rannaghor</span>
@@ -469,15 +474,15 @@
                         <h4 class="footer-heading">Contact</h4>
                         <ul class="footer-links">
                             <li>
-                                <span class="footer-icon">📍</span>
+                                <span class="footer-icon"><i data-lucide="map-pin"></i></span>
                                 <a href="https://maps.app.goo.gl/3uwBWRVSph2sTfhd8">Mirpur, Dhaka-1216</a>
                             </li>
                             <li>
-                                <span class="footer-icon">📞</span>
+                                <span class="footer-icon"><i data-lucide="phone"></i></span>
                                 <a href="tel:+8801234567890">+880 1234-567890</a>
                             </li>
                             <li>
-                                <span class="footer-icon">✉️</span>
+                                <span class="footer-icon"><i data-lucide="mail"></i></span>
                                 <a href="mailto:info@rannaghor.com">info@rannaghor.com</a>
                             </li>
                         </ul>
@@ -516,7 +521,7 @@
 
                 <!-- Footer Bottom -->
                 <div class="footer-bottom">
-                    <p>© 2026 Rannaghor. All rights reserved. Made with ❤️ in Bangladesh</p>
+                    <p>© 2026 Rannaghor. All rights reserved. Made with <i data-lucide="heart" class="icon-heart inline-icon"></i> in Bangladesh</p>
                 </div>
             </div>
         </footer>
@@ -544,7 +549,7 @@
                         <!-- Orders will be inserted here by JavaScript -->
                     </div>
                     <div id="noOrders" class="empty-state">
-                        <div class="empty-state-icon">📋</div>
+                        <div class="empty-state-icon"><i data-lucide="clipboard-list"></i></div>
                         <p class="empty-state-title">No orders yet</p>
                         <p class="empty-state-subtitle">Your order history will appear here</p>
                     </div>
@@ -607,12 +612,12 @@
                     <!-- Info Cards -->
                     <div class="success-info-grid">
                         <div class="success-info-card">
-                            <div class="info-icon">⏱️</div>
+                            <div class="info-icon"><i data-lucide="clock"></i></div>
                             <p class="info-label">Estimated Time</p>
                             <p class="info-value">15-20 min</p>
                         </div>
                         <div class="success-info-card">
-                            <div class="info-icon">🪑</div>
+                            <div class="info-icon"><i data-lucide="armchair"></i></div>
                             <p class="info-label">Delivering to</p>
                             <p class="info-value">Table <span id="successTableNumber">-</span></p>
                         </div>
@@ -620,7 +625,7 @@
 
                     <!-- Tip Message -->
                     <div class="success-tip">
-                        <p>💡 Tap <strong>"Track Order"</strong> button to see real-time status updates</p>
+                        <p><i data-lucide="info" class="inline-icon"></i> Tap <strong>"Track Order"</strong> button to see real-time status updates</p>
                     </div>
 
                     <button id="closeSuccessModal" class="btn btn-primary btn-block">
@@ -637,7 +642,7 @@
         <div class="modal-container">
             <div class="modal-content modal-sm">
                 <div class="waiter-content">
-                    <div class="waiter-icon">🔔</div>
+                    <div class="waiter-icon"><i data-lucide="bell"></i></div>
                     <h3 id="waiterModalTitle" class="modal-title">Calling Waiter...</h3>
                     <p class="waiter-subtitle">A waiter will be with you shortly at Table <span
                             id="waiterTableNumber">-</span></p>
@@ -680,54 +685,53 @@
                     </svg>
                 </button>
 
-                <div class="item-modal-content">
-                    <!-- Left Column: Image & Details -->
-                    <div class="item-modal-info-column">
-                        <div class="item-modal-icon" id="itemModalIcon">🍛</div>
+                <div class="item-modal-content" id="itemModalContent">
+                    <!-- Left Column: Image & Core Info -->
+                    <div class="item-modal-left">
+                        <div class="item-modal-visual">
+                            <div id="itemModalIcon" class="main-image-container">
+                                <!-- Image inserted by JS -->
+                            </div>
+                            <div class="modal-rating-header">
+                                <div class="main-rating-stars">
+                                    <i data-lucide="star" class="icon-star-filled"></i>
+                                </div>
+                                <span id="itemModalAvgRating" class="rating-number">0.0</span>
+                                <span id="itemModalRatingCount" class="rating-count">(0 reviews)</span>
+                            </div>
+                        </div>
 
-                        <div class="item-modal-details">
-                            <h3 id="itemModalTitle" class="item-modal-title">Item Name</h3>
-                            <p id="itemModalDesc" class="item-modal-description">Description</p>
-
-                            <div class="item-modal-meta">
-                                <div id="itemModalSpicy" class="spicy-level"></div>
-                                <div class="item-modal-category" id="itemModalCategory">Category</div>
+                        <div class="item-modal-details-box">
+                                <div class="item-modal-header-info">
+                                <h3 id="itemModalTitle" class="item-title-lg">Item Name</h3>
+                                <p id="itemModalDesc" class="item-desc-md">Description</p>
                             </div>
 
-                            <div class="item-modal-footer">
-                                <div class="item-modal-price">
-                                    <span id="itemModalPrice" class="gradient-text"><span
-                                            class="currency">৳</span>0</span>
-                                </div>
-                                <div class="item-quantity-selector">
-                                    <button class="qty-btn" id="itemQtyMinus" aria-label="Decrease quantity">−</button>
-                                    <span class="qty-value" id="itemQtyValue" aria-label="Quantity">1</span>
-                                    <button class="qty-btn" id="itemQtyPlus" aria-label="Increase quantity">+</button>
+                            <div class="item-modal-pricing-row">
+                                <span id="itemModalPrice" class="item-price-lg">৳0</span>
+                                <div class="item-qty-control">
+                                    <button class="qty-btn-v2" id="itemQtyMinus" aria-label="Decrease quantity">−</button>
+                                    <span class="qty-val-v2" id="itemQtyValue">1</span>
+                                    <button class="qty-btn-v2" id="itemQtyPlus" aria-label="Increase quantity">+</button>
                                 </div>
                             </div>
 
-                            <button id="addItemToCart" class="btn btn-primary btn-block" aria-label="Add item to cart">
-                                Add to Cart - <span id="itemTotalPrice"><span class="currency">৳</span>0</span>
+                            <button id="addItemToCart" class="btn btn-primary btn-add-cart-v2">
+                                <span>Add to Cart</span>
+                                <span class="btn-divider"></span>
+                                <span id="itemTotalPrice">৳0</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Right Column: Reviews -->
-                    <div class="item-modal-reviews-column">
-                        <div id="itemModalRating" class="item-modal-rating">
-                            <div class="item-avg-rating">
-                                <span class="avg-rating-stars">⭐</span>
-                                <span id="itemModalAvgRating" class="avg-rating-value">0.0</span>
-                                <span id="itemModalRatingCount" class="avg-rating-count">(0 reviews)</span>
-                            </div>
-                        </div>
-
-                        <div id="itemModalReviews" class="item-modal-reviews">
-                            <h4 class="reviews-title">Customer Reviews</h4>
-                            <div id="itemReviewsList" class="reviews-list">
+                    <div class="item-modal-right">
+                        <div class="reviews-section">
+                            <h4 class="reviews-section-title">CUSTOMER REVIEWS</h4>
+                            <div id="itemReviewsList" class="reviews-scroll-area">
                                 <!-- Reviews inserted by JS -->
                             </div>
-                            <div id="noReviews" class="no-reviews">
+                            <div id="noReviews" class="no-reviews-placeholder">
                                 <span>No reviews yet</span>
                             </div>
                         </div>

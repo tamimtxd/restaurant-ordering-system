@@ -12,12 +12,17 @@
         rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/kitchen.css">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="kitchen-body">
     <nav class="kitchen-nav">
         <div class="nav-brand">
-            <span class="brand-icon">👨‍🍳</span>
+            <div class="brand-icon">
+                <img src="assets/images/logo.png" alt="Rannaghor Logo">
+            </div>
             <div class="brand-text">
                 <span class="brand-name">Rannaghor</span>
                 <div class="brand-sub-row">
@@ -29,7 +34,7 @@
         <div class="nav-search">
             <div class="search-wrapper">
                 <input type="text" id="orderSearch" placeholder="Search Food, #Order, or Table...">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon"><i data-lucide="search"></i></span>
                 <button id="clearSearch" class="btn-clear hidden">&times;</button>
             </div>
         </div>
