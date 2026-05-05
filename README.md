@@ -29,6 +29,7 @@ The system features a **luxury dark-mode Glassmorphic UI**, seamless order track
 - **Interactive Menu:** A categorized, highly visual menu with a full-bleed hero slider for "Today's Specials".
 - **Real-Time Cart & Checkout:** Add items, modify quantities, and check out with instant tax calculations. No refreshing required.
 - **Live Order Tracking:** Customers watch their order status change in real-time as the kitchen prepares it (Received → Preparing → Ready).
+- **Post-Meal Rating System:** Once an order is served, an elegant modal automatically prompts customers to rate their individual dishes and provide feedback.
 
 ### 👨‍🍳 Kitchen Staff Dashboard
 - **Instant Synchronization:** Connected to the Supabase Realtime API, new orders appear instantly on the dashboard with a notification chime.

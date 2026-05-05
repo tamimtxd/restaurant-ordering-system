@@ -293,7 +293,7 @@ async function init() {
         setTable(tableFromURL);
     } else {
         showWelcomeScreen();
-        initQRScanner();
+        // initQRScanner(); // Now initialized manually via toggle
     }
 
     setupEventListeners();
