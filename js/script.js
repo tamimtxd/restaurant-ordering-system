@@ -106,7 +106,7 @@ let specialItems = [
         id: 'special1',
         name: "Whole Tandoori Chicken",
         namebn: "আস্ত তন্দুরি চিকেন",
-        price: 550,
+        price: 600,
         originalPrice: 650,
         image: "assets/images/food/whole-tandoori-chicken.jpg",
         desc: "Succulent whole chicken marinated in spiced yogurt and slow-roasted in a traditional clay oven",
