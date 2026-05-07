@@ -375,6 +375,7 @@ async function fetchMenuItems() {
 
             console.log('Menu items fetched from Supabase. Menu count:', menuItems.length, 'Specials count:', specialItems.length);
             console.log('First menu item ID type:', typeof menuItems[0]?.id, 'Value:', menuItems[0]?.id);
+            renderSpecials();
             renderMenu(state.selectedCategory, state.searchQuery);
         }
     } catch (err) {
@@ -408,6 +409,7 @@ function setTable(tableNumber) {
     hideWelcomeScreen();
     showMainContent();
     loadFromStorage();
+    renderSpecials();
     renderMenu();
     updateOrderBadges();
 
@@ -561,7 +563,70 @@ function attachMenuItemListeners() {
     });
 }
 
-// Initialize special items separately (called only once)
+// Render Special Items dynamically
+function renderSpecials() {
+    const specialsContainer = document.getElementById('specials');
+    if (!specialsContainer || specialItems.length === 0) return;
+
+    let slidesHTML = '';
+    let dotsHTML = '<div class="slider-pagination">';
+
+    specialItems.forEach((item, index) => {
+        const isActive = index === 0 ? 'active' : '';
+        const badgeHTML = item.price < (item.originalPrice || item.price)
+            ? `<div class="special-badge discount">SALE</div>`
+            : `<div class="special-badge chef">CHEF'S PICK</div>`;
+        const originalPriceHTML = item.originalPrice
+            ? `<span class="price-original"><span class="currency">${CONFIG.currencySymbol}</span>${item.originalPrice}</span>`
+            : '';
+
+        slidesHTML += `
+            <div class="slide ${isActive}">
+                <div class="slide-bg" style="background-image: url('${item.image}');"></div>
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <span class="slide-eyebrow">Today's Special</span>
+                    ${badgeHTML}
+                    <h3 class="slide-title">${item.name}</h3>
+                    <p class="slide-description">${item.desc || item.description || ''}</p>
+                    <div class="special-rating" data-id="${item.id}">
+                        <span class="card-rating-star"><i data-lucide="star" class="icon-star-filled"></i></span>
+                        <span class="card-rating-value">0.0</span>
+                        <span class="card-rating-count">(0)</span>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="slide-price">
+                            <span class="price-current"><span class="currency">${CONFIG.currencySymbol}</span>${item.price}</span>
+                            ${originalPriceHTML}
+                        </div>
+                        <button class="btn btn-primary btn-add btn-special" data-id="${item.id}">Add +</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        dotsHTML += `<button class="slider-dot ${isActive}" aria-label="Go to slide ${index + 1}"></button>`;
+    });
+
+    dotsHTML += '</div>';
+    specialsContainer.innerHTML = slidesHTML + dotsHTML;
+
+    // Reset initialization state so listeners can be attached to new DOM elements
+    state.specialItemsInitialized = false;
+
+    // Clear old interval to prevent overlapping slider timers
+    if (state.slideInterval) {
+        clearInterval(state.slideInterval);
+    }
+
+    // Re-initialize Lucide icons for the new injected HTML
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+
+    initSpecialItems();
+}
+
+// Initialize special items separately
 function initSpecialItems() {
     if (state.specialItemsInitialized) return;
 
@@ -598,7 +663,6 @@ function initSpecialItems() {
     const slides = document.querySelectorAll('.specials-slider .slide');
     const dots = document.querySelectorAll('.slider-dot');
     let currentSlide = 0;
-    let slideInterval;
 
     if (slides.length > 0) {
         const showSlide = (index) => {
@@ -617,8 +681,8 @@ function initSpecialItems() {
 
         // Start auto-play
         const startSlider = () => {
-            if (slideInterval) clearInterval(slideInterval);
-            slideInterval = setInterval(nextSlide, 5000);
+            if (state.slideInterval) clearInterval(state.slideInterval);
+            state.slideInterval = setInterval(nextSlide, 5000);
         };
 
         // Handle dot clicks and hovers
@@ -629,7 +693,7 @@ function initSpecialItems() {
             });
             dot.addEventListener('mouseenter', () => {
                 showSlide(index);
-                clearInterval(slideInterval);
+                clearInterval(state.slideInterval);
             });
             dot.addEventListener('mouseleave', () => {
                 startSlider();
