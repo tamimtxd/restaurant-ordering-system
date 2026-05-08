@@ -72,10 +72,10 @@ let menuItems = [
     { id: 12, name: "Beef Seekh Kebab", namebn: "বিফ সিক কাবাব", category: "kebab", price: 320, image: "assets/images/food/beef-seekh-kebab.jpg", desc: "Spiced minced beef on skewers", spicy: 2 },
     { id: 13, name: "Mutton Boti Kebab", namebn: "মাটন বটি কাবাব", category: "kebab", price: 350, image: "assets/images/food/mutton-boti-kebab.jpg", desc: "Tender mutton cubes grilled", spicy: 2 },
     { id: 14, name: "Tangri Kebab", namebn: "টাংরি কাবাব", category: "kebab", price: 300, image: "assets/images/food/tangri-kebab.jpg", desc: "Marinated chicken drumsticks", spicy: 2, popular: true },
-    { id: 15, name: "Reshmi Kebab", namebn: "রেশমি কাবাব", category: "kebab", price: 290, image: "assets/images/food/reshmi-kebab.jpg", desc: "Soft and silky chicken kebab", spicy: 1 },
+    { id: 15, name: "Reshmi Kebab", namebn: "রেশমি কাবাব", category: "kebab", price: 300, image: "assets/images/food/reshmi-kebab.jpg", desc: "Soft and silky chicken kebab", spicy: 1 },
 
     // Snacks
-    { id: 16, name: "Samosa", namebn: "সমুচা", category: "snacks", price: 40, image: "assets/images/food/samosa.jpg", desc: "Crispy pastry with spiced filling (2 pcs)", spicy: 1 },
+    { id: 16, name: "Samosa", namebn: "সমুচা", category: "snacks", price: 35, image: "assets/images/food/samosa.jpg", desc: "Crispy pastry with spiced filling (2 pcs)", spicy: 1 },
     { id: 17, name: "Singara", namebn: "সিঙ্গারা", category: "snacks", price: 30, image: "assets/images/food/singara.jpg", desc: "Bengali style potato singara (2 pcs)", spicy: 1 },
     { id: 18, name: "Fuchka", namebn: "ফুচকা", category: "snacks", price: 60, image: "assets/images/food/fuchka.jpg", desc: "Crispy shells with tangy water (6 pcs)", spicy: 2, popular: true },
     { id: 19, name: "Chotpoti", namebn: "চটপটি", category: "snacks", price: 80, image: "assets/images/food/chotpoti.jpg", desc: "Spicy chickpea street food", spicy: 2 },
