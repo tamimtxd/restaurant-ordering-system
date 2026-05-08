@@ -177,6 +177,8 @@ html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    background-color: #0d0500; /* Prevent white background showing during mobile scroll */
+    min-height: 100%;
 }
 
 body {
@@ -187,9 +189,21 @@ body {
     color: var(--color-text-primary);
     background: radial-gradient(circle at top center, #160a03 0%, var(--color-bg-dark) 80%);
     background-attachment: fixed;
+    background-color: var(--color-bg-dark);
+    min-height: 100%;
+    margin: 0;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimization for mobile browsers to prevent background flickering/gaps during scroll */
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 }
 
 body.modal-open,
@@ -472,38 +486,7 @@ h6 {
     border-color: var(--color-primary);
 }
 
-/* Hero Stats Optimization */
-.hero-stats {
-    display: flex;
-    gap: var(--space-xl);
-    margin-top: var(--space-xl);
-    padding-top: var(--space-lg);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
 
-.stat-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-number {
-    font-size: var(--text-2xl);
-    font-weight: 800;
-    /* Increased weight */
-    color: #FF8C00;
-    /* Use primary brand orange for better visibility */
-    line-height: 1;
-    margin-bottom: var(--space-xxs);
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    /* Add shadow for contrast */
-}
-
-.stat-label {
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.9);
-    /* Brighter white */
-    font-weight: 500;
-}
 
 /* Button Sizes */
 .btn-sm {
@@ -535,14 +518,6 @@ h6 {
 
 .btn-text {
     display: inline;
-}
-
-.spicy-icon {
-    color: #ff4500;
-    filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.4));
-    width: 1.1em;
-    height: 1.1em;
-    margin: 0 0.05em;
 }
 
 .inline-icon {
@@ -969,80 +944,7 @@ h6 {
 }
 
 
-/* Mobile Menu Toggle */
-.btn-mobile-menu {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 44px;
-    height: 44px;
-    gap: 5px;
-    padding: 0;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
 
-.hamburger-line {
-    width: 22px;
-    height: 2px;
-    background: var(--color-text-primary);
-    border-radius: 2px;
-    transition: all var(--transition-base);
-}
-
-.btn-mobile-menu.active .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.btn-mobile-menu.active .hamburger-line:nth-child(2) {
-    opacity: 0;
-}
-
-.btn-mobile-menu.active .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Mobile Menu Dropdown */
-.mobile-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: rgba(26, 10, 0, 0.98);
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--space-md);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-    animation: slideDown var(--transition-base);
-}
-
-.mobile-nav-link {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md);
-    border-radius: var(--radius-lg);
-    font-size: var(--text-base);
-    color: var(--color-text-secondary);
-    transition: all var(--transition-fast);
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-}
-
-.mobile-nav-link:hover {
-    background: rgba(255, 140, 0, 0.1);
-    color: var(--color-primary);
-}
-
-.mobile-nav-icon {
-    font-size: var(--text-xl);
-}
 
 /* ==========================================
    8. WELCOME SCREEN
@@ -1340,37 +1242,7 @@ h6 {
     animation-delay: -3s;
 }
 
-/* Hero Container */
-.hero-container {
-    position: relative;
-    z-index: 10;
-    max-width: 800px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 var(--container-padding);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-/* Session Badge */
-.session-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    background: rgba(0, 239, 139, 0.08);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(0, 239, 139, 0.2);
-    padding: 8px 18px;
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: #00ef8b;
-    margin-bottom: var(--space-2xl);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
 
 /* Live Dot Animation */
 .live-dot {
@@ -1382,173 +1254,11 @@ h6 {
     box-shadow: 0 0 10px rgba(0, 239, 139, 0.5);
 }
 
-/* Hero Title */
-.hero-title {
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    line-height: 1.1;
-    margin-bottom: var(--space-xl);
-    letter-spacing: -0.04em;
-    font-weight: 900;
-    color: #ffffff;
-}
 
-.hero-title .gradient-text {
-    background: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FF2E00 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    display: inline-block;
-}
-
-.hero-title br {
-    display: block;
-}
-
-/* Hero Description */
-.hero-description {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-    max-width: 600px;
-    margin: 0 auto var(--space-2xl);
-    line-height: 1.6;
-    opacity: 0.9;
-}
-
-/* Hero Actions */
-.hero-actions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-md);
-    margin-bottom: var(--space-3xl);
-}
-
-.hero-actions .btn {
-    padding: 16px 32px;
-    font-size: var(--text-base);
-    min-width: 200px;
-    justify-content: center;
-}
-
-.hero-actions .btn-primary {
-    background: linear-gradient(135deg, #FF8C00 0%, #FF2E00 100%);
-    border: none;
-    box-shadow: 0 10px 25px rgba(255, 46, 0, 0.3);
-}
-
-.hero-actions .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(255, 46, 0, 0.4);
-}
-
-.hero-actions .btn-outline {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.hero-actions .btn-outline:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Hero Stats */
-.hero-stats {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* keep it centered */
-    gap: var(--space-2xl);
-    padding: var(--space-xl) 0;
-    /* remove side padding */
-    margin-top: var(--space-md);
-    background: transparent;
-    /* Remove weird box */
-    border: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    /* Stacked for better centering */
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    flex: 1;
-    min-width: 120px;
-}
-
-.stat-icon {
-    font-size: 2rem;
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
-    margin-bottom: 4px;
-}
-
-.stat-details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* Centered text details */
-    text-align: center;
-}
-
-.stat-number {
-    font-size: 1.8rem;
-    font-weight: 800;
-    font-family: var(--font-display);
-    color: #ffffff;
-    line-height: 1;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    /* Visibility boost */
-}
-
-.stat-label {
-    font-size: 0.7rem;
-    color: #aaaaaa;
-    /* Brighter than muted for better visibility */
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-weight: 700;
-    margin-top: 4px;
-}
-
-.stat-divider {
-    width: 1px;
-    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.15), transparent);
-    margin: 10px 0;
-}
-
-/* Scroll Indicator */
-.scroll-indicator {
-    position: absolute;
-    bottom: var(--space-xl);
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-sm);
-    color: var(--color-text-muted);
-    font-size: var(--text-xs);
-    animation: bounce 2s ease-in-out infinite;
-}
-
-.scroll-arrow svg {
-    width: 24px;
-    height: 24px;
-    opacity: 0.5;
-}
 
 /* ==========================================
    10. MENU SECTION
    ========================================== */
-
-/* .menu-section {
-    padding: var(--space-3xl) 0;
-} */
 
 .search-container {
     max-width: 600px;
@@ -2642,7 +2352,6 @@ h6 {
     width: 100%;
     max-height: 100vh;
     background: rgb(17 9 3 / 80%);
-    /* Made background more solid since we removed the inner blur to stop the black flash crash */
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-2xl);
     overflow: hidden;
@@ -2753,7 +2462,6 @@ h6 {
 .empty-state-subtitle {
     font-size: var(--text-base);
     color: var(--color-text-muted);
-    margin: 0;
 }
 
 /* Orders List */
@@ -3138,32 +2846,7 @@ h6 {
     color: var(--color-success);
 }
 
-/* Waiter Modal */
-.waiter-content {
-    padding: var(--space-xl);
-    text-align: center;
-}
 
-.waiter-icon {
-    font-size: 64px;
-    margin-bottom: var(--space-md);
-    animation: bounce 1s ease-in-out infinite;
-}
-
-.waiter-icon.success {
-    animation: none;
-}
-
-.waiter-subtitle {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-lg);
-}
-
-.waiter-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
-}
 
 /* Item Modal Premium Split Layout */
 .item-modal-content {
@@ -3601,21 +3284,12 @@ h6 {
     color: #ffffff;
 }
 
-.food-badge.spicy {
-    background: rgba(239, 68, 68, 0.9);
-    color: #ffffff;
-}
+
 
 .food-card-title {
     font-size: var(--text-lg);
     font-weight: var(--font-bold);
     margin-bottom: 2px;
-}
-
-.food-card-title-bn {
-    font-size: var(--text-sm);
-    color: var(--color-primary);
-    margin-bottom: var(--space-sm);
 }
 
 .food-card-description {
@@ -3658,14 +3332,6 @@ textarea::placeholder {
    18. FLOATING ELEMENTS
    ========================================== */
 
-/* Floating Cart (Mobile) */
-.floating-cart {
-    position: fixed;
-    bottom: 100px;
-    right: var(--space-md);
-    z-index: var(--z-fixed);
-}
-
 /* Floating Track Order */
 .floating-track {
     position: fixed;
@@ -3703,36 +3369,6 @@ textarea::placeholder {
     transform: scale(0.95);
 }
 
-.fab-cart {
-    width: 56px;
-    height: 56px;
-    background: var(--gradient-primary);
-    position: relative;
-    color: var(--color-text-primary);
-}
-
-.fab-cart .fab-icon {
-    width: 24px;
-    height: 24px;
-}
-
-.fab-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    min-width: 22px;
-    height: 22px;
-    padding: 0 6px;
-    background: var(--color-primary-light);
-    color: var(--color-bg-dark);
-    font-size: var(--text-xs);
-    font-weight: var(--font-bold);
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .fab-track {
     gap: var(--space-sm);
     padding: var(--space-md) var(--space-xl);
@@ -3743,6 +3379,18 @@ textarea::placeholder {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-full);
     box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.fab-badge {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
 }
 
 .fab-track:hover {
@@ -4107,54 +3755,7 @@ textarea::placeholder {
         font-size: 0.5rem;
     }
 
-    .hero-title {
-        font-size: 2rem;
-        margin-bottom: var(--space-lg);
-    }
 
-    .hero-stats {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        /* Better for tight spaces */
-        width: 100%;
-        max-width: 100%;
-        /* Allow it to use full parent width */
-        gap: 8px;
-        /* Tighten gap */
-        padding: 12px 10px;
-        margin: 0 auto;
-    }
-
-    .stat-item {
-        flex: 1;
-        min-width: 0;
-        /* Important: allow shrinking below default min-width */
-    }
-
-    .stat-divider {
-        display: block;
-        width: 1px;
-        height: 20px;
-        /* Shorter for tiny screens */
-        background: rgba(255, 255, 255, 0.15);
-        margin: 0;
-        flex-shrink: 0;
-    }
-
-    .stat-number {
-        font-size: 1rem;
-    }
-
-    .stat-label {
-        font-size: 0.5rem;
-        white-space: nowrap;
-        /* Keep it on one line but it will shrink if needed */
-    }
-
-    .stat-icon {
-        font-size: 1rem;
-    }
 
     .category-tab {
         padding: var(--space-xs) var(--space-sm);
@@ -4296,9 +3897,7 @@ textarea::placeholder {
 
 /* Medium (768px - 1023px) */
 @media (min-width: 768px) {
-    .btn-mobile-menu {
-        display: none;
-    }
+
 
     /* btn-waiter and btn-navbar-action are now always visible */
 
@@ -4306,9 +3905,7 @@ textarea::placeholder {
         min-height: 108vh;
     }
 
-    .hero-title {
-        font-size: var(--text-5xl);
-    }
+
 
     .section-title {
         font-size: var(--text-4xl);
@@ -4316,10 +3913,6 @@ textarea::placeholder {
 
     .footer-grid {
         grid-template-columns: 2fr 1fr 1fr 1fr;
-    }
-
-    .floating-cart {
-        display: none !important;
     }
 
     .orb-1 {
@@ -4429,7 +4022,6 @@ textarea::placeholder {
 @media print {
 
     .navbar,
-    .floating-cart,
     .floating-track,
     .back-to-top,
     .cart-sidebar,
@@ -5488,129 +5080,9 @@ body.welcome-active {
     }
 }
 
-/* ==========================================
-   5. MOBILE BOTTOM NAVIGATION
-   ========================================== */
 
-.mobile-bottom-nav {
-    display: none !important;
-    /* Bottom nav removed - buttons unified into top navbar */
-}
 
-@media (max-width: 768px) {
 
-    /* Bug Fix: Ensure modals don't get covered by bottom nav */
-    .modal {
-        align-items: flex-start !important;
-        padding-top: 5vh !important;
-        padding-bottom: 20px !important;
-        overflow-y: auto !important;
-    }
-
-    .modal-container {
-        max-height: none !important;
-        align-items: flex-start !important;
-    }
-
-    .modal-content {
-        max-height: none !important;
-        margin-bottom: 20px !important;
-    }
-
-    .modal-body {
-        max-height: none !important;
-        overflow-y: visible !important;
-    }
-
-    /* Responsive Specials */
-    .special-content {
-        flex-direction: column;
-    }
-
-    .special-image {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 16 / 9;
-    }
-}
-
-.mobile-bottom-nav .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    flex: 1;
-}
-
-.mobile-bottom-nav .nav-item.active {
-    color: var(--primary-color);
-}
-
-.mobile-bottom-nav .table-card-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.table-card-icon .lucide {
-    width: 32px;
-    height: 32px;
-}
-
-.mobile-bottom-nav .nav-label {
-    font-size: 0.7rem;
-    font-weight: 500;
-}
-
-.icon-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mobile-bottom-nav .nav-badge {
-    position: absolute;
-    top: -5px;
-    right: -8px;
-    background: var(--primary-color);
-    color: white;
-    font-size: 0.6rem;
-    font-weight: bold;
-    min-width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    border: 2px solid rgba(10, 10, 10, 0.95);
-}
-
-/* Mobile adjustments - bottom nav removed */
-@media (max-width: 768px) {
-    /* No bottom padding needed - bottom nav removed */
-
-    /* Hide standard desktop nav items if visible */
-    .navbar-menu {
-        display: none !important;
-    }
-
-    /* Modal visibility fix: Handled by z-index: 3000 */
-
-    /* Fix Issue 3: No need for floating cart on mobile */
-    .floating-cart {
-        display: none !important;
-    }
-}
 
 /* ==========================================
    FIX: ENSURE WELCOME SCREEN INTERACTIVITY
@@ -5638,7 +5110,6 @@ body.welcome-active {
    FIX: SPECIALS GRID LAYOUT (TABLET/MOBILE)
    ========================================== */
 @media (max-width: 900px) {
-    /* Removed .specials-grid layout override since it's now flex */
 
     .special-card {
         padding: var(--space-lg) !important;
@@ -6256,10 +5727,17 @@ body.welcome-active {
 .footer-bottom p {
     color: var(--color-text-muted);
     font-size: var(--text-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+    line-height: 1.6;
+}
+
+.footer-bottom a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
 }
 
 .no-reviews span {

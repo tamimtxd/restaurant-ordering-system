@@ -24,17 +24,10 @@ const Z_INDEX = {
     MODAL: 3000,
     TOAST: 5000,
     NAVBAR: 1000,
-    BOTTOM_NAV: 1000,
     FLOATING: 1500,
     CART: 2000,
     OVERLAY: 1999,
     WELCOME: 100
-};
-
-// Layout Constants (Issue #4: Magic Numbers)
-const LAYOUT = {
-    MOBILE_NAV_HEIGHT: '80px',
-    TRACK_BUTTON_OFFSET: '80px'
 };
 
 const CONFIG = {
@@ -54,50 +47,50 @@ const CONFIG = {
 // Menu Items Data (Fallback data)
 let menuItems = [
     // Biriyani
-    { id: 1, name: "Kacchi Biriyani", namebn: "কাচ্চি বিরিয়ানি", category: "biriyani", price: 350, image: "assets/images/food/kacchi-biriyani.jpg", desc: "Aromatic mutton biriyani with potatoes", spicy: 2, popular: true },
-    { id: 2, name: "Chicken Biriyani", namebn: "চিকেন বিরিয়ানি", category: "biriyani", price: 280, image: "assets/images/food/chicken-biriyani.jpg", desc: "Fragrant rice with tender chicken pieces", spicy: 2 },
-    { id: 3, name: "Beef Tehari", namebn: "গরুর তেহারি", category: "biriyani", price: 300, image: "assets/images/food/beef-tehari.jpg", desc: "Spiced beef with aromatic rice", spicy: 3 },
-    { id: 4, name: "Morog Polao", namebn: "মোরগ পোলাও", category: "biriyani", price: 320, image: "assets/images/food/morog-polao.jpg", desc: "Chicken with fragrant pulao rice", spicy: 1 },
+    { id: 1, name: "Kacchi Biriyani", category: "biriyani", price: 350, image: "assets/images/food/kacchi-biriyani.jpg", desc: "Aromatic mutton biriyani with potatoes", popular: true },
+    { id: 2, name: "Chicken Biriyani", category: "biriyani", price: 280, image: "assets/images/food/chicken-biriyani.jpg", desc: "Fragrant rice with tender chicken pieces" },
+    { id: 3, name: "Beef Tehari", category: "biriyani", price: 300, image: "assets/images/food/beef-tehari.jpg", desc: "Spiced beef with aromatic rice" },
+    { id: 4, name: "Morog Polao", category: "biriyani", price: 320, image: "assets/images/food/morog-polao.jpg", desc: "Chicken with fragrant pulao rice" },
 
     // Curry
-    { id: 5, name: "Chicken Rezala", namebn: "চিকেন রেজালা", category: "curry", price: 320, image: "assets/images/food/chicken-rezala.jpg", desc: "Creamy white curry with tender chicken", spicy: 1 },
-    { id: 6, name: "Mutton Bhuna", namebn: "মাটন ভুনা", category: "curry", price: 380, image: "assets/images/food/mutton-bhuna.jpg", desc: "Slow-cooked mutton in rich spices", spicy: 3, popular: true },
-    { id: 7, name: "Chingri Malai", namebn: "চিংড়ি মালাই", category: "curry", price: 450, image: "assets/images/food/chingri-malai.jpg", desc: "Prawns in coconut milk curry", spicy: 1 },
-    { id: 8, name: "Ilish Bhapa", namebn: "ইলিশ ভাপা", category: "curry", price: 500, image: "assets/images/food/ilish-bhapa.jpg", desc: "Steamed hilsa in mustard paste", spicy: 2 },
-    { id: 9, name: "Beef Kala Bhuna", namebn: "গরুর কালা ভুনা", category: "curry", price: 360, image: "assets/images/food/beef-kala-bhuna.jpg", desc: "Chittagong style dark beef curry", spicy: 3 },
-    { id: 10, name: "Chicken Kosha", namebn: "চিকেন কষা", category: "curry", price: 280, image: "assets/images/food/chicken-kosha.jpg", desc: "Bengali style slow-cooked chicken", spicy: 2 },
+    { id: 5, name: "Chicken Rezala", category: "curry", price: 320, image: "assets/images/food/chicken-rezala.jpg", desc: "Creamy white curry with tender chicken" },
+    { id: 6, name: "Mutton Bhuna", category: "curry", price: 380, image: "assets/images/food/mutton-bhuna.jpg", desc: "Slow-cooked mutton in rich spices", popular: true },
+    { id: 7, name: "Chingri Malai", category: "curry", price: 450, image: "assets/images/food/chingri-malai.jpg", desc: "Prawns in coconut milk curry" },
+    { id: 8, name: "Ilish Bhapa", category: "curry", price: 500, image: "assets/images/food/ilish-bhapa.jpg", desc: "Steamed hilsa in mustard paste" },
+    { id: 9, name: "Beef Kala Bhuna", category: "curry", price: 360, image: "assets/images/food/beef-kala-bhuna.jpg", desc: "Chittagong style dark beef curry" },
+    { id: 10, name: "Chicken Kosha", category: "curry", price: 280, image: "assets/images/food/chicken-kosha.jpg", desc: "Bengali style slow-cooked chicken" },
 
     // Kebab
-    { id: 11, name: "Chicken Tikka", namebn: "চিকেন টিক্কা", category: "kebab", price: 280, image: "assets/images/food/chicken-tikka.jpg", desc: "Grilled marinated chicken pieces", spicy: 2 },
-    { id: 12, name: "Beef Seekh Kebab", namebn: "বিফ সিক কাবাব", category: "kebab", price: 320, image: "assets/images/food/beef-seekh-kebab.jpg", desc: "Spiced minced beef on skewers", spicy: 2 },
-    { id: 13, name: "Mutton Boti Kebab", namebn: "মাটন বটি কাবাব", category: "kebab", price: 350, image: "assets/images/food/mutton-boti-kebab.jpg", desc: "Tender mutton cubes grilled", spicy: 2 },
-    { id: 14, name: "Tangri Kebab", namebn: "টাংরি কাবাব", category: "kebab", price: 300, image: "assets/images/food/tangri-kebab.jpg", desc: "Marinated chicken drumsticks", spicy: 2, popular: true },
-    { id: 15, name: "Reshmi Kebab", namebn: "রেশমি কাবাব", category: "kebab", price: 300, image: "assets/images/food/reshmi-kebab.jpg", desc: "Soft and silky chicken kebab", spicy: 1 },
+    { id: 11, name: "Chicken Tikka", category: "kebab", price: 280, image: "assets/images/food/chicken-tikka.jpg", desc: "Grilled marinated chicken pieces" },
+    { id: 12, name: "Beef Seekh Kebab", category: "kebab", price: 320, image: "assets/images/food/beef-seekh-kebab.jpg", desc: "Spiced minced beef on skewers" },
+    { id: 13, name: "Mutton Boti Kebab", category: "kebab", price: 350, image: "assets/images/food/mutton-boti-kebab.jpg", desc: "Tender mutton cubes grilled" },
+    { id: 14, name: "Tangri Kebab", category: "kebab", price: 300, image: "assets/images/food/tangri-kebab.jpg", desc: "Marinated chicken drumsticks", popular: true },
+    { id: 15, name: "Reshmi Kebab", category: "kebab", price: 290, image: "assets/images/food/reshmi-kebab.jpg", desc: "Soft and silky chicken kebab" },
 
     // Snacks
-    { id: 16, name: "Samosa", namebn: "সমুচা", category: "snacks", price: 35, image: "assets/images/food/samosa.jpg", desc: "Crispy pastry with spiced filling (2 pcs)", spicy: 1 },
-    { id: 17, name: "Singara", namebn: "সিঙ্গারা", category: "snacks", price: 30, image: "assets/images/food/singara.jpg", desc: "Bengali style potato singara (2 pcs)", spicy: 1 },
-    { id: 18, name: "Fuchka", namebn: "ফুচকা", category: "snacks", price: 60, image: "assets/images/food/fuchka.jpg", desc: "Crispy shells with tangy water (6 pcs)", spicy: 2, popular: true },
-    { id: 19, name: "Chotpoti", namebn: "চটপটি", category: "snacks", price: 80, image: "assets/images/food/chotpoti.jpg", desc: "Spicy chickpea street food", spicy: 2 },
-    { id: 20, name: "Jhalmuri", namebn: "ঝালমুড়ি", category: "snacks", price: 50, image: "assets/images/food/jhalmuri.jpg", desc: "Spiced puffed rice mix", spicy: 2 },
-    { id: 21, name: "Peyaju", namebn: "পেঁয়াজু", category: "snacks", price: 30, image: "assets/images/food/peyaju.jpg", desc: "Crispy onion fritters (5 pcs)", spicy: 1 },
-    { id: 22, name: "Beguni", namebn: "বেগুনি", category: "snacks", price: 35, image: "assets/images/food/beguni.jpg", desc: "Fried eggplant fritters (4 pcs)", spicy: 1 },
+    { id: 16, name: "Samosa", category: "snacks", price: 40, image: "assets/images/food/samosa.jpg", desc: "Crispy pastry with spiced filling (2 pcs)" },
+    { id: 17, name: "Singara", category: "snacks", price: 30, image: "assets/images/food/singara.jpg", desc: "Bengali style potato singara (2 pcs)" },
+    { id: 18, name: "Fuchka", category: "snacks", price: 60, image: "assets/images/food/fuchka.jpg", desc: "Crispy shells with tangy water (6 pcs)", popular: true },
+    { id: 19, name: "Chotpoti", category: "snacks", price: 80, image: "assets/images/food/chotpoti.jpg", desc: "Spicy chickpea street food" },
+    { id: 20, name: "Jhalmuri", category: "snacks", price: 50, image: "assets/images/food/jhalmuri.jpg", desc: "Spiced puffed rice mix" },
+    { id: 21, name: "Peyaju", category: "snacks", price: 30, image: "assets/images/food/peyaju.jpg", desc: "Crispy onion fritters (5 pcs)" },
+    { id: 22, name: "Beguni", category: "snacks", price: 35, image: "assets/images/food/beguni.jpg", desc: "Fried eggplant fritters (4 pcs)" },
 
     // Dessert
-    { id: 23, name: "Roshogolla", namebn: "রসগোল্লা", category: "dessert", price: 40, image: "assets/images/food/roshogolla.jpg", desc: "Soft cheese balls in syrup (2 pcs)", spicy: 0 },
-    { id: 24, name: "Mishti Doi", namebn: "মিষ্টি দই", category: "dessert", price: 60, image: "assets/images/food/mishti-doi.jpg", desc: "Sweet fermented yogurt", spicy: 0, popular: true },
-    { id: 25, name: "Chomchom", namebn: "চমচম", category: "dessert", price: 50, image: "assets/images/food/chomchom.jpg", desc: "Oval shaped sweet (2 pcs)", spicy: 0 },
-    { id: 26, name: "Firni", namebn: "ফিরনি", category: "dessert", price: 70, image: "assets/images/food/firni.jpg", desc: "Rice pudding with nuts", spicy: 0 },
-    { id: 27, name: "Jilapi", namebn: "জিলাপি", category: "dessert", price: 80, image: "assets/images/food/jilapi.jpg", desc: "Crispy sweet spirals", spicy: 0 },
-    { id: 28, name: "Rasmalai", namebn: "রসমালাই", category: "dessert", price: 90, image: "assets/images/food/rasmalai.jpg", desc: "Cheese patties in sweet milk (2 pcs)", spicy: 0 },
+    { id: 23, name: "Roshogolla", category: "dessert", price: 40, image: "assets/images/food/roshogolla.jpg", desc: "Soft cheese balls in syrup (2 pcs)" },
+    { id: 24, name: "Mishti Doi", category: "dessert", price: 60, image: "assets/images/food/mishti-doi.jpg", desc: "Sweet fermented yogurt", popular: true },
+    { id: 25, name: "Chomchom", category: "dessert", price: 50, image: "assets/images/food/chomchom.jpg", desc: "Oval shaped sweet (2 pcs)" },
+    { id: 26, name: "Firni", category: "dessert", price: 70, image: "assets/images/food/firni.jpg", desc: "Rice pudding with nuts" },
+    { id: 27, name: "Jilapi", category: "dessert", price: 80, image: "assets/images/food/jilapi.jpg", desc: "Crispy sweet spirals" },
+    { id: 28, name: "Rasmalai", category: "dessert", price: 90, image: "assets/images/food/rasmalai.jpg", desc: "Cheese patties in sweet milk (2 pcs)" },
 
     // Drinks
-    { id: 29, name: "Borhani", namebn: "বোরহানি", category: "drinks", price: 60, image: "assets/images/food/borhani.jpg", desc: "Spiced yogurt drink", spicy: 1, popular: true },
-    { id: 30, name: "Lassi", namebn: "লাচ্ছি", category: "drinks", price: 80, image: "assets/images/food/lassi.jpg", desc: "Sweet yogurt smoothie", spicy: 0 },
-    { id: 31, name: "Mango Lassi", namebn: "আমের লাচ্ছি", category: "drinks", price: 100, image: "assets/images/food/mango-lassi.jpg", desc: "Mango flavored lassi", spicy: 0 },
-    { id: 32, name: "Tea", namebn: "চা", category: "drinks", price: 30, image: "assets/images/food/tea.jpg", desc: "Traditional milk tea", spicy: 0 },
-    { id: 33, name: "Coffee", namebn: "কফি", category: "drinks", price: 70, image: "assets/images/food/coffee.jpg", desc: "Rich aromatic ground coffee", spicy: 0 },
-    { id: 34, name: "Lemonade", namebn: "লেমনেড", category: "drinks", price: 40, image: "assets/images/food/lemonade.jpg", desc: "Fresh lemon juice blended with cooling mint leaves", spicy: 0 },
+    { id: 29, name: "Borhani", category: "drinks", price: 60, image: "assets/images/food/borhani.jpg", desc: "Spiced yogurt drink", popular: true },
+    { id: 30, name: "Lassi", category: "drinks", price: 80, image: "assets/images/food/lassi.jpg", desc: "Sweet yogurt smoothie" },
+    { id: 31, name: "Mango Lassi", category: "drinks", price: 100, image: "assets/images/food/mango-lassi.jpg", desc: "Mango flavored lassi" },
+    { id: 32, name: "Tea", category: "drinks", price: 30, image: "assets/images/food/tea.jpg", desc: "Traditional milk tea" },
+    { id: 33, name: "Coffee", category: "drinks", price: 70, image: "assets/images/food/coffee.jpg", desc: "Rich aromatic ground coffee" },
+    { id: 34, name: "Lemonade", category: "drinks", price: 40, image: "assets/images/food/lemonade.jpg", desc: "Fresh lemon juice blended with cooling mint leaves" },
 ];
 
 // Special Items Data (Fallback data)
@@ -105,22 +98,18 @@ let specialItems = [
     {
         id: 'special1',
         name: "Whole Tandoori Chicken",
-        namebn: "আস্ত তন্দুরি চিকেন",
         price: 600,
         originalPrice: 650,
         image: "assets/images/food/whole-tandoori-chicken.jpg",
         desc: "Succulent whole chicken marinated in spiced yogurt and slow-roasted in a traditional clay oven",
-        spicy: 2,
         category: "kebab"
     },
     {
         id: 'special2',
         name: "Mutton Leg Roast",
-        namebn: "খাসির লেগ রোস্ট",
         price: 1200,
         image: "assets/images/food/mutton-leg-roast.jpg",
         desc: "A feast-worthy whole mutton leg slow-roasted with aromatic spices and served with saffron pulao",
-        spicy: 1,
         category: "meat"
     }
 ];
@@ -140,7 +129,6 @@ const state = {
     selectedItem: null,
     selectedItemQty: 1,
     isCartOpen: false,
-    isMobileMenuOpen: false,
     specialItemsInitialized: false, // Flag to prevent multiple listeners
     html5QrCode: null, // QR Scanner instance
     ratingOrderId: null // Currently rating order
@@ -165,13 +153,10 @@ const DOM = {
     navbar: document.getElementById('navbar'),
     tableBadge: document.getElementById('tableBadge'),
     tableNumberDisplay: document.getElementById('tableNumberDisplay'),
-    mobileMenuBtn: document.getElementById('mobileMenuBtn'),
-    mobileMenu: document.getElementById('mobileMenu'),
+
 
     // Main Content
     mainContent: document.getElementById('mainContent'),
-    heroTableNumber: document.getElementById('heroTableNumber'),
-    sessionInfo: document.getElementById('sessionInfo'),
 
     // Menu
     menuGrid: document.getElementById('menuGrid'),
@@ -179,7 +164,6 @@ const DOM = {
     menuSearch: document.getElementById('menuSearch'),
     clearSearch: document.getElementById('clearSearch'),
     noResults: document.getElementById('noResults'),
-    mobileBottomNav: document.querySelector('.mobile-bottom-nav'),
 
     // Cart
     cartBtn: document.getElementById('cartBtn'),
@@ -198,9 +182,7 @@ const DOM = {
     placeOrderBtn: document.getElementById('placeOrder'),
 
     // Floating Elements
-    floatingCart: document.getElementById('floatingCart'),
-    floatingCartBtn: document.getElementById('floatingCartBtn'),
-    floatingCartCount: document.getElementById('floatingCartCount'),
+
     floatingTrackOrder: document.getElementById('floatingTrackOrder'),
     floatingTrackBtn: document.getElementById('floatingTrackBtn'),
     floatingOrderCount: document.getElementById('floatingOrderCount'),
@@ -224,16 +206,7 @@ const DOM = {
     noActiveOrders: document.getElementById('noActiveOrders'),
     closeTrackOrderModal: document.getElementById('closeTrackOrderModal'),
 
-    waiterModal: document.getElementById('waiterModal'),
-    waiterTableNumber: document.getElementById('waiterTableNumber'),
-    cancelWaiter: document.getElementById('cancelWaiter'),
-    confirmWaiter: document.getElementById('confirmWaiter'),
     callWaiterBtn: document.getElementById('callWaiterBtn'),
-    mobileWaiterBtn: document.getElementById('bottomNavWaiterBtn'), // Updated to new ID
-
-    waiterCalledModal: document.getElementById('waiterCalledModal'),
-    waiterCalledTableNumber: document.getElementById('waiterCalledTableNumber'),
-    closeWaiterCalled: document.getElementById('closeWaiterCalled'),
 
     itemModal: document.getElementById('itemModal'),
     closeItemModal: document.getElementById('closeItemModal'),
@@ -349,32 +322,26 @@ async function fetchMenuItems() {
             const remoteMenuItems = data.filter(item => !item.is_special).map(item => ({
                 id: item.id,
                 name: item.name,
-                namebn: item.namebn,
                 category: item.category,
                 price: item.price,
                 image: item.image_url || `assets/images/food/${item.name.toLowerCase().replace(/ /g, '-')}.jpg`,
                 desc: item.description,
-                spicy: item.spicy,
                 popular: item.popular
             }));
 
             const remoteSpecialItems = data.filter(item => item.is_special).map(item => ({
                 id: item.id,
                 name: item.name,
-                namebn: item.namebn,
                 category: item.category,
                 price: item.price,
                 originalPrice: item.original_price,
                 image: item.image_url || `assets/images/food/${item.name.toLowerCase().replace(/ /g, '-')}.jpg`,
-                desc: item.description,
-                spicy: item.spicy
+                desc: item.description
             }));
 
             if (remoteMenuItems.length > 0) menuItems = remoteMenuItems;
             if (remoteSpecialItems.length > 0) specialItems = remoteSpecialItems;
 
-            console.log('Menu items fetched from Supabase. Menu count:', menuItems.length, 'Specials count:', specialItems.length);
-            console.log('First menu item ID type:', typeof menuItems[0]?.id, 'Value:', menuItems[0]?.id);
             renderSpecials();
             renderMenu(state.selectedCategory, state.searchQuery);
         }
@@ -396,7 +363,6 @@ function getTableFromURL() {
 }
 
 function setTable(tableNumber) {
-    console.log('setTable called with:', tableNumber);
     if (!tableNumber) return;
 
     state.currentTable = tableNumber;
@@ -413,9 +379,7 @@ function setTable(tableNumber) {
     renderMenu();
     updateOrderBadges();
 
-    if (window.innerWidth < 768 && DOM.floatingCart) {
-        DOM.floatingCart.classList.remove('hidden');
-    }
+
 }
 
 function updateTableDisplays(tableNumber) {
@@ -423,8 +387,6 @@ function updateTableDisplays(tableNumber) {
         DOM.tableNumberDisplay,
         DOM.heroTableNumber,
         DOM.cartTableNumber,
-        DOM.waiterTableNumber,
-        DOM.waiterCalledTableNumber,
         DOM.successTableNumber
     ];
 
@@ -474,7 +436,6 @@ function renderMenu(category = 'all', searchQuery = '') {
         const query = searchQuery.toLowerCase();
         filtered = filtered.filter(item =>
             item.name.toLowerCase().includes(query) ||
-            item.namebn.includes(query) ||
             item.desc.toLowerCase().includes(query) ||
             item.category.toLowerCase().includes(query)
         );
@@ -498,7 +459,6 @@ function renderMenu(category = 'all', searchQuery = '') {
 }
 
 function createMenuItemHTML(item, index) {
-    const spicyIndicator = getSpicyIndicator(item.spicy);
     const delay = Math.min(index * 0.05, 0.5);
     const ratingData = state.itemRatingsData[item.id];
     const avgRating = ratingData ? ratingData.avg.toFixed(1) : '0.0';
@@ -518,7 +478,6 @@ function createMenuItemHTML(item, index) {
                 <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.src='https://placehold.co/400x400/1a1a1a/ffffff?text=${encodeURIComponent(item.name)}'">
                 <div class="food-card-badges">
                     ${item.popular ? '<span class="food-badge popular">Popular</span>' : ''}
-                    ${item.spicy >= 3 ? '<span class="food-badge spicy">Spicy</span>' : ''}
                 </div>
                 ${ratingHTML}
             </div>
@@ -538,29 +497,9 @@ function createMenuItemHTML(item, index) {
     `;
 }
 
-function getSpicyIndicator(level) {
-    if (!level) return '';
-    return `<i data-lucide="flame" class="inline-icon spicy-icon"></i>`.repeat(level);
-}
-
 // Attach listeners ONLY to menu grid items (not special items)
 function attachMenuItemListeners() {
-    // Add to cart buttons - only menu items
-    document.querySelectorAll('.btn-menu-item').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            addToCart(btn.dataset.id);
-        });
-    });
-
-    // Card click for details
-    document.querySelectorAll('.food-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (!e.target.closest('.btn-add')) {
-                openItemModal(card.dataset.id);
-            }
-        });
-    });
+    // No direct listeners needed - handled by universal event delegation in setupEventListeners()
 }
 
 // Render Special Items dynamically
@@ -630,29 +569,8 @@ function renderSpecials() {
 function initSpecialItems() {
     if (state.specialItemsInitialized) return;
 
-    // Add to cart buttons
-    document.querySelectorAll('.btn-special').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            console.log('Special item Add button clicked:', btn.dataset.id);
-            addToCart(btn.dataset.id);
-        });
-    });
+    // No direct listeners needed for add buttons or click details - handled by delegation
 
-    // Make special item content clickable for details
-    document.querySelectorAll('.slide-title, .slide-description, .special-rating').forEach(el => {
-        el.addEventListener('click', (e) => {
-            const slide = el.closest('.slide-content');
-            if (slide) {
-                const btn = slide.querySelector('.btn-special');
-                if (btn) {
-                    console.log('Special item detail click:', btn.dataset.id);
-                    openItemModal(btn.dataset.id);
-                }
-            }
-        });
-    });
 
     // Initial sync of ratings if data already exists
     if (Object.keys(state.itemRatingsData).length > 0) {
@@ -750,7 +668,6 @@ function clearSearch() {
 // ==========================================
 
 function addToCart(id) {
-    console.log('addToCart called for ID:', id);
     try {
         let item = menuItems.find(i => i.id == id) || specialItems.find(i => i.id == id);
         if (!item) {
@@ -762,10 +679,8 @@ function addToCart(id) {
 
         if (existingItem) {
             existingItem.qty++;
-            console.log('Incremented quantity for:', item.name);
         } else {
             state.cart.push({ ...item, qty: 1 });
-            console.log('Added new item:', item.name);
         }
 
         updateCart();
@@ -836,7 +751,7 @@ function updateCart() {
 }
 
 function updateCartBadges(count) {
-    const badges = [DOM.cartCount, DOM.floatingCartCount];
+    const badges = [DOM.cartCount];
 
     badges.forEach(badge => {
         if (badge) {
@@ -938,7 +853,6 @@ async function placeOrder() {
                 .select(); // Get back the record to confirm
 
             if (error) throw error;
-            console.log('Order saved to Supabase successfully');
         } catch (err) {
             console.error('Error saving order to Supabase:', err.message);
             showToast('Order saved locally (Offline mode)', 'info');
@@ -991,7 +905,6 @@ function simulateOrderProgress(orderNumber) {
 }
 
 function updateOrderStatus(orderNumber, newStatus) {
-    console.log(`Updating order #${orderNumber} status to: ${newStatus}`);
 
     // Use loose equality and string conversion to be safe with IDs
     const order = state.orders.find(o => String(o.id) === String(orderNumber));
@@ -1535,9 +1448,7 @@ function addSelectedItemToCart() {
 // 11. WAITER FUNCTIONS
 // ==========================================
 
-function showWaiterModal() {
-    // Deprecated for one-click action but kept for structural compatibility if needed later
-}
+
 
 async function callWaiter() {
     if (!state.currentTable) {
@@ -1574,10 +1485,6 @@ function handleScroll() {
 
     if (DOM.backToTop) {
         DOM.backToTop.classList.toggle('visible', scrollY > 500);
-    }
-
-    if (window.innerWidth < 768 && DOM.floatingCart && state.currentTable) {
-        DOM.floatingCart.classList.toggle('hidden', scrollY < 200);
     }
 }
 
@@ -1642,7 +1549,6 @@ function handleMouseMove(e) {
 // ==========================================
 
 function setupEventListeners() {
-    console.log('SetupEventListeners: initializing global delegation');
 
     // 1. UNIVERSAL CLICK DELEGATION
     document.addEventListener('click', (e) => {
@@ -1652,7 +1558,6 @@ function setupEventListeners() {
         const tableBtn = target.closest('.table-btn-compact, .table-card-premium');
         if (tableBtn) {
             const table = tableBtn.dataset.table;
-            console.log('Table clicked (Delegated):', table);
 
             // Visual feedback
             document.querySelectorAll('.table-btn-compact, .table-card-premium').forEach(c => {
@@ -1668,7 +1573,6 @@ function setupEventListeners() {
 
         // Toggle Manual Selection Button
         if (target.closest('#toggleManualBtn')) {
-            console.log('toggleManualBtn clicked (Delegated)');
             toggleManualSelection();
             return;
         }
@@ -1686,7 +1590,6 @@ function setupEventListeners() {
         if (specialAddBtn) {
             e.stopPropagation();
             e.preventDefault();
-            console.log('Special item Add button clicked:', specialAddBtn.dataset.id);
             addToCart(specialAddBtn.dataset.id);
             return;
         }
@@ -1731,7 +1634,7 @@ function setupEventListeners() {
         }
 
         // Cart Actions
-        if (target.closest('#cartBtn') || target.closest('#floatingCartBtn')) {
+        if (target.closest('#cartBtn')) {
             openCart();
             return;
         }
@@ -1767,20 +1670,8 @@ function setupEventListeners() {
         }
 
         // Waiter Calling
-        if (target.closest('#callWaiterBtn') || target.closest('#mobileWaiterBtn')) {
+        if (target.closest('#callWaiterBtn')) {
             callWaiter();
-            return;
-        }
-        if (target.closest('#cancelWaiter')) {
-            hideModal(DOM.waiterModal);
-            return;
-        }
-        if (target.closest('#confirmWaiter')) {
-            confirmCallWaiter();
-            return;
-        }
-        if (target.closest('#closeWaiterCalled')) {
-            hideModal(DOM.waiterCalledModal);
             return;
         }
 
@@ -1825,7 +1716,7 @@ function setupEventListeners() {
     // Mouse move for parallax
     document.addEventListener('mousemove', throttle(handleMouseMove, 50));
 
-    // Keyboard navigation removed (function undefined)
+
 
     // Window resize
     window.addEventListener('resize', debounce(handleResize, 100));
@@ -1850,13 +1741,6 @@ function setupEventListeners() {
 }
 
 function handleResize() {
-    if (window.innerWidth >= 768 && state.isMobileMenuOpen) {
-        // Legacy closeMobileMenu removed
-    }
-
-    if (DOM.floatingCart && state.currentTable) {
-        DOM.floatingCart.classList.toggle('hidden', window.innerWidth >= 768);
-    }
 }
 
 // ==========================================
@@ -1953,7 +1837,6 @@ function throttle(func, limit) {
 function subscribeToOrderUpdates(orderNumber) {
     if (typeof supabaseClient === 'undefined') return;
 
-    console.log(`Subscribing to Realtime updates for Order #${orderNumber}`);
 
     // Ensure we don't have multiple subscriptions for the same order
     const channelName = `cust-order-${orderNumber}`;
@@ -1966,7 +1849,6 @@ function subscribeToOrderUpdates(orderNumber) {
             table: 'orders',
             filter: `order_number=eq.${orderNumber}`
         }, (payload) => {
-            console.log(`Realtime update for #${orderNumber}:`, payload.new.status);
             updateOrderStatus(orderNumber, payload.new.status);
 
             // Show toast for transparency
@@ -1980,7 +1862,6 @@ function subscribeToOrderUpdates(orderNumber) {
             }
         })
         .subscribe((status) => {
-            console.log(`Subscription status for #${orderNumber}:`, status);
         });
 
     return channel;
@@ -2165,7 +2046,6 @@ async function saveRatingsToSupabase(orderNumber, itemRatings) {
             .insert(ratingRows);
 
         if (error) throw error;
-        console.log('Ratings saved to Supabase');
     } catch (err) {
         console.error('Error saving ratings to Supabase:', err.message);
     }
@@ -2191,7 +2071,6 @@ async function fetchItemRatings() {
             return;
         }
 
-        console.log('Ratings fetched from Supabase:', data ? data.length : 0, 'rows');
 
         if (data && data.length > 0) {
             // Aggregate ratings per item
@@ -2220,7 +2099,6 @@ async function fetchItemRatings() {
                 };
             });
 
-            console.log('Item ratings fetched from Supabase:', Object.keys(state.itemRatingsData).length, 'items');
 
             // Re-render menu with updated ratings
             renderMenu(state.selectedCategory, state.searchQuery);
@@ -2263,13 +2141,11 @@ function escapeHTML(str) {
 // ==========================================
 
 async function initQRScanner() {
-    console.log('initQRScanner called');
 
     // Check if welcome screen is active (either style.display is flex OR it has the welcome-active class on body)
     const isWelcomeVisible = DOM.welcomeScreen && (DOM.welcomeScreen.style.display !== 'none') && document.body.classList.contains('welcome-active');
 
     if (!isWelcomeVisible) {
-        console.log('initQRScanner: welcome screen not visible, skipping');
         return;
     }
 
@@ -2306,7 +2182,6 @@ async function initQRScanner() {
 }
 
 function onScanSuccess(decodedText, decodedResult) {
-    console.log(`Scan result: ${decodedText}`);
 
     try {
         const url = new URL(decodedText);
@@ -2343,7 +2218,6 @@ async function stopQRScanner() {
 }
 
 function toggleManualSelection() {
-    console.log('toggleManualSelection called');
     const manual = document.getElementById('manualSelection');
     const scanner = document.getElementById('scannerSection');
     const toggleBtn = document.getElementById('toggleManualBtn');

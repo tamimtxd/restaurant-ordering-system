@@ -42,7 +42,6 @@ const DOM = {
  * Initialize Dashboard
  */
 async function init() {
-    console.log('Kitchen Dashboard Initializing...');
 
     setupEventListeners();
     await Promise.all([
@@ -55,7 +54,6 @@ async function init() {
     // Background Sync Loop: Ensures data stays current even if Realtime is throttled/dropped
     // Runs every 5 seconds as a robust fallback for cross-device updates
     setInterval(async () => {
-        console.log('Background sync check...');
         await Promise.all([
             fetchActiveOrders(),
             fetchWaiterCalls()
@@ -117,7 +115,6 @@ function setupEventListeners() {
     // Refresh on visibility change (more robust than focus)
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
-            console.log('Tab visible: Synchronizing data...');
             Promise.all([
                 fetchActiveOrders(),
                 fetchWaiterCalls()
@@ -158,7 +155,6 @@ function switchMobileColumn(columnId) {
  */
 async function fetchActiveOrders() {
     try {
-        console.log('Fetching orders from Supabase...');
         
         // 1. Fetch all active orders (received, preparing, ready)
         // This ensures the kitchen never "loses" an order that needs action
@@ -195,7 +191,6 @@ async function fetchActiveOrders() {
         });
 
         orders = uniqueOrders;
-        console.log(`Successfully fetched ${orders.length} orders total (${(activeData || []).length} active).`);
         renderDashboard();
     } catch (err) {
         console.error('CRITICAL: Error fetching orders:', err.message);
@@ -245,7 +240,6 @@ function setupRealtime() {
             handleOrderUpdate(payload);
         })
         .subscribe((status) => {
-            console.log('Orders Channel Status:', status);
         });
 
     // Waiter Calls Channel
@@ -265,14 +259,12 @@ function setupRealtime() {
 
 function startPollingFallback() {
     // Polling removed as per user request
-    console.log('Polling fallback disabled.');
 }
 
 /**
  * Handle Realtime Payloads for Waiter
  */
 function handleWaiterUpdate(payload) {
-    console.log('Realtime Waiter Update Received:', payload.eventType, payload.new?.id);
     const { eventType, new: newRecord, old: oldRecord } = payload;
 
     if (eventType === 'INSERT') {
@@ -343,7 +335,6 @@ async function resolveServiceAlert(id) {
  * Handle Realtime Payloads for Orders
  */
 function handleOrderUpdate(payload) {
-    console.log('Realtime Order Update Received:', payload.eventType, payload.new?.order_number);
     const { eventType, new: newRecord, old: oldRecord } = payload;
 
     if (eventType === 'INSERT') {
@@ -386,8 +377,7 @@ function renderDashboard() {
                 const items = typeof o.items === 'string' ? JSON.parse(o.items) : o.items;
                 if (Array.isArray(items)) {
                     foodMatch = items.some(item =>
-                        (item.name && item.name.toLowerCase().includes(searchQuery)) ||
-                        (item.namebn && item.namebn.includes(searchQuery))
+                        (item.name && item.name.toLowerCase().includes(searchQuery))
                     );
                 }
             } catch (e) {
