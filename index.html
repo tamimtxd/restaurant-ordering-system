@@ -22,8 +22,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- QR Scanner Library -->
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -31,70 +30,8 @@
 
 <body>
 
-    <!-- ==================== -->
-    <!-- WELCOME SCREEN -->
-    <!-- ==================== -->
-    <div id="welcomeScreen" class="welcome-screen-new">
-        <div class="welcome-wrapper">
-            <!-- Compact Header -->
-            <div class="welcome-brand">
-                <div class="brand-icon-lg">
-                    <img src="assets/images/logo.png" alt="Rannaghor Logo">
-                </div>
-                <h1 class="brand-title">Rannaghor</h1>
-                <p class="brand-subtitle">Authentic Bangladeshi Cuisine</p>
-            </div>
-
-            <!-- QR Scanner Container -->
-            <div id="scannerSection" class="scanner-section hidden">
-                <div class="scanner-header">
-                    <span class="scanner-icon"><i data-lucide="camera"></i></span>
-                    <span class="scanner-title">SCAN TO START YOUR ORDER</span>
-                </div>
-                <div id="reader" class="qr-reader"></div>
-                <div class="scanner-hint">Point your camera at the QR code on your table</div>
-            </div>
-
-            <!-- Manual Selection Fallback -->
-            <div id="manualSelection" class="manual-selector">
-                <h2 class="selector-title">Select Your Table</h2>
-                <div class="table-grid-premium">
-                    <button class="table-card-premium" data-table="1">
-                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
-                        <span class="table-card-number">Table 1</span>
-                    </button>
-                    <button class="table-card-premium" data-table="2">
-                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
-                        <span class="table-card-number">Table 2</span>
-                    </button>
-                    <button class="table-card-premium" data-table="3">
-                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
-                        <span class="table-card-number">Table 3</span>
-                    </button>
-                    <button class="table-card-premium" data-table="4">
-                        <span class="table-card-icon"><i data-lucide="armchair"></i></span>
-                        <span class="table-card-number">Table 4</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Actions & Links -->
-            <div class="welcome-actions">
-                <button id="toggleManualBtn" class="btn-action-text">Switch to Scanner</button>
-
-                <div class="admin-links">
-                    <a href="qr-codes.html" class="btn btn-outline btn-sm">
-                        <span>QR Codes</span>
-                        <i data-lucide="qr-code"></i>
-                    </a>
-                    <button id="kitchenAdminBtn" class="btn btn-outline btn-sm">
-                        <span>Kitchen Dashboard</span>
-                        <i data-lucide="chef-hat"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Redirecting handled in script.js if no table selected -->
+    <div id="welcomeScreen" class="hidden"></div>
 
 
     <!-- ==================== -->

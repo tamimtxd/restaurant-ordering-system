@@ -177,7 +177,8 @@ html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-    background-color: #0d0500; /* Prevent white background showing during mobile scroll */
+    background-color: #0d0500;
+    /* Prevent white background showing during mobile scroll */
     min-height: 100%;
 }
 
@@ -1953,6 +1954,18 @@ h6 {
     border-top: 1px solid var(--color-border);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
+    opacity: 0.8;
+}
+
+.footer-bottom a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: text-decoration 0.2s;
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
 }
 
 /* ==========================================
@@ -4797,8 +4810,10 @@ body.welcome-active {
 
 .welcome-wrapper {
     width: 100%;
-    max-width: 450px;
+    max-width: 1100px;
+    /* Increased for QR management grid */
     text-align: center;
+    padding: var(--space-md);
 }
 
 /* Brand */
@@ -5183,123 +5198,130 @@ body.welcome-active {
     display: none;
 }
 
-.manual-selector {
-    width: 100%;
-    margin: 20px 0;
+/* QR Management Section */
+.qr-management-section {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-xl);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    text-align: left;
+    margin-top: var(--space-xl);
 }
 
-.manual-selector.hidden {
-    display: none;
-}
-
-.welcome-actions {
+.management-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 20px;
-    width: 100%;
-    margin-top: 30px;
-}
-
-.btn-action-text {
-    background: none;
-    border: none;
-    color: #ff8c00;
-    text-decoration: underline;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: color 0.3s;
-}
-
-.btn-action-text:hover {
-    color: #ff6b00;
-}
-
-.admin-links {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
+    margin-bottom: var(--space-xl);
     flex-wrap: wrap;
+    gap: var(--space-md);
 }
 
-.btn-sm {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    border-radius: 20px;
+.selector-title {
+    margin-bottom: 0;
+    font-size: var(--text-2xl);
+    font-family: var(--font-display);
 }
 
-/* Fix for Scanner Video Element */
-#reader video {
-    width: 100% !important;
-    height: auto !important;
-    object-fit: cover !important;
-}
-
-
-/* Premium Table Selection Styling */
-.table-grid-premium {
+.qr-management-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-lg);
 }
 
-.table-card-premium {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 25px 15px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.qr-management-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    overflow: hidden;
+    gap: var(--space-lg);
+    transition: all var(--transition-base);
 }
 
-.table-card-premium::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.table-card-premium:hover {
+.qr-management-card:hover {
+    border-color: var(--color-primary);
     transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 140, 0, 0.4);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.table-card-premium:hover::before {
-    opacity: 1;
+.qr-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.table-card-premium.selected {
-    background: linear-gradient(135deg, rgba(255, 140, 0, 0.15), rgba(220, 20, 60, 0.15));
-    border-color: #ff8c00;
-    box-shadow: 0 0 20px rgba(255, 140, 0, 0.2);
+.qr-table-number {
+    font-weight: var(--font-bold);
+    font-size: var(--text-lg);
 }
 
-.table-card-icon {
-    font-size: 2rem;
-    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.3));
+.btn-icon-qr {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.table-card-number {
-    font-size: 1.1rem;
-    font-weight: 600;
+.btn-icon-qr:hover {
+    background: var(--color-primary);
     color: white;
-    font-family: 'Poppins', sans-serif;
+    border-color: var(--color-primary);
+}
+
+.qr-card-body {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-md);
+    background: white;
+    border-radius: var(--radius-lg);
+}
+
+.qr-preview {
+    width: 140px;
+    height: 140px;
+}
+
+.qr-card-footer {
+    margin-top: auto;
+}
+
+.welcome-footer {
+    margin-top: var(--space-2xl);
+    text-align: center;
+    opacity: 0.5;
+    font-size: var(--text-xs);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .qr-management-section {
+        padding: var(--space-md);
+    }
+
+    .qr-management-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: var(--space-md);
+    }
+
+    .management-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #kitchenAdminBtn {
+        width: 100%;
+    }
 }
 
 

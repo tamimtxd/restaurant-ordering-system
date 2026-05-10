@@ -65,10 +65,10 @@ let menuItems = [
     { id: 12, name: "Beef Seekh Kebab", category: "kebab", price: 320, image: "assets/images/food/beef-seekh-kebab.jpg", desc: "Spiced minced beef on skewers" },
     { id: 13, name: "Mutton Boti Kebab", category: "kebab", price: 350, image: "assets/images/food/mutton-boti-kebab.jpg", desc: "Tender mutton cubes grilled" },
     { id: 14, name: "Tangri Kebab", category: "kebab", price: 300, image: "assets/images/food/tangri-kebab.jpg", desc: "Marinated chicken drumsticks", popular: true },
-    { id: 15, name: "Reshmi Kebab", category: "kebab", price: 290, image: "assets/images/food/reshmi-kebab.jpg", desc: "Soft and silky chicken kebab" },
+    { id: 15, name: "Reshmi Kebab", category: "kebab", price: 300, image: "assets/images/food/reshmi-kebab.jpg", desc: "Soft and silky chicken kebab" },
 
     // Snacks
-    { id: 16, name: "Samosa", category: "snacks", price: 40, image: "assets/images/food/samosa.jpg", desc: "Crispy pastry with spiced filling (2 pcs)" },
+    { id: 16, name: "Samosa", category: "snacks", price: 35, image: "assets/images/food/samosa.jpg", desc: "Crispy pastry with spiced filling (2 pcs)" },
     { id: 17, name: "Singara", category: "snacks", price: 30, image: "assets/images/food/singara.jpg", desc: "Bengali style potato singara (2 pcs)" },
     { id: 18, name: "Fuchka", category: "snacks", price: 60, image: "assets/images/food/fuchka.jpg", desc: "Crispy shells with tangy water (6 pcs)", popular: true },
     { id: 19, name: "Chotpoti", category: "snacks", price: 80, image: "assets/images/food/chotpoti.jpg", desc: "Spicy chickpea street food" },
@@ -141,11 +141,7 @@ const state = {
 const DOM = {
     // Welcome Screen
     welcomeScreen: document.getElementById('welcomeScreen'),
-    tableCards: document.querySelectorAll('.table-btn-compact, .table-card-premium'),
-
-    scannerSection: document.getElementById('scannerSection'),
-    manualSelection: document.getElementById('manualSelection'),
-    toggleManualBtn: document.getElementById('toggleManualBtn'),
+    qrGridContainer: document.getElementById('qrGridContainer'),
     kitchenAdminBtn: document.getElementById('kitchenAdminBtn'),
 
 
@@ -246,14 +242,7 @@ const DOM = {
     itemModalRatingCount: document.getElementById('itemModalRatingCount'),
     itemReviewsList: document.getElementById('itemReviewsList'),
     noReviews: document.getElementById('noReviews'),
-    kitchenAdminBtn: document.getElementById('kitchenAdminBtn'),
 };
-
-// ==========================================
-// 4. GLOBAL LISTENERS
-// ==========================================
-
-DOM.kitchenAdminBtn?.addEventListener('click', handleKitchenAdmin);
 
 // ==========================================
 // 4. INITIALIZATION
@@ -265,8 +254,8 @@ async function init() {
     if (tableFromURL) {
         setTable(tableFromURL);
     } else {
-        showWelcomeScreen();
-        // initQRScanner(); // Now initialized manually via toggle
+        // Redirect to Management Dashboard if no table is selected
+        window.location.href = 'management/';
     }
 
     setupEventListeners();
@@ -2136,114 +2125,4 @@ function escapeHTML(str) {
     return div.innerHTML;
 }
 
-// ==========================================
-// 17. QR SCANNER & ADMIN LOGIC
-// ==========================================
 
-async function initQRScanner() {
-
-    // Check if welcome screen is active (either style.display is flex OR it has the welcome-active class on body)
-    const isWelcomeVisible = DOM.welcomeScreen && (DOM.welcomeScreen.style.display !== 'none') && document.body.classList.contains('welcome-active');
-
-    if (!isWelcomeVisible) {
-        return;
-    }
-
-    // Check if Html5Qrcode is loaded
-    if (typeof Html5Qrcode === 'undefined') {
-        console.error('Html5Qrcode library not loaded!');
-        toggleManualSelection();
-        return;
-    }
-
-    // Prevent double init
-    if (state.html5QrCode) return;
-
-    state.html5QrCode = new Html5Qrcode("reader");
-
-    const config = {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0
-    };
-
-    try {
-        await state.html5QrCode.start(
-            { facingMode: "environment" },
-            config,
-            onScanSuccess
-        );
-    } catch (err) {
-        console.warn("QR Scanner Error:", err);
-        // Fallback to manual selection if camera fails
-        toggleManualSelection();
-        showToast("Camera access denied or unavailable. Please select table manually.", "info");
-    }
-}
-
-function onScanSuccess(decodedText, decodedResult) {
-
-    try {
-        const url = new URL(decodedText);
-        const table = url.searchParams.get("table");
-
-        if (table) {
-            showToast(`Table ${table} Detected! 🎯`, "success");
-            stopQRScanner();
-            setTable(table);
-        } else {
-            showToast("Invalid QR Code. Please scan a table QR.", "warning");
-        }
-    } catch (e) {
-        // Handle non-URL QR codes or other formats
-        if (!isNaN(decodedText) && (decodedText >= 1 && decodedText <= 4)) {
-            showToast(`Table ${decodedText} Detected! 🎯`, "success");
-            stopQRScanner();
-            setTable(decodedText);
-        } else {
-            showToast("Invalid QR Code.", "warning");
-        }
-    }
-}
-
-async function stopQRScanner() {
-    if (state.html5QrCode) {
-        try {
-            await state.html5QrCode.stop();
-            state.html5QrCode = null;
-        } catch (err) {
-            console.error("Error stopping scanner:", err);
-        }
-    }
-}
-
-function toggleManualSelection() {
-    const manual = document.getElementById('manualSelection');
-    const scanner = document.getElementById('scannerSection');
-    const toggleBtn = document.getElementById('toggleManualBtn');
-
-    if (!manual || !scanner) return;
-
-    const isManualHidden = manual.classList.contains("hidden");
-
-    if (isManualHidden) {
-        manual.classList.remove("hidden");
-        scanner.classList.add("hidden");
-        if (toggleBtn) toggleBtn.textContent = "Switch to Scanner";
-        stopQRScanner();
-    } else {
-        manual.classList.add("hidden");
-        scanner.classList.remove("hidden");
-        if (toggleBtn) toggleBtn.textContent = "Switch to Manual Selection";
-        initQRScanner();
-    }
-}
-
-function handleKitchenAdmin() {
-    const password = prompt("Enter Kitchen Dashboard Password:");
-    if (password === "123") {
-        window.open("kitchen.html", "_blank");
-    } else if (password !== null) {
-        showToast("Incorrect Password!", "error");
-    }
-}
