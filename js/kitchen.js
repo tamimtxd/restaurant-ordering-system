@@ -439,6 +439,18 @@ function renderDashboard() {
 }
 
 /**
+ * Helper to fix image paths for subfolder pages
+ */
+function fixImagePath(path) {
+    if (!path) return '';
+    // If it's a relative path starting with assets/, prefix with ../
+    if (path.startsWith('assets/')) {
+        return '../' + path;
+    }
+    return path;
+}
+
+/**
  * Create HTML for an order card
  */
 function createOrderCard(order) {
@@ -466,7 +478,7 @@ function createOrderCard(order) {
                 ${items.map(item => `
                     <div class="card-item-row">
                         <div class="item-name-wrapper">
-                            ${item.image ? `<img src="${item.image}" alt="${item.name}" class="kitchen-item-thumb">` : `<span class="item-emoji">${item.emoji || '🍽️'}</span>`}
+                            ${item.image ? `<img src="${fixImagePath(item.image)}" alt="${item.name}" class="kitchen-item-thumb">` : `<span class="item-emoji">${item.emoji || '🍽️'}</span>`}
                             <span>${item.name}</span>
                         </div>
                         <span class="item-qty">x${item.qty}</span>

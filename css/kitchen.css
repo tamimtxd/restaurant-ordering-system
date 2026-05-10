@@ -25,10 +25,11 @@ body.kitchen-body {
     color: #fff;
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 /* Navigation */
@@ -257,7 +258,10 @@ body.kitchen-body {
 .kitchen-container {
     flex: 1;
     padding: 1.5rem;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100vh - var(--nav-height));
+    height: calc(100dvh - var(--nav-height));
 }
 
 .orders-grid {
@@ -679,9 +683,8 @@ body.kitchen-body {
 
     .order-column {
         display: none;
-        height: calc(100vh - 180px);
-        /* Increased offset for safer scrolling */
-        max-height: calc(100dvh - 180px);
+        height: calc(100dvh - 160px);
+        min-height: 400px;
     }
 
     .order-column.active {
