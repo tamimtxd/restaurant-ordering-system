@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rannaghor | Management</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="../css/style.css">
 
     <!-- Favicon -->
@@ -13,66 +20,118 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        :root {
+            --nav-height: 80px;
+            --glass-blur: blur(15px);
+            --primary-orange: #FF8C00;
+        }
+
         body {
-            background-color: var(--color-bg-dark);
+            background: #0a0a0a;
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(255, 140, 0, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(220, 20, 60, 0.05) 0%, transparent 50%);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding-top: var(--nav-height); /* Space for fixed nav */
+        }
+
+        /* Navigation Style (Matches Kitchen) */
+        .admin-nav {
+            height: var(--nav-height);
+            background: rgba(10, 10, 10, 0.82);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 1000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .admin-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-name {
+            font-family: var(--font-display);
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(to right, #ffffff, #ffccaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            font-size: 0.85rem;
+            color: var(--primary-orange);
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .brand-sub-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .admin-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: var(--space-2xl) var(--space-lg);
+            padding: var(--space-xl) var(--space-lg);
             width: 100%;
         }
 
-        .admin-header {
-            text-align: center;
-            margin-bottom: var(--space-3xl);
-        }
-
-        .admin-brand {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-xl);
-        }
-
-        .admin-logo {
-            width: 200px;
-            height: 200px;
-            border-radius: var(--radius-2xl);
+        .nav-actions {
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: var(--space-md);
-        }
-
-        .admin-logo img {
-            width: 100%;
-            height: auto;
-        }
-
-        .admin-title {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0;
-        }
-
-        .admin-subtitle {
-            color: var(--color-text-secondary);
-            font-size: var(--text-sm);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            gap: 1rem;
         }
 
         .qr-management-section {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--color-border);
-            border-radius: var(--radius-2xl);
+            border-radius: 20px;
             padding: var(--space-xl);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -94,9 +153,9 @@
         }
 
         .qr-management-card {
-            background: var(--color-bg-card);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-xl);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
             padding: var(--space-lg);
             display: flex;
             flex-direction: column;
@@ -105,7 +164,8 @@
         }
 
         .qr-management-card:hover {
-            border-color: var(--color-primary);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
@@ -166,13 +226,7 @@
             width: 100%;
         }
 
-        /* Actions */
-        .admin-header-actions {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: var(--space-xl);
-        }
+
 
         /* Controls */
         .admin-controls {
@@ -230,42 +284,66 @@
         }
 
         @media (max-width: 768px) {
+            .admin-nav-container {
+                padding: 0 1rem;
+            }
+
+            .brand-name {
+                font-size: 1.4rem;
+            }
+
+            .brand-tagline {
+                font-size: 0.65rem;
+            }
+
+            .nav-actions span {
+                display: none; /* Hide button text on small screens */
+            }
+
+            .nav-actions .btn {
+                padding: 8px;
+                min-width: 0;
+            }
+
             .management-header {
                 flex-direction: column;
                 align-items: stretch;
-            }
-
-            .admin-title {
-                font-size: 2rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="admin-container">
-        <header class="admin-header">
-            <div class="admin-brand">
-                <div class="admin-logo">
+    <nav class="admin-nav">
+        <div class="admin-nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
                     <img src="../assets/images/logo.png" alt="Rannaghor Logo">
                 </div>
-                <h1 class="admin-title">Rannaghor</h1>
-                <p class="admin-subtitle">Admin Dashboard</p>
+                <div class="brand-text">
+                    <span class="brand-name">Rannaghor</span>
+                    <div class="brand-sub-row">
+                        <span class="brand-tagline">Admin Dashboard</span>
+                    </div>
+                </div>
             </div>
-            <div class="admin-header-actions">
+
+            <div class="nav-actions">
                 <a href="kitchen.html" target="_blank" class="btn btn-primary btn-sm">
                     <i data-lucide="chef-hat"></i>
-                    <span>Kitchen Dashboard</span>
+                    <span>Kitchen</span>
                 </a>
             </div>
-        </header>
+        </div>
+    </nav>
 
+    <div class="admin-container">
         <main class="qr-management-section">
             <div class="management-header">
                 <h2 class="selector-title">Table Management</h2>
                 <div class="admin-controls">
                     <label for="tableCount">Number of Tables</label>
-                    <input type="number" id="tableCount" value="12" min="1" max="100" />
+                    <input type="number" id="tableCount" value="4" min="1" max="100" />
                 </div>
             </div>
 
